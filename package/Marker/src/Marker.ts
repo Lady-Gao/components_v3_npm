@@ -12,7 +12,10 @@ export default {
             }
         },
         id: null,
-        Icon: String,
+        Icon: {
+            type: String,
+            default:''
+        },
         //是否使用平滑移动
         usemoveTransform: {
             type: Boolean,
@@ -51,6 +54,9 @@ export default {
 
         initMakrt()
         watch(() => props.position, watchPostion,
+            { immediate: true, deep: true }
+        )
+        watch(() => props.Icon, watchIcon,
             { immediate: true, deep: true }
         )
       
@@ -100,6 +106,17 @@ export default {
         function watchPostion(newVal, oldVal) {
             setPosition(newVal)
         }
+         /**
+        * 监听Icon
+        * @param newVal  Array 更新值
+        * @param oldVal  Array 旧值
+        * 当图片更新，有marker就更新
+        */
+        function watchIcon(newVal, oldVal) {
+            if (newVal != oldVal && newVal) {
+                newVal&&myMarker.setIcon(newVal)
+            }
+        }
 
         /**
          * 更新marker定位
@@ -119,8 +136,9 @@ export default {
                 myMarker.setPosition(point)
                 // mapMethods.setFitView(myMarker)
             }
-           
+            console.log(props.Icon)
         }
+      
         /**
          * marker点击事件
          * @param e 
