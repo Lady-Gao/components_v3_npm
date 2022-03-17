@@ -1,6 +1,6 @@
-import { h, onMounted, inject, ref, nextTick, watch, reactive, toRefs, toRef } from "vue";
+import { h, onMounted, inject, ref, nextTick, watch, reactive, toRefs, toRef ,defineExpose, defineComponent} from "vue";
 import { getMapScript } from '../../../src/utils/scriptHelper';
-
+import '../../Map/src/Map'
 export default {
     name: 'Marker',
     props: {
@@ -45,6 +45,13 @@ export default {
                 return true
             }
         },
+        //是否删除
+        remove: {
+            type: Boolean,
+            default() {
+                return false
+            }
+        },
     },
 
     setup(props,context) {
@@ -66,10 +73,20 @@ export default {
          */
        function initMakrt(){
             //生成marker
-           myMarker=creatMarker({
-                position:props.position,
-                icon:props.Icon
-            })
+        //    myMarker=creatMarker({
+        //         position:props.position,
+        //         icon:props.Icon
+        //     })
+        myMarker=new window.AMap.Marker({
+            position:props.position,
+            icon:props.Icon,
+            // anchor: anchor[i], //设置锚点
+            // offset: new AMap.Pixel(0,0), //设置偏移量
+            label: {
+                direction: 'top',
+                content: props.id+'号',
+            }
+        });
             if(props.intoMap){
                 addOverlay()
                
@@ -92,7 +109,9 @@ export default {
          * 将marker添加在地图上
          */
        function addOverlay(){
-          mapMethods.addOverlay(myMarker)
+        //   mapMethods.addOverlay(myMarker)
+        myMarker.setMap(map);
+        //       map.add(myMarker);
              return myMarker
         }
        
@@ -124,6 +143,9 @@ export default {
          */
         function setPosition(point, speed = 1000) {
             if (!myMarker) return
+            if(point==null){
+                return  myMarker.setMap(null);
+            }
              // 用平滑的方式移动还是跳点移动
             if (props.usemoveTransform) {
                   //平滑移动
@@ -136,9 +158,21 @@ export default {
                 myMarker.setPosition(point)
                 // mapMethods.setFitView(myMarker)
             }
-            console.log(props.Icon)
+            
         }
       
+        /**
+         * 移除marker
+         */
+        function removeMarker(val){
+             console.log('removeMarker')
+            if(myMarker){
+                map.remove(myMarker)
+                           myMarker=null
+            }
+           
+        }
+
         /**
          * marker点击事件
          * @param e 
@@ -161,6 +195,12 @@ export default {
         nextTick(() => {
 
         })
+        
+        return {
+            removeMarker
+        }
+    },
+    render(){
         return () => h('div', { class: 'Marker' }, 'Marker')
     }
 }
