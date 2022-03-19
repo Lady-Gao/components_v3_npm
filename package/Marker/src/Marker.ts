@@ -1,4 +1,4 @@
-import { h, onMounted, inject, ref, nextTick, watch, reactive, toRefs, toRef ,defineExpose, defineComponent} from "vue";
+import { h, onMounted, inject, ref, nextTick, watch, reactive, toRefs, toRef ,defineExpose, defineComponent,Options} from "vue";
 import { getMapScript } from '../../../src/utils/scriptHelper';
 import '../../Map/src/Map'
 export default {
@@ -53,8 +53,9 @@ export default {
             }
         },
     },
-
+    emits:['click','moving'],
     setup(props,context) {
+        
         const storeData = inject<any>('storeData')
            const {mapMethods,map}=storeData
         let myMarker = null//marker对象
@@ -87,6 +88,7 @@ export default {
                 content: props.id+'号',
             }
         });
+        myMarker.id=props.id
             if(props.intoMap){
                 addOverlay()
                
@@ -129,12 +131,13 @@ export default {
         * 监听Icon
         * @param newVal  Array 更新值
         * @param oldVal  Array 旧值
-        * 当图片更新，有marker就更新
+        * 当图片更新，有marker就更新 不显示图片不能穿空或者null  不识别？建议传‘null'
         */
         function watchIcon(newVal, oldVal) {
-            if (newVal != oldVal && newVal) {
-                newVal&&myMarker.setIcon(newVal)
-            }
+            if (newVal != oldVal ) {
+                  myMarker.setIcon(newVal)
+             }
+           
         }
 
         /**
@@ -167,8 +170,10 @@ export default {
         function removeMarker(val){
              console.log('removeMarker')
             if(myMarker){
+                myMarker.off('click', onClick)
+           myMarker.off('moving', onMoving)
                 map.remove(myMarker)
-                           myMarker=null
+                 myMarker=null
             }
            
         }
@@ -201,6 +206,7 @@ export default {
         }
     },
     render(){
+       
         return () => h('div', { class: 'Marker' }, 'Marker')
     }
 }

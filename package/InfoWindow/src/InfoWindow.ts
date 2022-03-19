@@ -12,6 +12,7 @@ export default {
         content: null,
       
     },
+    emits:['close'],
     setup(props,context) {
         const storeData = inject<any>('storeData')
         const {mapMethods,map}=storeData
@@ -35,9 +36,11 @@ export default {
                 offset: new window.AMap.Pixel(0, -30),
                 autoMove: true,
              });
+             InfoWindow.id=props.id
              InfoWindow.on('close',onclose)
 
          }
+         //设置图片  定位
          function  open(){
             setContent()
             InfoWindow.open(map, props.position);
@@ -71,6 +74,7 @@ export default {
                 if (InfoWindow.getIsOpen()) {
                    setPosition(point);
                 } else {
+
                     open()
                     
                 }
@@ -81,10 +85,17 @@ export default {
            
         }
 
-
+        function close(){
+            InfoWindow.close()
+        }
         function watchContent(text) {
             InfoWindow.setContent(text);
         }
+       return {
+        close
+       }
+    },
+    render(){
         return () => h('div',{class:'InfoWindow'},'InfoWindow')
     }
 }
