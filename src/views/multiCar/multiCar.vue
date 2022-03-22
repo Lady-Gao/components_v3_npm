@@ -16,8 +16,14 @@
         @click="clickMarker"
         @moving="markerMoving"
       ></Marker>
-      <!-- 巡航器 平滑的对象 -->
-      <!-- <PathSimplifierIns :currentData='currentData'  @moveing='PathSimplifierInsmoveing' ref='PathSimplifierIns' @click="PathSimplifierInsClick"/> -->
+      <!-- 巡航器 平滑的对象 :position='realTimeData.position' model='realTime'  :historyData='historyData' model='history'   @click="PathSimplifierInsClick"-->
+      <!-- <PathSimplifierIns  :id='currentMarkerId' :position='realTimeData.position' :icon='realTimeData.icon'   model='realTime' @moveing='PathSimplifierInsmoveing'/> -->
+      <PathSimplifierIns
+        :position="hisdata"
+        :icon="icon1"
+        model="history"
+         @moveing='PathSimplifierInsmoveing'
+      />
       <InfoWindow
         :position="InfoBox.position"
         :content="InfoBox.content"
@@ -40,9 +46,9 @@ import httpData from "./data";
 const mapName = "AMap";
 const icon1 = "https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png";
 const icon2 = "https://fs.cvtsp.com/images-shihang-login.png";
-
+const carObj = reactive<any>({});
 const carList = reactive<
-  { id: string; position: number[]; icon: String|null; remove: boolean }[]
+  { id: string; position: number[]; icon: String | null; remove: boolean }[]
 >([]);
 // {
 //     id:0,
@@ -50,16 +56,30 @@ const carList = reactive<
 //     position:[116.497428, 39.20923],
 
 // }
-let currentMarkerId = ref(""); //当前选中的id
+let currentMarkerId = ref(); //当前选中的id
 
 const InfoBox = reactive({
   position: [], //信息弹框定位
   content: "", //信息弹框文本内容
 });
 
-const currentData = ref({}); //平滑对象
-const carObj = reactive<any>({});
-
+const realTimeData = reactive<{ position: number[]; icon: string; id: any }>({
+  position:[],
+  icon: '',
+  id: null,
+}); //平滑对象
+const hisdata=[
+    { point: [111.497428, 39.20923], icon: icon2 },
+    { point: [116.497428, 21.20923], icon: icon1 },
+    { point: [113.597428, 36.20923], icon: icon2 },
+    { point: [124.697428, 29.280923], icon: icon1 },
+    { point: [125.397428, 37.20923], icon: icon2 },
+  ]
+const historyData = ref([{}]);
+setTimeout(() => {
+  console.log('settimg')
+  historyData.value =hisdata ;
+}, 8000);
 const Markers = (el: any) => {
   el && (carObj[el.id] = el);
 };
@@ -76,7 +96,7 @@ function addCar() {
   carList.push({
     id,
     position: httpData[num],
-    icon: 'null',
+    icon: "null",
     remove: false,
   });
   clickMarker({
@@ -90,32 +110,36 @@ function addCar() {
  * 未点击marker,不弹出信息框
  */
 let haveclickMarker = false; //当前是否点击了marker,
-function clickMarker(val: { lnglat: any; id: string;  }) {
+function clickMarker(val: { lnglat: any; id: string }) {
   console.log("点击了marker", val.id);
-  currentMarkerId.value = val.id;
 
   carList.map((item) => {
     if (item.id == val.id) {
       //点击时变图片
-      item.icon = 'null';
+      item.icon = "null";
     } else {
       item.icon = icon1;
     }
   });
+  currentMarkerId.value = val.id;
   InfoBox.content = `<div><h1>${val.id + "号 ： " + val.lnglat}</h1></div>`;
   InfoBox.position = val.lnglat;
+
+  realTimeData.id = val.id;
+  realTimeData.position = val.lnglat; //平滑更新
+  realTimeData.icon = icon1;
+
   haveclickMarker = true;
 }
 
-
 /**
- * marker移动时 点击了marker 就更新定位
+ * marker移动时 更新infort弹框
  */
 function markerMoving(val: { lnglat: []; id: string }) {
-  if (haveclickMarker && val.id == currentMarkerId.value) {
-    //只对当前选中的车辆 进行信息框更新
-    InfoBox.position = val.lnglat;
-  }
+  // if (haveclickMarker && val.id == currentMarkerId.value) {
+  //   //只对当前选中的车辆 进行信息框更新
+  //   InfoBox.position = val.lnglat;
+  // }
 }
 
 /**
@@ -131,12 +155,14 @@ function delCar() {
       carList.splice(idx, 1);
     }
   });
-  if(delidnex.value==currentMarkerId.value){
+ 
+  if (delidnex.value == currentMarkerId.value) {
     //关闭弹框
-  infoBoxref.value.close();
+    infoBoxref.value.close();
+     currentMarkerId.value=null
   }
+  
 }
-
 
 function InfoWindowclose() {
   haveclickMarker = false;
@@ -146,7 +172,13 @@ function InfoWindowclose() {
 /**
  * PathSimplifierIns平滑对象移动时 点击了marker 就更新定位
  */
-function PathSimplifierInsmoveing(val: { lnglat: []; id: number }) {}
+function PathSimplifierInsmoveing(val:any) {
+  // console.log(val,'PathSimplifierInsmoveing')
+  if (haveclickMarker) {
+    //只对当前选中的车辆 进行信息框更新
+    InfoBox.position = val;
+  }
+}
 /**
  *
  * @param val 点击平滑对象
@@ -154,20 +186,27 @@ function PathSimplifierInsmoveing(val: { lnglat: []; id: number }) {}
 function PathSimplifierInsClick(val: any) {
   console.log(val, "点击了PathSimplifierIns");
 }
+var bool: boolean = true;
 setInterval(() => {
   if (!carList.length) return;
   carList.map((item) => {
     let num = Math.floor(Math.random() * 30);
     item.position = httpData[num]; //更换位置
 
-     if (item.id == currentMarkerId.value) {//实时更换图标
+    if (item.id == currentMarkerId.value) {
+      //实时更换图标
+
+      realTimeData.position = item.position; //平滑更新
+      //模拟图片更滑
+      realTimeData.icon = bool ? icon1 : icon2;
+      bool = !bool;
+
       item.icon = null;
     } else {
       item.icon = icon1;
     }
   });
   //    carList[index].icon=icon2//更换图标
-
 }, 5000);
 </script>
 
