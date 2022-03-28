@@ -1,4 +1,3 @@
-import { clear } from "console";
 import { defineComponent, h, inject, onMounted, ref, watch } from "vue";
 import { asyncDownloadScript } from '../../../src/utils/scriptHelper'
 /**
@@ -71,6 +70,7 @@ export default {
     emits: ['moveing','pointClick'],
     setup(props, context) {
         const storeData = inject<any>('storeData')
+        console.log(storeData,'storeData')
         const { mapMethods, map } = storeData
         var pathSimplifierIns = null//pathSimplifierIns对象
         var myPathSimplifier = null
@@ -122,10 +122,9 @@ export default {
         }
         //初始化pathSimplifierIns
         function initPathSimplifier() {
-            console.log('initPathSimplifier')
             pathSimplifierIns = new myPathSimplifier({
-                zIndex: 100,
-                autoSetFitView: false,
+                // zIndex: 100,
+                // autoSetFitView: false,
                 map: map, //所属的地图实例
                 pathNavigatorStyle: {
                     width: 32,
@@ -140,7 +139,6 @@ export default {
                 getHoverTitle: function (pathData, pathIndex, pointIndex) {
                     
                   
-                    console.log(pathData, 'getHoverTitle')
                     if (pointIndex >= 0) {
                         //point 
                         return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
@@ -164,7 +162,6 @@ export default {
 
 
         function realTimestart() {
-            console.log('realTimestart')
             data[0].path[0] = props.position
             pathSimplifierIns.setData(data);
             navg1 = pathSimplifierIns.createPathNavigator(0, {
@@ -208,7 +205,6 @@ export default {
                         content: myPathSimplifier.Render.Canvas.getImageContent(icon)
                     },
                     getPath: function (pathData, pathIndex) {
-                        console.log(pathData, pathIndex, 'getPath')
                         return pathData.path;
                     },
                 });
@@ -224,7 +220,6 @@ export default {
         //实时数据 跟新路劲 更新图标
         function doExpand(position) {
             if (position.length) {
-                console.log('doExpand')
                 var cursor = navg1.getCursor().clone(), //保存巡航器的位置
                     status = navg1.getNaviStatus();
 
@@ -271,12 +266,10 @@ export default {
             if(props.model=='realTime'){
 
             }else{
-                console.log(index,'index')
                 if(!props.position[historyIndex].icon)return
                 //轨迹更换图标 
                 if(historyIndex!=index){
                     historyIndex=index
-                    console.log(props.position[historyIndex],'renderLater')
                     let pathNavigatorStyle = navg1.getStyleOptions();
                     pathNavigatorStyle.content= myPathSimplifier.Render.Canvas.getImageContent(props.position[historyIndex].icon)
                      pathSimplifierIns.renderLater(200);
@@ -287,8 +280,7 @@ export default {
 
         }
         function pointClick(e,info) {
-            console.log(e,info,'pointClick')
-            context.emit('pointClick', )
+            context.emit('pointClick', e,info)
 
         }
         /**
@@ -297,7 +289,6 @@ export default {
          */
         function watchPosition(val) {
             if (!val[0]) return
-            console.log(val, 'watchPosition')
             waitingJs(val)
         }
         /**
@@ -343,7 +334,6 @@ export default {
 
             // }
             if (!oldval) return
-            console.log(newval, 'newval')
             navg1 && navg1.destroy()
             navg1 = null
             if (props.model == 'realTime' && newval) {

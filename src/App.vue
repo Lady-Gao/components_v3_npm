@@ -15,11 +15,11 @@ const mapReady=ref(false)
 
 <template>
    <el-tabs tab-position="left"  >
-    <el-tab-pane label="multiCar">
-        <multiCar/>
-    </el-tab-pane>
     <el-tab-pane label="history">
         <history/>
+    </el-tab-pane>
+    <el-tab-pane label="multiCar">
+        <!-- <multiCar/> -->
     </el-tab-pane>
   
   </el-tabs>

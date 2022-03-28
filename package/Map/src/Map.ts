@@ -32,7 +32,12 @@ export default {
         viewMode: {
             type: String,
             default: '3D'
-        }
+        },
+        //在同一个页面使用  需要加id区分 不然只会初始化一个
+        id:{
+            type: String,
+            default:'MapDom'
+        },
     },
 
     setup(props: any, contex) {
@@ -72,12 +77,13 @@ export default {
 
         //地图初始化
         function mapInitial(AMap) {
-            storeData.map = new AMap.Map('MapDom', {
+            console.log(props.id)
+            storeData.map = new AMap.Map(props.id, {
                 zoom: props.zoom,//级别
                 center: props.center,//中心点坐标
                 viewMode: props.viewMode//使用地图视图
             });
-
+            // storeData.map.mapId=props.id
             storeData.mapMethods = new Gaode(storeData.map);
             storeData.isReady = true;
 
@@ -111,8 +117,7 @@ export default {
 
         return () => h('div', {
             class: 'Map',
-            id: 'MapDom',
-            ref: 'mapVnode',
+            id: props.id,
         }, h('div', {
          
         }, storeData.isReady ? contex.slots.default() : ''))

@@ -1,9 +1,9 @@
 
 
 <template>
-  <div>
+  <div class='multiCar'>
     multiCar {{ currentMarkerId }} carList:{{ carList.length }}
-    <Map :name="mapName" :zoom="3" ref="MAP">
+    <Map :name="mapName" :zoom="3" ref="MAP" id='multiCar'>
       <!--  :Icon="currentMarkerId==item.id?null:item.icon" :remove='item.remove'-->
       <Marker
         :id="item.id"
@@ -17,13 +17,8 @@
         @moving="markerMoving"
       ></Marker>
       <!-- 巡航器 平滑的对象 :position='realTimeData.position' model='realTime'  :historyData='historyData' model='history'   @click="PathSimplifierInsClick"-->
-      <!-- <PathSimplifierIns  :id='currentMarkerId' :position='realTimeData.position' :icon='realTimeData.icon'   model='realTime' @moveing='PathSimplifierInsmoveing'/> -->
-      <PathSimplifierIns
-        :position="hisdata"
-        :icon="icon1"
-        model="history"
-         @moveing='PathSimplifierInsmoveing'
-      />
+      <PathSimplifierIns  :id='currentMarkerId' :position='realTimeData.position' :icon='realTimeData.icon'   model='realTime' @moveing='PathSimplifierInsmoveing'/>
+    
       <InfoWindow
         :position="InfoBox.position"
         :content="InfoBox.content"
@@ -34,6 +29,7 @@
     <el-button @click="addCar">添加一辆车</el-button>
     <el-button @click="delCar">删除{{ delidnex }}号</el-button>
     <el-input v-model="delidnex"></el-input>
+    
   </div>
 </template>
 
@@ -42,10 +38,9 @@
  * 点击车辆时  讲当前车辆图片设置为透明
  */
 import { computed, reactive, ref } from "vue";
-import httpData from "./data";
+import {listPoints,icon1,icon2} from "../../utils/data";
 const mapName = "AMap";
-const icon1 = "https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png";
-const icon2 = "https://fs.cvtsp.com/images-shihang-login.png";
+
 const carObj = reactive<any>({});
 const carList = reactive<
   { id: string; position: number[]; icon: String | null; remove: boolean }[]
@@ -95,13 +90,13 @@ function addCar() {
 
   carList.push({
     id,
-    position: httpData[num],
+    position: listPoints[num],
     icon: "null",
     remove: false,
   });
   clickMarker({
     id,
-    lnglat: httpData[num],
+    lnglat: listPoints[num],
   });
 }
 
@@ -191,7 +186,7 @@ setInterval(() => {
   if (!carList.length) return;
   carList.map((item) => {
     let num = Math.floor(Math.random() * 30);
-    item.position = httpData[num]; //更换位置
+    item.position = listPoints[num]; //更换位置
 
     if (item.id == currentMarkerId.value) {
       //实时更换图标
@@ -210,9 +205,11 @@ setInterval(() => {
 }, 5000);
 </script>
 
-<style scoped>
-.Map {
+<style scoped lang='scss'>
+.multiCar{
+.Map{
   height: 500px;
   width: 100%;
+}
 }
 </style>
