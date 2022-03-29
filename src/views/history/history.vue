@@ -2,7 +2,7 @@
 
 <template>
   <div class="history">
-    history
+    history实现1
     <Map :name="mapName" :zoom="3" ref="MAP" id="history">
       <!-- 不能跳点 -->
       <PathSimplifierIns
@@ -12,9 +12,8 @@
         @pointClick='pointClicks'
       />
       
-      <Liner :path="path" />
-      <!-- <Liner :path="movepath" /> -->
-      <!-- <MoveAnimation ref='hMoveAnimation'/> -->
+      <!-- <Liner :path="path" /> -->
+    
     </Map>
 
     <el-button @click="startAnimation">开始动画</el-button>
@@ -30,19 +29,19 @@ import { ref } from "vue";
 import { listPoints, icon1, icon2 } from "../../utils/data";
 const hMoveAnimation = ref();
 function startAnimation() {
-  hMoveAnimation.value.startAnimation();
+
 }
 function pauseAnimation() {
-  hMoveAnimation.value.pauseAnimation();
+
 }
 function resumeAnimation() {
-  hMoveAnimation.value.resumeAnimation();
+
 }
 function stopAnimation() {
-  hMoveAnimation.value.stopAnimation();
+
 }
 function jump() {
-  hMoveAnimation.value.startAnimation();
+
 }
 
 //平滑对象

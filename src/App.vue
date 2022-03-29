@@ -3,6 +3,7 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import multiCar from './views/multiCar/multiCar.vue'
 import history from './views/history/history.vue'
+import history2 from './views/history2/history2.vue'
 import { getMapScript } from './utils/scriptHelper';
 import { ref } from 'vue';
 
@@ -15,6 +16,9 @@ const mapReady=ref(false)
 
 <template>
    <el-tabs tab-position="left"  >
+     <el-tab-pane label="history2">
+        <history2/>
+    </el-tab-pane>
     <el-tab-pane label="history">
         <history/>
     </el-tab-pane>
