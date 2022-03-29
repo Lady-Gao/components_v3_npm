@@ -123,8 +123,8 @@ export default {
         //初始化pathSimplifierIns
         function initPathSimplifier() {
             pathSimplifierIns = new myPathSimplifier({
-                // zIndex: 100,
-                // autoSetFitView: false,
+                zIndex: 100,
+                autoSetFitView: false,
                 map: map, //所属的地图实例
                 pathNavigatorStyle: {
                     width: 32,

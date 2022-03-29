@@ -23,7 +23,7 @@ const mapReady=ref(false)
         <history/>
     </el-tab-pane>
     <el-tab-pane label="multiCar">
-        <!-- <multiCar/> -->
+        <multiCar/>
     </el-tab-pane>
   
   </el-tabs>
