@@ -3,7 +3,7 @@
 <template>
   <div class="history2">
     history实现2
-    <Map :name="mapName" :zoom="3" ref="MAP" id="history2">
+    <Map  :zoom="3" ref="MAP" id="history2">
       
       
       <Liner :path="lineArr" />

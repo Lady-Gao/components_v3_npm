@@ -3,7 +3,7 @@
 <template>
   <div class='multiCar'>
     multiCar {{ currentMarkerId }} carList:{{ carList.length }}
-    <Map :name="mapName" :zoom="3" ref="MAP" id='multiCar'>
+    <Map  :zoom="3" ref="MAP" id='multiCar'>
       <!--  :Icon="currentMarkerId==item.id?null:item.icon" :remove='item.remove'-->
       <Marker
         :id="item.id"

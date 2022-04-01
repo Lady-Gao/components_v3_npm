@@ -3,7 +3,7 @@
 <template>
   <div class="history">
     history实现1
-    <Map :name="mapName" :zoom="3" ref="MAP" id="history">
+    <Map  :zoom="3" ref="MAP" id="history">
       <!-- 不能跳点 -->
       <PathSimplifierIns
         :position="hisdata"

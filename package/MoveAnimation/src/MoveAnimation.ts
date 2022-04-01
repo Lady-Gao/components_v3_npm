@@ -1,6 +1,8 @@
 import { h, inject } from 'vue'
 import { asyncDownloadScript } from '../../../src/utils/scriptHelper'
-
+/**
+ * 平滑轨迹移动
+ */
 export default {
     name: 'MoveAnimation',
     props: {
@@ -58,7 +60,7 @@ export default {
                 // 每一段的时长
                 duration: 500,//可根据实际采集时间间隔设置
                 // JSAPI2.0 是否延道路自动设置角度在 moveAlong 里设置
-                // autoRotation: true,
+                autoRotation: true,
             });
         };
 

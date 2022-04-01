@@ -1,6 +1,9 @@
 import { defineComponent, h, inject, onMounted, ref, watch } from "vue";
 import { asyncDownloadScript } from '../../../src/utils/scriptHelper'
 /**
+ *巡航器 
+ *
+ *
  * 实时： <!-- <PathSimplifierIns  
  *              :id='currentMarkerId' 
  *              :position='realTimeData.position' 

@@ -1,5 +1,7 @@
 import { defineComponent, h, inject, onMounted, ref, watch } from "vue";
-
+/**
+ * 信息弹框组件
+ */
 export default {
     name: 'InfoWindow',
     props: {
