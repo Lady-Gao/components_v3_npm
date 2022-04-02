@@ -1,4 +1,4 @@
-import { h, inject } from 'vue'
+import { h, inject, watch } from 'vue'
 import { asyncDownloadScript } from '../../../src/utils/scriptHelper'
 /**
  * 平滑轨迹移动
@@ -11,31 +11,38 @@ export default {
             default(){
                 return []
             }
-        }
+        },
+        id:''
     },
     setup(props, context) {
+        console.log(props.id,'MoveAnimationinit')
         const storeData = inject<any>('storeData')
         const { mapMethods, map } = storeData
         var MoveAnimationMarker = null
      
-        init()
-
+        
+        watch(() => props.lineArr, watchlineArr,
+        { immediate: true, deep: true }
+    )
          // 绘制轨迹
-     
+     function watchlineArr(val){
+         val&& init()
+     }
 
         function init() {
+            console.log(props.lineArr[0],'props.lineArr')
             window.AMap.plugin('AMap.MoveAnimation', function () {
-                console.log('init')
+             
                 MoveAnimationMarker = new window.AMap.Marker({
                     map: map,
                     position: [116.478935, 39.997761],
                     icon: "https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png",
-                    offset: new window.AMap.Pixel(-13, -26),
+                   
                 });
 
                
 
-                var passedPolyline = new window.AMap.Polyline({
+                let passedPolyline = new window.AMap.Polyline({
                     map: map,
                     strokeColor: "#AF5",  //线颜色
                     strokeWeight: 6,      //线宽

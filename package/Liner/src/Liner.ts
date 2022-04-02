@@ -28,9 +28,7 @@ export default {
         const { mapMethods, map } = storeData
         var myLiner = null //liner对象
         initLiner()
-        onMounted(() => {
-            console.log('Liner')
-        })
+      
 
         watch(() => props.path, watchPath,
             { immediate: true, deep: true }

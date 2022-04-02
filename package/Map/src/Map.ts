@@ -70,7 +70,7 @@ export default {
 
             getMapScript(props.name, url)
                 .then((AMap) => {
-                    console.log(AMap,'AMap')
+                  
                     mapInitial(AMap)
                 })
         }
@@ -114,12 +114,13 @@ export default {
                
 
         }
-
+        let slots=contex.slots.default?contex.slots.default() : ''
+        console.log(slots,'contex.slots---------------------------------------')
         return () => h('div', {
             class: 'Map',
             id: props.id,
         }, h('div', {
          
-        }, storeData.isReady ? contex.slots.default() : ''))
+        }, storeData.isReady ? contex.slots.default(): ''))
     }
 }

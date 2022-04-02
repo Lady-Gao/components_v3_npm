@@ -7,11 +7,11 @@
     <el-button @click="changeedit(true)">修改</el-button>
     <Map :zoom="13" ref="MAP" id="fenceManage">
       <!-- <MapTool :type='fenceManageType' ref='MapToolRef' /> -->
-      <EditPlugin
+       <EditPlugin
         :type="fenceManageType"
         :edit="edit"
         :overlayOptions="overlayOptions"
-      />
+      /> 
     </Map>
 
     <div>

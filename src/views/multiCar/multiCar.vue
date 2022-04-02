@@ -18,7 +18,8 @@
       ></Marker>
       <!-- 巡航器 平滑的对象 :position='realTimeData.position' model='realTime'  :historyData='historyData' model='history'   @click="PathSimplifierInsClick"-->
       <PathSimplifierIns  :id='currentMarkerId' :position='realTimeData.position' :icon='realTimeData.icon'   model='realTime' @moveing='PathSimplifierInsmoveing'/>
-    
+      
+      <Liner :path="[[111.497428, 39.20923],[125.397428, 37.20923]]" />
       <InfoWindow
         :position="InfoBox.position"
         :content="InfoBox.content"

@@ -3,13 +3,13 @@
 <template>
   <div class="history2">
     history实现2
-    <Map  :zoom="3" ref="MAP" id="history2">
-      
+    <Map  :zoom="13" ref="MAP" id="history2" :center='[116.478935, 39.997761]'>
       
       <Liner :path="lineArr" />
-      <MoveAnimation ref='hMoveAnimation' :lineArr='lineArr'/> 
+         <MoveAnimation ref='hMoveAnimation' :lineArr='lineArr' id=''/> 
     </Map>
 
+  
     <el-button @click="startAnimation">开始动画</el-button>
     <el-button @click="pauseAnimation">暂停动画</el-button>
     <el-button @click="resumeAnimation">继续动画</el-button>
@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { listPoints, icon1, icon2 } from "../../utils/data";
+console.log('history2')
 const hMoveAnimation = ref();
 function startAnimation() {
   hMoveAnimation.value.startAnimation();
