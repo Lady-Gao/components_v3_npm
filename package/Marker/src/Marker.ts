@@ -11,6 +11,12 @@ export default {
                 return []
             }
         },
+        size:{
+            type:Array,
+            default(){
+                return [32,32]
+            }
+        },
         id: null,
         Icon: {
             type: String,
@@ -81,12 +87,13 @@ export default {
         myMarker=new window.AMap.Marker({
             position:props.position,
             icon:props.Icon,
+            size: new AMap.Size(50, 50),    // 图标尺寸  宽  高
             // anchor: anchor[i], //设置锚点
             // offset: new AMap.Pixel(0,0), //设置偏移量
-            label: {
-                direction: 'top',
-                content: props.id+'号',
-            }
+            // label: {
+            //     direction: 'top',
+            //     content: props.id+'号',
+            // }
         });
         myMarker.id=props.id
             if(props.intoMap){
