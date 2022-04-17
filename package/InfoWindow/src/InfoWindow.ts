@@ -15,10 +15,10 @@ export default {
       
     },
     emits:['close'],
-    setup(props,context) {
+    setup(props:any,context:any) {
         const storeData = inject<any>('storeData')
-        const {mapMethods,map}=storeData
-     let InfoWindow = null//marker对象
+        const {map}=storeData
+     let InfoWindow:any = null//marker对象
      initInfoWindow()
         
         onMounted(() => {
@@ -62,7 +62,7 @@ export default {
         function setContent(){
             InfoWindow.setContent(props.content);
         }
-        function setPosition(val){
+        function setPosition(val:[]){
              setContent()
              InfoWindow.setPosition(val);
         }
@@ -70,7 +70,7 @@ export default {
          * 定位有更新就更新定位，没有数据则关闭infowindow
          * @param point 
          */
-        function watchPostion(point) {
+        function watchPostion(point:[]) {
              if (InfoWindow && point.length) {
                  //打开状态下 更新定位
                 if (InfoWindow.getIsOpen()) {
@@ -90,7 +90,7 @@ export default {
         function close(){
             InfoWindow.close()
         }
-        function watchContent(text) {
+        function watchContent(text:string) {
             InfoWindow.setContent(text);
         }
        return {

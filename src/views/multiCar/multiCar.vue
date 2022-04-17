@@ -16,10 +16,10 @@
         @click="clickMarker"
         @moving="markerMoving"
       ></Marker>
-      <!-- 巡航器 平滑的对象 :position='realTimeData.position' model='realTime'  :historyData='historyData' model='history'   @click="PathSimplifierInsClick"-->
-      <PathSimplifierIns  :id='currentMarkerId' :position='realTimeData.position' :icon='realTimeData.icon'   model='realTime' @moveing='PathSimplifierInsmoveing'/>
-      
-      <Liner :path="[[111.497428, 39.20923],[125.397428, 37.20923]]" />
+      <!-- <PathSimplifierIns  :id='currentMarkerId' :position='realTimeData.position' :icon='realTimeData.icon'   model='realTime' @moveing='PathSimplifierInsmoveing'/> -->
+        <PathSimplifierIns     model="history"    :position="hisArr"  :icon='icon1'
+   />
+      <!-- <Liner :path="[[111.497428, 39.20923],[125.397428, 37.20923]]" /> -->
       <InfoWindow
         :position="InfoBox.position"
         :content="InfoBox.content"
@@ -71,6 +71,7 @@ const hisdata=[
     { point: [124.697428, 29.280923], icon: icon1 },
     { point: [125.397428, 37.20923], icon: icon2 },
   ]
+  const hisArr=[[111.497428, 39.20923],[116.497428, 21.20923]]
 const historyData = ref([{}]);
 setTimeout(() => {
   console.log('settimg')

@@ -9,7 +9,13 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"]
+    "suppressImplicitAnyIndexErrors":true,
+    "lib": ["esnext", "dom"],
+    // ++ 这里加上baseUrl 和 path即可 ++
+    "paths": {
+	  // 根据别名配置相关路径
+      "@*": ["./src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

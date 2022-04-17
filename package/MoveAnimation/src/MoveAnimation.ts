@@ -6,27 +6,27 @@ import { asyncDownloadScript } from '../../../src/utils/scriptHelper'
 export default {
     name: 'MoveAnimation',
     props: {
+        // 轨迹路径
         lineArr:{
             type:Array,
             default(){
                 return []
             }
         },
-        id:''
+        // id:''
     },
-    setup(props, context) {
-        console.log(props.id,'MoveAnimationinit')
+    setup(props:any, context:any) {
         const storeData = inject<any>('storeData')
-        const { mapMethods, map } = storeData
-        var MoveAnimationMarker = null
+        const {  map } = storeData
+        var MoveAnimationMarker:any = null
      
         
         watch(() => props.lineArr, watchlineArr,
         { immediate: true, deep: true }
     )
          // 绘制轨迹
-     function watchlineArr(val){
-         val&& init()
+     function watchlineArr(val:boolean){
+         val[0]&& init()
      }
 
         function init() {
@@ -35,7 +35,7 @@ export default {
              
                 MoveAnimationMarker = new window.AMap.Marker({
                     map: map,
-                    position: [116.478935, 39.997761],
+                    position: props.lineArr[0],
                     icon: "https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png",
                    
                 });
@@ -49,7 +49,7 @@ export default {
                 });
 
 
-                MoveAnimationMarker.on('moving', function (e) {
+                MoveAnimationMarker.on('moving', function (e:any) {
                     passedPolyline.setPath(e.passedPath);
                     // map.setCenter(e.target.getPosition(),true)
                 });
@@ -61,7 +61,7 @@ export default {
             });
 
         }
-
+// 开始动画
         function startAnimation() {
             MoveAnimationMarker.moveAlong(props.lineArr, {
                 // 每一段的时长
@@ -70,15 +70,15 @@ export default {
                 autoRotation: true,
             });
         };
-
+// 暂停动画
         function pauseAnimation() {
             MoveAnimationMarker.pauseMove();
         };
-
+// 继续动画
         function resumeAnimation() {
             MoveAnimationMarker.resumeMove();
         };
-
+// 停止动画
         function stopAnimation() {
             MoveAnimationMarker.stopMove();
         };

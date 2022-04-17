@@ -5,13 +5,10 @@
     fenceManage
     <el-button @click="changeedit(false)">添加</el-button>
     <el-button @click="changeedit(true)">修改</el-button>
-    <Map :zoom="13" ref="MAP" id="fenceManage">
-      <!-- <MapTool :type='fenceManageType' ref='MapToolRef' /> -->
-       <EditPlugin
-        :type="fenceManageType"
-        :edit="edit"
-        :overlayOptions="overlayOptions"
-      /> 
+    <!-- 鼠标工具demo -->
+    <!-- <Map :zoom="13" ref="MAP" id="fenceManage">
+      <MouseTool :type='fenceManageType' ref='MapToolRef' @draw='draw' />
+      
     </Map>
 
     <div>
@@ -22,7 +19,16 @@
       <el-button @click="change('circle')"> 画圆</el-button>
       <el-button @click="remove"> 清除 </el-button>
       <el-button @click="close"> 关闭绘制 </el-button>
-    </div>
+    </div> -->
+      <!-- 矢量图形编辑demo -->
+    <Map :zoom="13">
+        <EditPlugin
+        :type="fenceManageType"
+        :edit="edit"
+        :overlayOptions="overlayOptions"
+        @end='endCallback'
+      /> 
+    </Map>
     <div>
       <el-button @click="and('marker')">显示点</el-button>
       <el-button @click="and('polyline')">显示 折线</el-button>
@@ -31,25 +37,24 @@
       <el-button @click="and('circle')">显示 圆</el-button>
      <el-button @click="changeedit(true)">开启编辑状态</el-button>
        <el-button @click="changeedit(false)">关闭编辑状态</el-button>
+        <el-button @click="cleanOverlay">关闭并清除覆盖物</el-button>
     </div>
 
-    <div>
+    <!-- <div>
       <el-button @click="and('marker',true)">一开始就编辑点</el-button>
       <el-button @click="and('polyline',true)">一开始就编辑 折线</el-button>
-      <el-button @click="and('polygon',true)"> 一开始就编辑多边形</el-button>
-      <el-button @click="and('rectangle',true)"> 一开始就编辑矩形</el-button>
+      <el-button @click="and('polygon',true)">一开始就编辑多边形</el-button>
+      <el-button @click="and('rectangle',true)">一开始就编辑矩形</el-button>
       <el-button @click="and('circle',true)">一开始就编辑 圆</el-button>
-    </div>
+    </div> -->
+   
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-const fenceManageType = ref<String>("marker");
-const overlayOptions = ref({
-   position: [116.428945, 39.89663],
-        icon: "https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png",
-});
+const fenceManageType = ref<String>("");
+const overlayOptions = ref();
 const edit = ref<boolean>(false);
 const MapToolRef = ref();
 let path = [
@@ -65,18 +70,18 @@ function change(val: String) {
 
 }
 
-function changeedit(val: boolean) {
-  edit.value = val;
-    if(!val)change('')
-}
 
+function changeedit(val: boolean) {
+  console.log('changeedit')
+  edit.value = val;
+}
+function cleanOverlay(){
+   edit.value =false
+  fenceManageType.value=''
+}
 function and(val: string,flag?:boolean) {
   //编辑打开
-  if(flag){
-    edit.value=true
-  }
-
-  fenceManageType.value = val; //更改类型]
+ 
   
   switch (val) {
     case "marker":
@@ -109,10 +114,19 @@ function and(val: string,flag?:boolean) {
       };
       break;
   }
+  
+
+  fenceManageType.value = val; //更改类型]
+   if(flag){
+    edit.value=true
+  }
 }
 
-function editFun(val){
-
+function draw(val:any){
+  console.log(val,'draw')
+}
+function endCallback(val:Event){
+console.log(val,'endCallback')
 }
 function remove() {
   MapToolRef.value.remove();

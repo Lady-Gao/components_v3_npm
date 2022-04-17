@@ -22,11 +22,11 @@ export default {
         },
 
     },
-    setup(props) {
+    setup(props:any) {
         const storeData = inject<any>('storeData')
         console.log(storeData,'storeData')
-        const { mapMethods, map } = storeData
-        var myLiner = null //liner对象
+        const {  map } = storeData
+        var myLiner:any = null //liner对象
         initLiner()
       
 
@@ -41,7 +41,7 @@ export default {
             });
           myLiner.on('click',linerClick)
         }
-        function watchPath(val) {
+        function watchPath(val:[]) {
             if(val.length){
                 setPath()
             }
@@ -52,7 +52,7 @@ export default {
             myLiner.setPath(props.path)
         }
 
-        function linerClick(val,e){
+        function linerClick(val:any,e:any){
             
             console.log(val,e,'val,e')
         }

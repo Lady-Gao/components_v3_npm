@@ -1,14 +1,22 @@
 {
-  "name": "vite-comp",
-  "version": "0.0.0",
+  "name": "cv_amapv3",
+  "version": "0.0.23",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "build": "vite build",
+    "preview": "vite preview",
+    "lib": "vue-cli-service build --target lib --name cv_amapv3 --dest lib ./index.ts",
+    "librollup": "rollup -c"
   },
   "dependencies": {
+    "@vue/cli-service": "^5.0.4",
     "default-passive-events": "^2.0.0",
     "element-plus": "^2.0.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.49.9",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
@@ -21,5 +29,12 @@
     "typescript": "^4.4.4",
     "vite": "^2.7.2",
     "vue-tsc": "^0.29.8"
-  }
+  },
+  "author": "monstergao",
+  "license": "ISC",
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "main": "lib/cv.js"
 }

@@ -10,20 +10,21 @@ import { defineComponent, h, inject, onMounted, ref, watch } from "vue";
  * 
  */
 export default {
-    name: 'MapTool',
+    name: 'MouseTool',
     props: {
         type: {
             type: String,
-            default: 'rectangle'
+            default: 'marker'
         },
      
 
     },
-    setup(props, contex) {
+    emits:['draw'],
+    setup(props:any, context:any) {
         const storeData = inject<any>('storeData')
         const { map } = storeData
-        var mouseTool =null //绘制对象
-        var overlays = [];
+        var mouseTool:any =ref() //绘制对象
+        var overlays:any = [];
       
         map.plugin(["AMap.MouseTool"],function(){ 
             initMouseTool()
@@ -36,18 +37,20 @@ export default {
         )
       
         function initMouseTool(){
-            mouseTool= new window.AMap.MouseTool(map); 
+            mouseTool.value= new window.AMap.MouseTool(map); 
            
         }
 
         /**
+         * 鼠标工具绘制覆盖物结束时触发此事件
          * 结束绘制
          * @param e 
          */
-        function draw(e){
+       
+        function draw(e:any){
             console.log(props.type,e,)
             overlays.push(e.obj);
-          
+            context.emit('draw',{obj:e.obj,overlays})
         }
 
         function remove(){
@@ -56,7 +59,7 @@ export default {
 
         //关闭，并清除覆盖物
         function close(flag=true){
-            mouseTool.close(flag)
+            mouseTool.value.close(flag)
         }
 
        
@@ -69,11 +72,15 @@ export default {
          * 监听类型变化
          * @param val 
          */
-        function watchType(val) {
+        function watchType(val:string) {
             // close()
-        
-            mouseTool[val]()
-            mouseTool.on('draw',draw) 
+        console.log(val,'watchType')
+        if(val&&val!=mouseTool.value){
+
+            mouseTool.value[val]()
+            mouseTool.value.on('draw',draw) 
+        }
+
         }
         return {
             remove,
@@ -82,6 +89,6 @@ export default {
     },
     render(){
        
-        return () => h('div', { class: 'MapTool' }, 'MapTool')
+        return () => h('div', { class: 'MouseTool' }, 'MouseTool')
     }
 }

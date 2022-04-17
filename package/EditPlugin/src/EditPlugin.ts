@@ -28,13 +28,14 @@ export default {
         }
 
     },
-    setup(props, contex) {
+    emits:['end'],
+    setup(props:any, contex:any) {
         const storeData = inject<any>('storeData')
         const { map } = storeData
         var myEditor=null //编辑对象
         var editType=''
-        var myoverlay=null
-        var myoverlayEditor=null
+        var myoverlay:any=null
+        var myoverlayEditor:any=null
        
  
 
@@ -53,10 +54,10 @@ export default {
            
         //矩形 需要计算周边
         if(props.type=='rectangle'){
-            otherOptions.bounds= new  AMap.Bounds(props.overlayOptions.southWest, props.overlayOptions.northEast)
+            otherOptions.bounds= new  window.AMap.Bounds(props.overlayOptions.southWest, props.overlayOptions.northEast)
         }
         
-           myoverlay=new AMap[editType]({
+           myoverlay=new  window.AMap[editType]({
                ...props.overlayOptions,
                ...otherOptions
              
@@ -77,31 +78,37 @@ export default {
               return  myoverlay.setDraggable(true)
             }
             map.plugin(["AMap."+ editType+"Editor"],function(){ 
-              myoverlayEditor = new AMap[editType+"Editor"](map, myoverlay); 
+              myoverlayEditor = new  window.AMap[editType+"Editor"](map, myoverlay); 
 
                 // 开启编辑模式
                 myoverlayEditor.open(); 
-                myoverlayEditor.on('adjust', function(event) {
-                    console.log('触发事件： adjust',event)
-                })
+                // myoverlayEditor.on('adjust', function(event:any) {
+                //     console.log('触发事件： adjust',event)
+                // })
+                myoverlayEditor.on('end', endCallback)
             });
         }
-
-     
-        function watchEdit(val){
-            console.log(val,'watchEditval')
+        //结束编辑
+        function endCallback(event:any) {
+            contex.emit('end',event)
+        }
+        function watchEdit(val:boolean){
+            if(! props.type)return
             if(val){//开启编辑状态
                 if(!myoverlay){
                     //先创建覆盖物
                     createOverlay()
+                }else{
+
+                    EditPlugin()
                 }
-                EditPlugin()
             }else{ //仅展示
-                clearMap()
+            //    props.type&& clearMap()
+            myoverlayEditor&&myoverlayEditor.close()
             }
         }
 
-        function watchType(val){
+        function watchType(val:string){
             clearMap()
             if(val){
                 //marker=>Marker
@@ -127,7 +134,9 @@ export default {
             }
             if(myoverlayEditor){
                 myoverlayEditor.close()
+                myoverlayEditor.off('end',endCallback)
                 myoverlayEditor=null
+
             }
         }
        

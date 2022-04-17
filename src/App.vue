@@ -2,7 +2,7 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 
-import { getMapScript } from "./utils/scriptHelper";
+import { getMapScript } from "@/utils/scriptHelper";
 import { ref } from "vue";
 import { useRouter } from "vue-router"
 const activeName = ref('/multiCar')
@@ -17,7 +17,7 @@ function tabClick(val:String){
 
 <template>
   <div>
-    <el-tabs  @tab-click='tabClick' v-model="activeName">
+    <el-tabs   @tab-click='tabClick' v-model="activeName">
       <el-tab-pane label="multiCar" name='multiCar'> </el-tab-pane>
       <el-tab-pane label="history2" name='history2'> </el-tab-pane>
       <el-tab-pane label="history" name='history'> </el-tab-pane>

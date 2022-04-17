@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { listPoints, icon1, icon2 } from "../../utils/data";
+import { listPoints, icon1, icon2 } from "@/utils/data";
 const hMoveAnimation = ref();
 function startAnimation() {
 

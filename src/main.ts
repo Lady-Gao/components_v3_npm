@@ -7,12 +7,20 @@ import 'element-plus/dist/index.css'
  import { createRouter, createWebHistory } from 'vue-router';
 
 
-
+console.log(CVcomponents,'CVcomponents')
   const router = createRouter({
     history: createWebHistory(),
     routes :[
         {
             path: "/",
+            component: () => import( "./views/readMe/readMe.vue")
+        },
+        {
+            path: "/:pathMatch(.*)",
+           redirect:'/'
+        },
+        {
+            path: "/home",
             component: () => import( "./views/home/home.vue")
         },
         {

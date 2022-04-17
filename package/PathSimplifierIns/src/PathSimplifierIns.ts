@@ -19,7 +19,7 @@ import { asyncDownloadScript } from '../../../src/utils/scriptHelper'
               @moveing='PathSimplifierInsmoveing'
       />
 
- * position：[
+ * 方式一 position：[
     { point: [116.497428, 39.20923], icon: icon1 },
     { point: [116.497428, 39.20923] },
     { point: [113.597428, 36.20923], icon: icon1 },
@@ -27,13 +27,14 @@ import { asyncDownloadScript } from '../../../src/utils/scriptHelper'
     { point: [115.397428, 37.20923], icon: icon1 },
   ]
  * 
- * 
+ * 方式二 position：[[116.497428, 39.20923],[113.597428, 36.20923]]  icon：icon1 单独传
  * 
  * 
  */
 export default {
     name: 'PathSimplifierIns',
     props: {
+        // 巡航方式
         model: {
             type: String,
             default() {
@@ -51,6 +52,7 @@ export default {
             type: String || null,
             default: ''
         },
+        // 巡航器更换标识，id改变，将重置巡航器
         id: null
         ,
 
@@ -71,25 +73,25 @@ export default {
         }
     },
     emits: ['moveing','pointClick'],
-    setup(props, context) {
+    setup(props:any, context:any) {
         const storeData = inject<any>('storeData')
         console.log(storeData,'storeData')
-        const { mapMethods, map } = storeData
-        var pathSimplifierIns = null//pathSimplifierIns对象
-        var myPathSimplifier = null
+        const {  map } = storeData
+        var pathSimplifierIns:any = null//pathSimplifierIns对象
+        var myPathSimplifier:any = null
         const emptyLineStyle = {
             lineWidth: 0,
             fillStyle: null,
             strokeStyle: null,
             borderStyle: null
         };
-        var navg1 = null;
+        var navg1:any = null;
         var data = [{
             name: '动态路线',
             path: [[]]
         }];
         var historyIndex=0//轨迹当前的点记录
-        asyncDownloadScript('AMapUI', 'https://webapi.amap.com/ui/1.1/main.js?v=1.1.1').then(AMapUI => {
+        asyncDownloadScript('AMapUI', 'https://webapi.amap.com/ui/1.1/main.js?v=1.1.1').then((AMapUI: any) => {
             init(AMapUI)
         })
 
@@ -106,8 +108,8 @@ export default {
         )
 
 
-        function init(AMapUI) {
-            AMapUI.load(['ui/misc/PathSimplifier'], function (PathSimplifier) {
+        function init(AMapUI:any) {
+            AMapUI.load(['ui/misc/PathSimplifier'], function (PathSimplifier:any) {
 
                 if (!PathSimplifier.supportCanvas) {
                     alert('当前环境不支持 Canvas！');
@@ -135,17 +137,14 @@ export default {
                     //使用图片
                     content: myPathSimplifier.Render.Canvas.getImageContent(props.icon)
                 },
-                getPath: function (pathData, pathIndex) {
+                getPath: function (pathData:any) {
                     // console.log(2,'getPath')//实时才调用
                     return pathData.path;
                 },
-                getHoverTitle: function (pathData, pathIndex, pointIndex) {
+                getHoverTitle: function (pathData:any) {
                     
-                  
-                    if (pointIndex >= 0) {
-                        //point 
-                        return pathData.name + '，点：' + pointIndex + '/' + pathData.path.length;
-                    }
+                //   console.log(pathData, pathIndex, pointIndex,'pathData, pathIndex, pointIndex')
+                   
 
                     return pathData.name + '，点数量' + pathData.path.length;
                 },
@@ -185,9 +184,20 @@ export default {
 
         //轨迹路劲 设置一次
         function historyStart() {
-            let point = props.position.map(item => {
-                return item.point
-            })
+            let point =[]
+            //判断传入的数据类别
+            //[{point:[],icon}]
+            if(props.position[0].point){
+                point = props.position.map((item:{point:[]}) => {
+                    return item.point
+                })
+            }
+            //[[],[]]
+            if(props.position[0].length){
+                point=props.position
+            }
+            
+           console.log(point,'historyStart')
 
             if (point[0]) {
                 let icon=props.position[0].icon||props.icon
@@ -207,7 +217,7 @@ export default {
                         //使用图片
                         content: myPathSimplifier.Render.Canvas.getImageContent(icon)
                     },
-                    getPath: function (pathData, pathIndex) {
+                    getPath: function (pathData:any) {
                         return pathData.path;
                     },
                 });
@@ -221,7 +231,7 @@ export default {
         }
 
         //实时数据 跟新路劲 更新图标
-        function doExpand(position) {
+        function doExpand(position:[]) {
             if (position.length) {
                 var cursor = navg1.getCursor().clone(), //保存巡航器的位置
                     status = navg1.getNaviStatus();
@@ -260,7 +270,7 @@ export default {
             }
 
         }
-        function onMoveing(e,info) {
+        function onMoveing(e:any,info:any) {
            
             let index=info.dataItem.pointIndex
            
@@ -282,7 +292,7 @@ export default {
             }
 
         }
-        function pointClick(e,info) {
+        function pointClick(e:any,info:any) {
             context.emit('pointClick', e,info)
 
         }
@@ -290,7 +300,7 @@ export default {
          * 监听实时定位数据的变化
          * 
          */
-        function watchPosition(val) {
+        function watchPosition(val:any) {
             if (!val[0]) return
             waitingJs(val)
         }
@@ -298,7 +308,7 @@ export default {
          * 循环等到js文件加载完成执行historyStart
          * @param val 
          */
-        function waitingJs(val) {
+        function waitingJs(val:any) {
             if (pathSimplifierIns) {//已加载完js文件
                 if (props.model == 'realTime') {
                     //实时
@@ -328,7 +338,7 @@ export default {
         }
 
         //清空
-        function clearpathSimplifierIns(newval, oldval) {
+        function clearpathSimplifierIns(newval:any, oldval:any) {
             // if (pathSimplifierIns) {
             //    pathSimplifierIns.setData([])
             //   

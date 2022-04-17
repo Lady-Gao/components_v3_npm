@@ -3,7 +3,13 @@
  * 获取地图cdn接口
  * 有回调
  */
-export const getMapScript = function (name: String, cdn: String) {
+ declare global {
+    interface Window {
+        [props:string]:any
+    }
+    
+}
+export const getMapScript = function (name :string, cdn: String) {
 if (!window[name]) {
     window[name] = {};
     window[name]._preloader = new Promise(function (resolve, reject) {
