@@ -1,1 +1,0 @@
-const e={key:"v-71b6b223",path:"/vue3-Amap/components/amap/Liner.html",title:"\u6298\u7EBF\uFF08Liner)",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/components/amap/Liner.md"};export{e as data};

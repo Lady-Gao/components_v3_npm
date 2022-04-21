@@ -1,14 +1,4 @@
-// const modulesFiles = import.meta.globEager("./package/*/index.ts");
 
-// const modules = Object.keys(modulesFiles).reduce(
-//     (modules: { [key: string]: any }, path: string) => {
-//         let moduleName = path.replace(/^\.\/modules\/(.*)\.\w+$/, '$1')
-//         let name = moduleName.split('/')[2] //文件名
-//       modules[name] = modulesFiles[path]?.default
-//       return modules
-//     },
-//     {}
-// )
 import Map from "./package/Map/index";
 import Marker from "./package/Marker/index";
 import Liner from "./package/Liner/index";
@@ -18,7 +8,7 @@ import PathSimplifierIns from "./package/PathSimplifierIns/index";
 import MoveAnimation from "./package/MoveAnimation/index";
 import EditPlugin from "./package/EditPlugin/index";
 
-const modules:any={
+const modules={
     Map,
     Marker,
     Liner,

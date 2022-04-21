@@ -1,1 +1,0 @@
-const e={key:"v-a71d1eb8",path:"/vue3-Amap/components/amap/MouseTool.html",title:"\u9F20\u6807\u5DE5\u5177\uFF08MouseTool)",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/components/amap/MouseTool.md"};export{e as data};

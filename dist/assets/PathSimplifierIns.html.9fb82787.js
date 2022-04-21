@@ -1,1 +1,0 @@
-const t={key:"v-ca3ca484",path:"/vue3-Amap/components/amap/PathSimplifierIns.html",title:"\u5DE1\u822A\u5668\uFF08PathSimplifierIns)",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/components/amap/PathSimplifierIns.md"};export{t as data};

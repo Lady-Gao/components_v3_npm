@@ -1,1 +1,0 @@
-import{_ as e,o as t,a as r,b as a,d as n}from"./app.ab862756.js";const o={},s={id:"inputtree",tabindex:"-1"},_=a("a",{class:"header-anchor",href:"#inputtree","aria-hidden":"true"},"#",-1),c=n(" inputTree"),i=[_,c];function d(h,u){return t(),r("h1",s,i)}var f=e(o,[["render",d],["__file","inputTree.html.vue"]]);export{f as default};

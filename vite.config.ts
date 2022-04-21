@@ -4,7 +4,6 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base:'/vue3-Amap/',
   plugins: [vue()],
   resolve: {
     alias: [
@@ -14,12 +13,4 @@ export default defineConfig({
       }
     ]
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        charset: false,
-        additionalData: `$injectedColor: orange;`
-      }
-    }
-  }
 })

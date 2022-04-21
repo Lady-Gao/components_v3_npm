@@ -1,1 +1,0 @@
-import{_ as e,o as a,a as t,b as o,d as s}from"./app.ab862756.js";const _={},c={id:"amap",tabindex:"-1"},r=o("a",{class:"header-anchor",href:"#amap","aria-hidden":"true"},"#",-1),n=s(" Amap"),d=[r,n];function i(h,m){return a(),t("h1",c,d)}var l=e(_,[["render",i],["__file","index.html.vue"]]);export{l as default};

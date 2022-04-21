@@ -1,1 +1,0 @@
-const t={key:"v-5908f4c0",path:"/vue3-Amap/guide/startedQuickly.html",title:"\u5FEB\u901F\u4E0A\u624B",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/guide/startedQuickly.md"};export{t as data};

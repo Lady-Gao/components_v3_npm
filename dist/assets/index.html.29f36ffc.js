@@ -1,1 +1,0 @@
-const e={key:"v-120ae260",path:"/vue3-Amap/guide/",title:"cv-components",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/guide/README.md"};export{e as data};

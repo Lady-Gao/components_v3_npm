@@ -1,1 +1,0 @@
-const e={key:"v-75b78ac5",path:"/vue3-Amap/components/tree/baseTree.html",title:"baseTree",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/components/tree/baseTree.md"};export{e as data};
