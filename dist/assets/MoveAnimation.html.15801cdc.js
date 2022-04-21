@@ -1,0 +1,1 @@
+const e={key:"v-832b70e4",path:"/vue3-Amap/components/amap/MoveAnimation.html",title:"\u8F68\u8FF9\u56DE\u653E\uFF08MoveAnimation)",lang:"en-US",frontmatter:{},excerpt:"",headers:[],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/components/amap/MoveAnimation.md"};export{e as data};

@@ -1,0 +1,1 @@
+import{_ as e,o as a,a as t,b as s,d as r}from"./app.ab862756.js";const o={},_={id:"basetree",tabindex:"-1"},c=s("a",{class:"header-anchor",href:"#basetree","aria-hidden":"true"},"#",-1),n=r(" baseTree"),d=[c,n];function h(i,f){return a(),t("h1",_,d)}var b=e(o,[["render",h],["__file","baseTree.html.vue"]]);export{b as default};

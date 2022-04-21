@@ -1,0 +1,1 @@
+const e={key:"v-39336057",path:"/vue3-Amap/components/amap/Marker.html",title:"\u70B9\u6807\u8BB0 (Marker)",lang:"en-US",frontmatter:{},excerpt:"",headers:[{level:2,title:"\u793A\u4F8B",slug:"\u793A\u4F8B",children:[]}],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/components/amap/Marker.md"};export{e as data};

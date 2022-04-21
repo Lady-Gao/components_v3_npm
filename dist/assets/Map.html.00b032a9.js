@@ -1,0 +1,1 @@
+const e={key:"v-126c6885",path:"/vue3-Amap/components/amap/Map.html",title:"\u5730\u56FE\uFF08Map)",lang:"en-US",frontmatter:{},excerpt:"",headers:[{level:2,title:"\u793A\u4F8B",slug:"\u793A\u4F8B",children:[]}],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/components/amap/Map.md"};export{e as data};

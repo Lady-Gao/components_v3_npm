@@ -1,0 +1,1 @@
+const e={key:"v-32f89304",path:"/vue3-Amap/guide/install.html",title:"\u5B89\u88C5",lang:"en-US",frontmatter:{},excerpt:"",headers:[{level:3,title:"npm",slug:"npm",children:[]},{level:3,title:"yarn",slug:"yarn",children:[]}],git:{updatedTime:null,contributors:[]},filePathRelative:"vue3-Amap/guide/install.md"};export{e as data};
