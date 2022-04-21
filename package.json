@@ -1,6 +1,7 @@
 {
   "name": "cv_amapv3",
   "version": "0.0.23",
+  "author": "monstergao",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -30,11 +31,11 @@
     "vite": "^2.7.2",
     "vue-tsc": "^0.29.8"
   },
-  "author": "monstergao",
+ 
   "license": "ISC",
   "files": [
     "lib",
     "README.md"
   ],
-  "main": "lib/cv.js"
+  "main": "lib/index.js"
 }

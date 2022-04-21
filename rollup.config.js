@@ -10,7 +10,7 @@ module.exports = [
     // 出口
     output: [
       {
-        file: "lib/cv.js",
+        file: "lib/index.js",
         // 配置打包模块化的方式 es:ESM  cjs:CommonJS
         format: "es",
       },
