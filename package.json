@@ -1,6 +1,6 @@
 {
-  "name": "cv_amapv3",
-  "version": "0.0.24",
+  "name": "projectceshi",
+  "version": "0.0.20",
   "author": "monstergao",
   "scripts": {
     "dev": "vite",
@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@vue/cli-service": "^5.0.4",
+    "cv_amapv3": "^0.0.27",
+    "cv_components_v3": "^0.0.1",
     "default-passive-events": "^2.0.0",
     "element-plus": "^2.0.4",
     "rollup-plugin-postcss": "^4.0.2",
@@ -31,11 +33,10 @@
     "vite": "^2.7.2",
     "vue-tsc": "^0.29.8"
   },
- 
   "license": "ISC",
   "files": [
     "lib",
     "README.md"
   ],
-  "main": "lib/index.js"
+  "main": "index.ts"
 }

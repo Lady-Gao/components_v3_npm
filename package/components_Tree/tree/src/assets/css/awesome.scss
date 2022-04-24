@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'iconfont-tree';  /* project id 3354902 */
+  src: url('//at.alicdn.com/t/font_3354902_sou7nsstvob.woff2?t=1650789909819') format('woff2'),
+  url('//at.alicdn.com/t/font_3354902_sou7nsstvob.woff?t=1650789909819') format('woff'),
+  url('//at.alicdn.com/t/font_3354902_sou7nsstvob.ttf?t=1650789909819') format('truetype');
+}
+
+// 公司icon
+.cv-ztree li span.button.company_ico_open:before,
+.cv-ztree li span.button.company_ico_close:before,
+.cv-ztree li span.button.company_ico_docu:before {
+  content: "\e61a";
+  font-family: 'iconfont-tree'; 
+}
+//close右箭头
+.cv-ztree li span.button.noline_close:before {
+  content: '\e62d';
+  font-family: 'iconfont-tree'; 
+}
+//open下三角
+.cv-ztree li span.button.noline_open:before {
+  content: '\e62e';
+  font-family: 'iconfont-tree'; 
+}

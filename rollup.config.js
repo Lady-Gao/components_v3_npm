@@ -6,11 +6,13 @@ import typescript from 'rollup-plugin-typescript2'
 module.exports = [
   {
     // 入口
-    input: "index.ts",
+    input: "package/index.ts",
+    // input: "package/Amap_components/index.ts",
     // 出口
     output: [
       {
-        file: "lib/index.js",
+         file: "package/lib/index.js",
+        // file:'package/Amap_components/lib/index.js',
         // 配置打包模块化的方式 es:ESM  cjs:CommonJS
         format: "es",
       },

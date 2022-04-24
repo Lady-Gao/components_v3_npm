@@ -5,7 +5,7 @@
 import { getMapScript } from "@/utils/scriptHelper";
 import { ref } from "vue";
 import { useRouter } from "vue-router"
-const activeName = ref('/multiCar')
+const activeName = ref('/baseTree')
     const router = useRouter()
  
 function tabClick(val:String){
@@ -16,14 +16,18 @@ function tabClick(val:String){
 </script>
 
 <template>
-  <div>
-    <el-tabs   @tab-click='tabClick' v-model="activeName">
+  <div class='flexRoute'>
+      <div >
+        <el-tabs tab-position='left'  @tab-click='tabClick' v-model="activeName" >
+       <el-tab-pane label="home" name='home'> </el-tab-pane>
       <el-tab-pane label="multiCar" name='multiCar'> </el-tab-pane>
-      <el-tab-pane label="history2" name='history2'> </el-tab-pane>
+      <el-tab-pane label="MoveAnimation" name='history2'> </el-tab-pane>
       <el-tab-pane label="history" name='history'> </el-tab-pane>
       <el-tab-pane label="fenceManage" name='fenceManage'> </el-tab-pane>
+       <el-tab-pane label="baseTree" name='baseTree'> </el-tab-pane>
     </el-tabs>
-    <router-view />
+      </div>
+    <div class='flex1'><router-view /></div>
   </div>
 </template>
 
@@ -36,4 +40,10 @@ function tabClick(val:String){
 //   color: #2c3e50;
 //   margin-top: 60px;
 // }
+.flexRoute{
+  display: flex;
+  .flex1{
+    flex: 1;
+  }
+}
 </style>
