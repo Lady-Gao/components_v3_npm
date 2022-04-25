@@ -98,7 +98,7 @@ console.log( this.autoParam,'this.lazy')
                 nocheckInherit: true,//自动继承父节点 nocheck = true 的属性
                 chkStyle: "checkbox",//显示 checkbox 选择框
                 chkboxType: { "Y": "ps", "N": "ps" },
-                chkDisabledInherit:true,
+                chkDisabledInherit:true,//当父节点设置 chkDisabled = true 时，设置子节点是否自动继承 chkDisabled = true 。
             },
             edit:{
                 drag:{
@@ -150,15 +150,15 @@ console.log( this.autoParam,'this.lazy')
                  * @param {*} treeNode 进行 勾选 或 取消勾选 的节点 JSON 数据对象
                  */
                 beforeCheck: function(treeId, treeNode) {
-                    _self.currentHandlerName = 'check';
+                    // _self.currentHandlerName = 'check';
 
-                    _self.nodeBeforeCheck.apply(this, arguments);
+                    _self.nodeBeforeCheck(arguments)
                     if(treeNode.checked) {
                         return treeNode.doCheck = true;
                     }
-                    if(typeof _self.limitCheck === 'function') {
-                        return treeNode.doCheck = _self.limitCheck(treeNode);
-                    } 
+                    // if(typeof _self.limitCheck === 'function') {
+                    //     return treeNode.doCheck = _self.limitCheck(treeNode);
+                    // } 
                 },
                 /**
                  * 用于捕获节点被删除之前的事件回调函数

@@ -1,7 +1,7 @@
 <template>
 <div class='baseTree'>
-  <el-col :span='12'>
- 异步树 为平铺的数据格式
+  <p>
+ 异步树 为平铺的数据格式 VehicleTreeInfoList
        <tree 
             :treeData='VehicleTreeInfoList'
        :lazy='lazy'
@@ -9,27 +9,36 @@
        :otherParam='{categories: 2}'
        />
 
-  </el-col>
-   <el-col :span='12'>
-     正常树 为有层级且带有有children属性
-       <tree 
+  </p>
+   <p>
+     正常树 为有层级且带有有children属性 EnterpriseTreeList
+       <tree  :isCheck='true'
        :treeData='EnterpriseTreeList'
        />
-   </el-col>
+   </p>
+     <p>
+     正常树 OrganizationTreeList
+       <tree 
+       :treeData='OrganizationTreeList'
+       />
+   </p>
 </div>
       
       
 </template>
     
 <script setup lang='ts'>
-    import getEnterpriseTreeList from '@/utils/getEnterpriseTreeList.json'
     import findVehicleTreeInfoList from '@/utils/findVehicleTreeInfoList.json'
-    const {EnterpriseTreeList}=getEnterpriseTreeList
+    import getEnterpriseTreeList from '@/utils/getEnterpriseTreeList.json'
+      import findEnterpriseOrganizationTreeList from '@/utils/findEnterpriseOrganizationTreeList.json'
     const {VehicleTreeInfoList}=findVehicleTreeInfoList
+    const {EnterpriseTreeList}=getEnterpriseTreeList
 
-
+    const {OrganizationTreeList}=findEnterpriseOrganizationTreeList
     const lazy='http://web2.test.cvtsp.com/api/basic/tree/findVehicleTreeInfoList'
-    const token='588a179d-8415-4f10-9062-f61e7c0d017a'
+
+    
+    const token='1b03d944-2292-484b-91d6-cf68f67486f4'
     const headers={
                     token,
                    'Authorization':'Bearer '+token
@@ -38,9 +47,9 @@
     
 <style lang='scss'>
  .baseTree{
-
+display: flex;
+    justify-content: space-between;
    height: 500px;
-   background: pink;
    .el-col{
  height: 100%;
    }

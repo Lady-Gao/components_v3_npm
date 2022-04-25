@@ -2,8 +2,8 @@
 
 <template>
   <div class="cv-ztree" ref="tree">
-      
-      <ul :id="treeId" ></ul>
+
+    <ul :id="treeId"></ul>
   </div>
 </template>
     
@@ -29,7 +29,7 @@ export default defineComponent({
         return "text";
       },
     },
-     showIcon: { // 是否显示图标
+    showIcon: { // 是否显示图标
       type: Boolean,
       default: true,
     },
@@ -37,23 +37,23 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-     isCopy: {//拖拽时，是否复制节点，false为移动节点
-      default: false, 
+    isCopy: {//拖拽时，是否复制节点，false为移动节点
+      default: false,
     },
     isRemoveBtn: {//
-      default: false, 
+      default: false,
     },
     isRenameBtn: {//
-      default: false, 
+      default: false,
     },
     isMove: {//拖拽时，设置是否允许移动节点
-      default: false, 
+      default: false,
     },
     iconsFilter: {//树上的节点图标更改方法 val.iconSkin = 'camera'
       type: Function,
-      default:null
+      default: null
     },
-   
+
     isContextmenu: {// 是否开启右击功能
       type: Boolean,
       default: false,
@@ -66,28 +66,28 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    baseUrl:{//请求的域名
-         type: String,
+    baseUrl: {//请求的域名
+      type: String,
       default: '',
     },
     lazy: {// 树的接口(/monitor/findVehicleTreeInfoList)
       type: String,
       default: '',
     },
-    type:{ //树的异步请求方式
-        type:String ,
-        default:'get'
+    type: { //树的异步请求方式
+      type: String,
+      default: 'get'
     },
-    headers:{ //树的异步请求头部 
-        type:Object ,
-        default:{
-            // 'token':localStorage.getItem("token"),
-            // 'Authorization':'Bearer '+localStorage.getItem("token")
-        } 
-      
+    headers: { //树的异步请求头部 
+      type: Object,
+      default: {
+        // 'token':localStorage.getItem("token"),
+        // 'Authorization':'Bearer '+localStorage.getItem("token")
+      }
+
     },
-   
-    
+
+
     autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
       type: Array,
       default() {
@@ -101,156 +101,144 @@ export default defineComponent({
     },
   },
   setup(props: any, context: any) {
-      console.log(props)
+    console.log(props)
     const tree = ref();
-    const treeId=ref()
-    treeId.value=randomMakeTreeid()
+    const treeId = ref()
+    treeId.value = randomMakeTreeid()
     onMounted(() => {
       tree.value = new BaseTree({
         el: treeId.value,
         options: {
-            baseUrl:props.baseUrl,
-            lazy:props.lazy,
-            type:props.type,
-            headers:props.headers,
-            autoParam:props.autoParam,
-            otherParam:props.otherParam,
-            name:props.name,
-            isCheck:props.isCheck,
-            showIcon:props.showIcon,
-            isCopy:props.isCopy,
-            isRemoveBtn:props.isRemoveBtn,
-            isRenameBtn:props.isRenameBtn,
-            isMove:props.isMove,
-            nodeFilter:props.nodeFilter,
-            isContextmenu:props.isContextmenu,
-            isExpand:props.isExpand,
-            isFreeze:props.isFreeze,
-            iconsFilter,
+          baseUrl: props.baseUrl,
+          lazy: props.lazy,
+          type: props.type,
+          headers: props.headers,
+          autoParam: props.autoParam,
+          otherParam: props.otherParam,
+          name: props.name,
+          isCheck: props.isCheck,
+          showIcon: props.showIcon,
+          isCopy: props.isCopy,
+          isRemoveBtn: props.isRemoveBtn,
+          isRenameBtn: props.isRenameBtn,
+          isMove: props.isMove,
+          nodeFilter: props.nodeFilter,
+          isContextmenu: props.isContextmenu,
+          isExpand: props.isExpand,
+          isFreeze: props.isFreeze,
+          iconsFilter,
         },
-        methods:{
-            treeLoaded,
-             nodeClick,
-             nodeCollapse() {},
+        methods: {
+          treeLoaded,
+          nodeClick,
+          nodeCollapse() { },
+          nodeBeforeCheck(){},
         }
-       
+
       });
 
-//如果传了treeData  就不是异步
-        if (Array.isArray(props.treeData) &&props.treeData.length) {
-            //传进来的数据是数组
-             tree.value.setInitialTree( props.treeData);
-        }else{
-            getHttpTreeData()
-        }
+      //如果传了treeData  就不是异步
+      if (Array.isArray(props.treeData) && props.treeData.length) {
+        //传进来的数据是数组
+        tree.value.setInitialTree(props.treeData);
+      } else {
+        getHttpTreeData()
+      }
     });
- 
- // 使用请求数据 lazy headers  type otherParam
-function getHttpTreeData(){
-            console.log('内部请求数据')
-            let str='?'
-           for (const key in props.otherParam) {
-              str+=key+'='+props.otherParam[key]+'&'
-           }
-           console.log(str)
-            fetch(props.lazy+str,{
-                  method:props.type,
-                headers: props.headers
-            }).then(response=>{
-                return response.json();
-            }).then(res=>{
-                console.log(res,'fetchres')
-                 tree.value.setInitialTree( res.data);
-            })
-}
 
-     watch(() => props.treeData, watchTreeData,
-        { immediate: true, deep: true }
-        )
+    // 使用请求数据 lazy headers  type otherParam
+    function getHttpTreeData() {
+      console.log('内部请求数据')
+      let str = '?'
+      for (const key in props.otherParam) {
+        str += key + '=' + props.otherParam[key] + '&'
+      }
+      console.log(str)
+      fetch(props.lazy + str, {
+        method: props.type,
+        headers: props.headers
+      }).then(response => {
+        return response.json();
+      }).then(res => {
+        console.log(res, 'fetchres')
+        tree.value.setInitialTree(res.data);
+      })
+    }
 
-    function watchTreeData(val:[]){
-        if(val.length&&tree.value){
+    watch(() => props.treeData, watchTreeData,
+      { immediate: true, deep: true }
+    )
 
-             console.log(val,'watchTreeData')
-            // tree.setInitialTree(this.names, val)
-        }
+    function watchTreeData(val: []) {
+      if (val.length && tree.value) {
+
+        console.log(val, 'watchTreeData')
+        // tree.setInitialTree(this.names, val)
+      }
     }
     // 随意生成树的id编号
     function randomMakeTreeid() {
-        treeId.value=`tree${Math.floor(new Date().getTime() + Math.random() * 100000)}`;
+      treeId.value = `tree${Math.floor(new Date().getTime() + Math.random() * 100000)}`;
       return treeId.value
     }
-    
+
     //更改节点得图标
-    function iconsFilter(nodes:any) {
-          var { data, flag } = nodes;
-          if (props.iconsFilter && Array.isArray(data)) {
-            data.forEach((val) => {
-             iconsFilter(val);
-            });
-            return data;
-          } else {
-            Array.isArray(data) &&
-              data.forEach((val) => {
-                switch (val.type) {
-                  case 1:
-                    return (val.iconSkin = "company");
-                  case 2:
-                    return (val.iconSkin = "organize");
-                  case 3:
-                    return (val.iconSkin = "fleed");
-                  case 4:
-                    return (val.iconSkin =
-                      val.deviceTypeCode == 2
-                        ? val.online
-                          ? "onlineCamera"
-                          : "unlineCamera"
-                        : val.online
-                        ? "online" + (val.icon || "icon1")
-                        : "unline" + (val.icon || "icon1"));
-                  case 5:
-                    return (val.iconSkin = "camera");
-                }
-              });
-              console.log(data,'iconsFilter')
-            return data;
-          }
-        }
+    function iconsFilter(nodes: any) {
+      var { data, flag } = nodes;
+      if (props.iconsFilter && Array.isArray(data)) {
+        data.forEach((val) => {
+          iconsFilter(val);
+        });
+        return data;
+      } else {
+        Array.isArray(data) &&
+          data.forEach((val) => {
+            switch (val.type) {
+              case 1:
+                return (val.iconSkin = "company");
+              case 2:
+                return (val.iconSkin = "organize");
+              case 3:
+                return (val.iconSkin = "fleed");
+              case 4:
+                return (val.iconSkin =
+                  val.deviceTypeCode == 2
+                    ? val.online
+                      ? "onlineCamera"
+                      : "unlineCamera"
+                    : val.online
+                      ? "online" + (val.icon || "icon1")
+                      : "unline" + (val.icon || "icon1"));
+              case 5:
+                return (val.iconSkin = "camera");
+            }
+          });
+        console.log(data, 'iconsFilter')
+        return data;
+      }
+    }
     // 数据成功渲染完成的回调
-    function  treeLoaded() {
-          
-        }
-const zTree=computed(()=>{
-    return tree.value.zTree
-})
-    function  nodeClick() {
-        console.log(arguments)
-        console.log(zTree,'zTree')
-        
-     
+    function treeLoaded() {
+
+    }
+    const zTree = computed(() => {
+      return tree.value.zTree
+    })
+    function nodeClick() {
+      console.log(arguments)
+      console.log(zTree, 'zTree')
+
+
     }
     return {
-        treeId,
-            tree,
-            zTree
+      treeId,
+      tree,
+      zTree
     }
   },
 });
 </script>
     
 <style lang='scss'>
-.cv-ztree{
-     width: 100%;
-     height: 95%;
-     overflow-y: scroll;
-  min-height: 36px;
-  .cv-tree-emptytext {
-    text-align: center;
-    font-size: 16px;
-    color: #ccc;
-  }
-  .cv-ztree li:hover {
-    background-color: #f5f7fa;
-  }
-}
+@import './assets/css/awesome.scss';
 </style>
