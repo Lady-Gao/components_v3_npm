@@ -14,6 +14,7 @@
  */
 import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue";
 import BaseTree from "./js/base-tree";
+import {getOptions,getMethods} from './js/treeMinxi'
 export default defineComponent({
   name: "Tree",
   props: {
@@ -99,141 +100,71 @@ export default defineComponent({
         return {};
       },
     },
+    limitCheck:{//beforeCheck点击选中之前的事件,return true|false (是否勾选)
+    type:Function,
+      default(){
+        return null
+      }
+    },
+    nodeFilter: {// 树上的节点筛选 return [条件, 符合的结果]
+      type: Array,
+      default() {
+        return ["type", 4];
+      },
+    },
+
+
   },
+  emits:['node-click','node-check'],
   setup(props: any, context: any) {
-    console.log(props)
     const tree = ref();
     const treeId = ref()
     treeId.value = randomMakeTreeid()
     onMounted(() => {
       tree.value = new BaseTree({
         el: treeId.value,
-        options: {
-          baseUrl: props.baseUrl,
-          lazy: props.lazy,
-          type: props.type,
-          headers: props.headers,
-          autoParam: props.autoParam,
-          otherParam: props.otherParam,
-          name: props.name,
-          isCheck: props.isCheck,
-          showIcon: props.showIcon,
-          isCopy: props.isCopy,
-          isRemoveBtn: props.isRemoveBtn,
-          isRenameBtn: props.isRenameBtn,
-          isMove: props.isMove,
-          nodeFilter: props.nodeFilter,
-          isContextmenu: props.isContextmenu,
-          isExpand: props.isExpand,
-          isFreeze: props.isFreeze,
-          iconsFilter,
-        },
-        methods: {
-          treeLoaded,
-          nodeClick,
-          nodeCollapse() { },
-          nodeBeforeCheck(){},
-        }
-
+        options:getOptions(props),
+        methods:getMethods(props,context)
       });
 
       //如果传了treeData  就不是异步
       if (Array.isArray(props.treeData) && props.treeData.length) {
         //传进来的数据是数组
-        tree.value.setInitialTree(props.treeData);
+         setInitialTree()
       } else {
         getHttpTreeData()
       }
     });
-
+//设置树的初始化数据
+  function setInitialTree() {
+     tree.value.setInitialTree(props.treeData);
+    }
     // 使用请求数据 lazy headers  type otherParam
-    function getHttpTreeData() {
+  function getHttpTreeData() {
       console.log('内部请求数据')
       let str = '?'
       for (const key in props.otherParam) {
         str += key + '=' + props.otherParam[key] + '&'
       }
-      console.log(str)
       fetch(props.lazy + str, {
         method: props.type,
         headers: props.headers
       }).then(response => {
         return response.json();
       }).then(res => {
-        console.log(res, 'fetchres')
         tree.value.setInitialTree(res.data);
       })
     }
 
-    watch(() => props.treeData, watchTreeData,
-      { immediate: true, deep: true }
-    )
-
-    function watchTreeData(val: []) {
-      if (val.length && tree.value) {
-
-        console.log(val, 'watchTreeData')
-        // tree.setInitialTree(this.names, val)
-      }
-    }
     // 随意生成树的id编号
     function randomMakeTreeid() {
       treeId.value = `tree${Math.floor(new Date().getTime() + Math.random() * 100000)}`;
       return treeId.value
     }
-
-    //更改节点得图标
-    function iconsFilter(nodes: any) {
-      var { data, flag } = nodes;
-      if (props.iconsFilter && Array.isArray(data)) {
-        data.forEach((val) => {
-          iconsFilter(val);
-        });
-        return data;
-      } else {
-        Array.isArray(data) &&
-          data.forEach((val) => {
-            switch (val.type) {
-              case 1:
-                return (val.iconSkin = "company");
-              case 2:
-                return (val.iconSkin = "organize");
-              case 3:
-                return (val.iconSkin = "fleed");
-              case 4:
-                return (val.iconSkin =
-                  val.deviceTypeCode == 2
-                    ? val.online
-                      ? "onlineCamera"
-                      : "unlineCamera"
-                    : val.online
-                      ? "online" + (val.icon || "icon1")
-                      : "unline" + (val.icon || "icon1"));
-              case 5:
-                return (val.iconSkin = "camera");
-            }
-          });
-        console.log(data, 'iconsFilter')
-        return data;
-      }
-    }
-    // 数据成功渲染完成的回调
-    function treeLoaded() {
-
-    }
-    const zTree = computed(() => {
-      return tree.value.zTree
-    })
-    function nodeClick() {
-      console.log(arguments)
-      console.log(zTree, 'zTree')
-
-
-    }
+    
     return {
       treeId,
       tree,
-      zTree
     }
   },
 });

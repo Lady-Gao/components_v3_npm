@@ -144,47 +144,33 @@ console.log( this.autoParam,'this.lazy')
                 headers:this.headers
             },
             callback: {
+                 /**
+                 * 用于捕获单击节点之前的事件回调函数，并且根据返回值确定是否允许单击操作
+                 */
+                beforeClick:this.beforeClick,
                 /**
                  * 用于捕获 勾选 或 取消勾选 之前的事件回调函数
-                 * @param {*} treeId 对应 zTree 的 treeId
-                 * @param {*} treeNode 进行 勾选 或 取消勾选 的节点 JSON 数据对象
                  */
-                beforeCheck: function(treeId, treeNode) {
-                    // _self.currentHandlerName = 'check';
-
-                    _self.nodeBeforeCheck(arguments)
-                    if(treeNode.checked) {
-                        return treeNode.doCheck = true;
-                    }
-                    // if(typeof _self.limitCheck === 'function') {
-                    //     return treeNode.doCheck = _self.limitCheck(treeNode);
-                    // } 
-                },
+                beforeCheck: this.beforeCheck,
                 /**
                  * 用于捕获节点被删除之前的事件回调函数
                  * @param {*} treeId 对应 zTree 的 treeId
                  * @param {*} treeNode 将要删除的节点 JSON 数据对象
                  */
-                beforeRemove: function(treeId, treeNode) {
-                    _self.nodeBeforeRemove.apply(this, arguments);
-                },
+                beforeRemove: this.beforeRemove,
                 /**
                  * 用于捕获节点编辑名称结束（Input 失去焦点 或 按下 Enter 键）之后，更新节点名称数据之前的事件回调函数，并且根据返回值确定是否允许更改名称的操作
                  * @param {*} treeId 对应 zTree 的 treeId
                  * @param {*} treeNode 将要删除的节点 JSON 数据对象
                  */
-                 beforeRename: function(treeId, treeNode) {
-                    _self.nodeBeforebeforeRename.apply(this, arguments);
-                },
+                 beforeRename: this.beforeRename,
                 /**
                  * 用于捕获节点被展开的事件回调函数
                  * @param {*} event 
                  * @param {*} treeId 
                  * @param {*} treeNode 
                  */
-                onExpand: function(event, treeId, treeNode) {
-                    _self.nodeExpand && _self.nodeExpand.apply(this, arguments);
-                },
+                onExpand: this.onExpand,
                 /**
                  * 用于捕获异步加载正常结束的事件回调函数
                  * @param {*} event 
@@ -192,33 +178,28 @@ console.log( this.autoParam,'this.lazy')
                  * @param {*} treeNode 
                  * @param {*} msg 
                  */
-                onAsyncSuccess: function (event, treeId, treeNode, msg) {    
-                    _self.load && _self.load(treeNode, _self.currentHandlerName);
-                },
+                onAsyncSuccess:this.onAsyncSuccess,
                 /**
                  * 用于捕获 checkbox / radio 被勾选 或 取消勾选的事件回调函数
                  * @param {*} event 
                  * @param {*} treeId 
                  * @param {*} treeNode 
                  */
-                onCheck: function(event, treeId, treeNode) {
-                    console.log(777)
-                    _self.nodeCheck && _self.nodeCheck.apply(this, arguments);
-                },
+                onCheck: this.onCheck,
                 /**
                  * 用于捕获节点被点击的事件回调函数
                  * @param {*} event 
                  * @param {*} treeId 
                  * @param {*} treeNode 
                  */
-                onClick: this.nodeClick,
+                onClick: this.onClick,
                 /**
                  * 用于捕获 zTree 上鼠标右键点击之后的事件回调函数
                  * @param {*} event 
                  * @param {*} treeId 
                  * @param {*} treeNode 
                  */
-                onRightClick: this.rightClickthis,
+                onRightClick: this.onRightClick,
                 /**
                  * 用于捕获节点编辑名称结束之后的事件回调函数
                  * @param {*} event 
@@ -226,14 +207,14 @@ console.log( this.autoParam,'this.lazy')
                  * @param {*} treeNode 
                  * @param {*} isCancel 
                  */
-                onRename: this.nodeRename,
+                onRename: this.onRename,
                 /**
                  * 用于捕获节点被折叠的事件回调函数
                  * @param {*} event 
                  * @param {*} treeId 
                  * @param {*} treeNode 
                  */
-                onCollapse: this.nodeCollapse,
+                onCollapse: this.onCollapse,
                 /**
                  * 用于捕获节点被拖拽之前的事件回调函数，并且根据返回值确定是否允许开启拖拽操作
                  * @param {*} treeId 
@@ -241,16 +222,7 @@ console.log( this.autoParam,'this.lazy')
                  * @param {*} targetNode 成为 treeNodes 拖拽结束的目标节点 JSON 数据对象。
                  * @param {*} moveType 指定移动到目标节点的相对位置
                  */
-                beforeDrop:function(treeId, treeNodes, targetNode, moveType) {
-                    _self.nodeBeforeDrop && _self.nodeBeforeDrop(treeNodes,targetNode);
-                    
-                    if(typeof _self.limitDrop === 'function') {
-                        return _self.limitDrop(treeNodes, targetNode, moveType);
-                    }else {
-                        return true;
-                    }
-                    
-                },
+                beforeDrop:this.beforeDrop,
                 /**
                  * 用于捕获节点拖拽操作结束的事件回调函数
                  * @param {*} e 
@@ -259,9 +231,7 @@ console.log( this.autoParam,'this.lazy')
                  * @param {*} targetNode 成为 treeNodes 拖拽结束的目标节点 JSON 数据对象。
                  * @param {*} moveType 指定移动到目标节点的相对位置
                  */
-                onDrop:function(e, treeId, treeNodes,targetNode,moveType){
-                    _self.nodeDrop && _self.nodeDrop(treeNodes,targetNode);
-                }
+                onDrop:this.onDrop
             } 
         }
     }

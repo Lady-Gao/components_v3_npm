@@ -5,7 +5,7 @@ const router = createRouter({
       
         {
             path: "/:pathMatch(.*)",
-           redirect:'/home'
+           redirect:'/baseTree'
         },
         {
             path: "/home",

@@ -8,7 +8,8 @@ import 'element-plus/dist/index.css'
 
 import router from './route'
 
-console.log(cv_components_v3,'cv_components_v3')
+
+// console.log(cv_components_v3,'cv_components_v3')
 
 createApp(App)
     .use(cv_components_v3)

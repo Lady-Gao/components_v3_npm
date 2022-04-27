@@ -1,12 +1,26 @@
 <template>
 <div class='baseTree'>
   <p>
- 异步树 为平铺的数据格式 VehicleTreeInfoList
+ 异步加载树 为平铺的数据格式 VehicleTreeInfoList
        <tree 
-            :treeData='VehicleTreeInfoList'
+         :treeData='VehicleTreeInfoList'
        :lazy='lazy'
        :headers='headers'
+        :otherParam='{}'
+         :isCheck='true'
+         :limitCheck="limitCheck"
+        
+         @node-check="nodeCheck"
+       />
+
+  </p>
+   <p>
+ 子节点异步加载树 为平铺的数据格式 VehicleTreeInfoList
+       <tree 
+       :lazy='lazy'  
+       :headers='headers'
        :otherParam='{categories: 2}'
+         @node-click='nodClick'
        />
 
   </p>
@@ -14,12 +28,15 @@
      正常树 为有层级且带有有children属性 EnterpriseTreeList
        <tree  :isCheck='true'
        :treeData='EnterpriseTreeList'
+         @node-check="nodeCheck"
+      
        />
    </p>
      <p>
      正常树 OrganizationTreeList
        <tree 
        :treeData='OrganizationTreeList'
+        @node-click='nodClick'
        />
    </p>
 </div>
@@ -36,12 +53,29 @@
 
     const {OrganizationTreeList}=findEnterpriseOrganizationTreeList
     const lazy='http://web2.test.cvtsp.com/api/basic/tree/findVehicleTreeInfoList'
-
-    
-    const token='1b03d944-2292-484b-91d6-cf68f67486f4'
+    const token=localStorage.getItem('token')
+    console.log(token)
     const headers={
                     token,
                    'Authorization':'Bearer '+token
+    }
+
+    //勾选之前的条件限制 车辆大于10条 不可勾选
+    function limitCheck(treeNode:any){
+      if(treeNode.sumCount>80){
+        alert('车辆大于10条 不可勾选')
+        return false
+      }else{
+        return true
+      }
+    }
+//点击事件
+    function nodClick(mess:any){
+      console.log(mess,'onClick')
+    }
+    //复选框点击事件
+    function nodeCheck(mess:any){
+      console.log(mess,'nodeCheck')
     }
 </script>
     
