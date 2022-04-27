@@ -131,7 +131,7 @@ export function getMethods(props:any,context:any) {
 
             //多选模式除了点击复选框 其他点击会走这里 props.isCheck
              context.emit('node-click',{
-                checked:treeNode.click,
+                click:treeNode.click,
                 treeNode
              })
 
