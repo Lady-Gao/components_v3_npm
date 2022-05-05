@@ -14,6 +14,7 @@ import router from './route'
 createApp(App)
     .use(cv_components_v3)
     // .use(cv_amapv3)
-    .use(ElementPlus,{size:"small"})
+    // .use(ElementPlus,{size:"small"})
+    .use(ElementPlus)
     .use(router)
     .mount('#app')

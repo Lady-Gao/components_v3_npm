@@ -83,8 +83,6 @@
 display: flex;
     justify-content: space-between;
    height: 500px;
-   .el-col{
- height: 100%;
-   }
+  
  }
 </style>

@@ -115,12 +115,16 @@ export default defineComponent({
       },
     },
     hoverOperation:{//用于当鼠标移动到节点上时，页面显示的用户自定义控件
-      type:Function||null,
-      default:()=>null
-    }
+      type:Function,
+      default(){
+        return ()=>{}
+      }
+    },
+    // treeReady: Function, // 树的初始节点渲染到页面
+    // treeLoaded: Function,  // 树接受数据加载完成的回调
 
   },
-  emits:['node-click','node-check'],
+  emits:['tree-loaded','tree-ready','node-click','node-check'],
   setup(props: any, context: any) {
     const tree = ref();
     const treeId = ref()
@@ -135,15 +139,16 @@ export default defineComponent({
       //如果传了treeData  就不是异步
       if (Array.isArray(props.treeData) && props.treeData.length) {
         //传进来的数据是数组
-         setInitialTree()
+         setInitialTree(props.treeData)
       } else {
         getHttpTreeData()
       }
       zTree.value=tree.value.zTree
     });
 //设置树的初始化数据
-  function setInitialTree() {
-     tree.value.setInitialTree(props.treeData);
+  function setInitialTree(data:any) {
+     tree.value.setInitialTree(data);
+       context.emit('tree-ready')
     }
     // 使用请求数据 lazy headers  type otherParam
   function getHttpTreeData() {
@@ -158,7 +163,7 @@ export default defineComponent({
       }).then(response => {
         return response.json();
       }).then(res => {
-        tree.value.setInitialTree(res.data);
+        setInitialTree(res.data);
       })
     }
 

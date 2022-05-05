@@ -1,25 +1,15 @@
 <template>
-  <div class="treeSearch">
+  <div :class="open ? 'treeSearch' : 'treeSearch inputTree'" @mouseleave="mouseleave">
     <!--  @input='fliterNode' @clear="fliterNode" -->
-    <el-input placeholder="Please input" @keydown.enter="fliterNode" v-model="inputValue" :maxlength="20" clearable
-      @input='fliterNode'>
+    <el-input placeholder="Please input" ref="Input" @keydown.enter="fliterNode" v-model="inputValue" :maxlength="20"
+      clearable @input='fliterNode' @focus="focus">
       <template #suffix>
         <span @click="fliterNode" class="cvIcon_search"></span>
       </template>
     </el-input>
-    <tree ref="baseTree" 
-    :treeData="treeData" 
-    :lazy='lazy' 
-    :headers='headers'
-    :autoParam="autoParam"
-    :otherParam="otherParam"
-    :isCheck="isCheck"
-     :showIcon="showIcon"
-    :limit-check="limitCheck"
-    :hoverOperation="hoverOperation"
-     @node-check="nodeCheck"
-    @node-click='nodClick'
-    >
+    <tree ref="baseTree" v-show="isShowTree" :treeData="treeData" :lazy='lazy' :headers='headers' :autoParam="autoParam"
+      :otherParam="otherParam" :isCheck="isCheck" :showIcon="showIcon" :limit-check="limitCheck"
+      :hoverOperation="hoverOperation" @node-check="nodeCheck" @node-click='nodClick'>
     </tree>
   </div>
 </template>
@@ -27,6 +17,16 @@
 <script lang="ts" setup>
 import { computed, defineComponent, onMounted, reactive, ref, watch, watchEffect } from "vue";
 const props = defineProps({
+  modelValue: {//v-model的value 文本内容(目前默认id值)
+    default: null
+  },
+
+  valueName: { //v-model的key 反选查找节点时 使用的字段 valueName：value
+    type: String,
+    default() {
+      return "id";
+    },
+  },
   treeData: {//树的初始化数据
     type: Array,
     default() {
@@ -62,40 +62,41 @@ const props = defineProps({
       // 'Authorization':'Bearer '+localStorage.getItem("token")
     }
   },
-    autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
-      type: Array,
-      default() {
-        return ["id", "type"];
-      },
+  autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
+    type: Array,
+    default() {
+      return ["id", "type"];
     },
-    otherParam: { // 增加树基础传参 除了autoParam以外的参数 在这里传
-      default() {
-        return {};
-      },
+  },
+  otherParam: { // 增加树基础传参 除了autoParam以外的参数 在这里传
+    default() {
+      return {};
     },
-   limitCheck:{//beforeCheck点击选中之前的事件,return true|false (是否勾选)
-    type:Function,
-      default(){
-        return null
-      }
-    },
-     hoverOperation:{//用于当鼠标移动到节点上时，页面显示的用户自定义控件
-      type:Object,
-      default() {
-          return null;
-        },
+  },
+  limitCheck: {//beforeCheck点击选中之前的事件,return true|false (是否勾选)
+    type: Function,
+    default() {
+      return null
     }
+  },
+  hoverOperation: {//用于当鼠标移动到节点上时，页面显示的用户自定义控件
+    type: Function,
+    default() {
+      return () => { }
+    }
+  },
+  open: {//是否保持展开
+    type: Boolean,
+    default: true
+  }
 })
 
 const inputValue = ref('')
-// watch(() => inputValue, inputChange)
-//输入框改变
-// function inputChange(val: any) {
-//   console.log(val)
 
-// }
 const baseTree = ref()
 function fliterNode() {
+  console.log('fliterNode')
+
   const { zTree } = baseTree.value
   const all_nodes = zTree.getNodes();
   const { childs, filterNodes } = filterNodes_search();
@@ -125,7 +126,7 @@ function filterNodes_search(level = 1) {
         if (!item.open) {
           // 展开父节点
           zTree.expandNode(item, true, false, false);
-         
+
         }
       }
       filterNodes.push(item);
@@ -167,13 +168,37 @@ function filterNodes_highlight(Nodes: any, childs: any) {
 }
 
 
-const emit = defineEmits(['node-click', 'node-check'])
+const emit = defineEmits(['update:modelValue', 'node-click', 'node-check'])
 
-  function nodClick(mess:any){
-  emit('node-click',mess)
+function nodClick(mess: any) {
+  inputValue.value = mess.treeNode[props.name]
+  emit('node-click', mess)
+  // 更新当前的text显示和当前的node节点信息
+  emit("update:modelValue", mess.treeNode[props.valueName]);
+  if (!props.open) {//inputTree模式
+    isShowTree.value = false
   }
-function nodeCheck(mess:any){
-   emit('node-check',mess)
+}
+function nodeCheck(mess: any) {
+  emit('node-check', mess)
+}
+
+
+const isShowTree = ref(props.open)
+const Input = ref()
+
+function focus() {
+  if (!props.open) {//inputTree模式
+    isShowTree.value = true
+  }
+}
+function mouseleave() {
+  if (!props.open) {//inputTree模式
+    //移除光标
+    Input.value.blur();
+    isShowTree.value = false
+  }
+
 }
 </script>
 
@@ -181,23 +206,23 @@ function nodeCheck(mess:any){
 @import '../../../asset';
 
 .treeSearch {
-  max-width: 320px;
-  padding: 10px;
+  min-width: 320px;
   box-sizing: border-box;
   height: 95%;
+  position: relative;
+}
 
-  .cvIcon_search {
-    line-height: 32px;
-  }
+.cv-ztree {
+  padding-top: 8px;
+}
 
-  .el-input {
-    margin-bottom: 8px;
-  }
+.inputTree {
 
-  .el-input--small .el-input__inner {
-    height: 32px;
-    line-height: 32px;
-
+  .cv-ztree {
+    max-height: 320px;
+    overflow: scroll;
+    position: absolute;
+    width: 100%;
   }
 }
 </style>

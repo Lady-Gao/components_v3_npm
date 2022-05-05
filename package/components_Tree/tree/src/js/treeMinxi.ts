@@ -96,7 +96,7 @@ export function getMethods(props:any,context:any) {
          }
 
 
-           context.emit('node-check',{
+            context.emit('node-check',{
                 checked:treeNode.checked,//点击的状态
                 treeNode,//当前选中
                 checkedList,//当前点击的数据，
@@ -107,7 +107,7 @@ export function getMethods(props:any,context:any) {
     return {
         // 数据成功渲染完成的回调
         treeLoaded() {
-
+            context.emit('tree-loaded')
         },
         /**
          * 用于捕获单击节点之前的事件回调函数，并且根据返回值确定是否允许单击操作
