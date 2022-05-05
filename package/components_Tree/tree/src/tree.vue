@@ -34,11 +34,14 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
-    isCheck: { // 是否是多选还是单选模式 true(多选) 事件触发current-change
+    isCheck: { // 是否是多选还是单选模式 true(多选) 
       type: Boolean,
       default: false,
     },
     isCopy: {//拖拽时，是否复制节点，false为移动节点
+      default: false,
+    },
+    isEdit:{//设置 zTree 是否处于编辑状态
       default: false,
     },
     isRemoveBtn: {//
@@ -87,16 +90,15 @@ export default defineComponent({
       }
 
     },
-
-
-    autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
+    autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id', "type",]
       type: Array,
       default() {
-        return ["id", "type"];
+        return ["id", "type"];//['id=enterpriseId']  这种写法   接口传过去的key是id,value是父节点的enterpriseId值
       },
     },
     otherParam: { // 增加树基础传参 除了autoParam以外的参数 在这里传
-      default() {
+      type:Object,
+     default() {
         return {};
       },
     },
@@ -112,13 +114,17 @@ export default defineComponent({
         return ["type", 4];
       },
     },
-
+    hoverOperation:{//用于当鼠标移动到节点上时，页面显示的用户自定义控件
+      type:Function||null,
+      default:()=>null
+    }
 
   },
   emits:['node-click','node-check'],
   setup(props: any, context: any) {
     const tree = ref();
     const treeId = ref()
+     const zTree = ref()
     treeId.value = randomMakeTreeid()
     onMounted(() => {
       tree.value = new BaseTree({
@@ -126,7 +132,6 @@ export default defineComponent({
         options:getOptions(props),
         methods:getMethods(props,context)
       });
-
       //如果传了treeData  就不是异步
       if (Array.isArray(props.treeData) && props.treeData.length) {
         //传进来的数据是数组
@@ -134,6 +139,7 @@ export default defineComponent({
       } else {
         getHttpTreeData()
       }
+      zTree.value=tree.value.zTree
     });
 //设置树的初始化数据
   function setInitialTree() {
@@ -162,9 +168,34 @@ export default defineComponent({
       return treeId.value
     }
     
+
+  /**
+   * 根据节点数据的属性搜索，获取条件模糊匹配的节点数据 JSON 对象集合
+   * @param key 需要模糊匹配的属性名称
+   * @param value 需要模糊匹配的属性值
+   * @param parentNode 可以指定在某个父节点下的子节点中搜索 忽略此参数，表示在全部节点中搜索
+   * return  返回值 Array(JSON) 匹配模糊搜索的节点数据集合
+   * 
+   */
+    // function getNodesByParamFuzzy(key:StringConstructor,value:string,parentNode:any){
+    //   let nodes=zTree.value.getNodesByParamFuzzy(key, value, null);
+    //   return nodes
+    // }
+
+
+    // 监听 treeData
+    //   watch(() => props.treeData, watchTreeData,
+    //     )
+    // //输入框改变
+    // function watchTreeData(val: any) {
+    //   console.log( props.treeData,'watchTreeData')
+    //   setInitialTree()
+
+    // }
     return {
       treeId,
       tree,
+      zTree,
     }
   },
 });

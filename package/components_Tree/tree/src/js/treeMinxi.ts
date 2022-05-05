@@ -33,6 +33,7 @@ export function getOptions(props) {
             return data;
         }
     }
+
     return {
         baseUrl: props.baseUrl,
         lazy: props.lazy,
@@ -51,7 +52,8 @@ export function getOptions(props) {
         isContextmenu: props.isContextmenu,
         isExpand: props.isExpand,
         isFreeze: props.isFreeze,
-        iconsFilter
+        hoverOperation:props.hoverOperation,
+        iconsFilter,
 
     }
 
@@ -63,23 +65,42 @@ export function getOptions(props) {
 export function getMethods(props:any,context:any) {
     var lastTid=null
     //勾选之后，向父组件传递
-    function  onChecAfterEmit(treeNode:any,zTree:any){
-        let List=[];
-        if(treeNode.checked){ //勾选时遍历取id
-             let key=props.nodeFilter[0]
-             let value=props.nodeFilter[1]
+    /**
+     * 
+     * @param treeNode 
+     * @param zTree 
+     * @emit 
+     * checked,//点击的状态
+     * treeNode,//当前选中
+     * checkedList,//当前点击的数据，
+     * allList//所有已勾选的数据 
 
-            let allNode=  zTree.getNodesByParam(key, value, treeNode);
-            for (let index = 0; index < allNode.length; index++) {
-                let id = allNode[index].id//这里的取值 也可以做成传入式allNode[props.checkkey]
-                id&&List.push(id)
+     */
+    function  onChecAfterEmit(treeNode:any,zTree:any){
+        let checkedList=[];let allList=[];
+        // if(treeNode.checked){ //勾选时遍历取id
+             const fkey=props.nodeFilter[0]
+             const fvalue=props.nodeFilter[1]
+             let checkedNode=  zTree.getNodesByParam(fkey, fvalue, treeNode);//当前被选中
+            for (let index = 0; index < checkedNode.length; index++) {
+                let id = checkedNode[index].id//这里的取值 也可以做成传入式allNode[props.checkkey]
+                id&&checkedList.push(id)
              }
+        //  }
+        let allNode=zTree.getCheckedNodes()//所有被选中
+        for (let index = 0; index < allNode.length; index++) {
+            if(allNode[index][fkey]==fvalue){
+                allList.push(allNode[index].id)
+            }
+           
          }
 
+
            context.emit('node-check',{
-                checked:treeNode.checked,
+                checked:treeNode.checked,//点击的状态
                 treeNode,//当前选中
-                List:List//所有选中
+                checkedList,//当前点击的数据，
+               allList//所有已勾选的数据
             })
         
     }
@@ -132,6 +153,7 @@ export function getMethods(props:any,context:any) {
             //多选模式除了点击复选框 其他点击会走这里 props.isCheck
              context.emit('node-click',{
                 click:treeNode.click,
+                id:treeNode.id,
                 treeNode
              })
 

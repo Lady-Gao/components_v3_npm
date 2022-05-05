@@ -6,7 +6,6 @@
          :treeData='VehicleTreeInfoList'
        :lazy='lazy'
        :headers='headers'
-        :otherParam='{}'
          :isCheck='true'
          :limitCheck="limitCheck"
         

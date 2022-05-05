@@ -1,0 +1,24 @@
+
+
+@font-face {
+    font-family: 'iconfont-cv_components_v3';  /* project id 3365244 */
+    src: url('');
+    src: url('?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_3365244_7q9ep99pblg.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_3365244_7q9ep99pblg.woff') format('woff'),
+    url('//at.alicdn.com/t/font_3365244_7q9ep99pblg.ttf') format('truetype'),
+    url('#iconfont') format('svg');
+  }
+
+  .cvIcon_search{
+    cursor: pointer;
+    &::before{
+        content: "\e62f";
+        font-family: 'iconfont-cv_components_v3';
+        
+    }
+    &:hover{
+      font-size: 28px;
+      font-size: 16px;
+    }
+  }

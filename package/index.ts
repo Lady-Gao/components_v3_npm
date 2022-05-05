@@ -10,8 +10,8 @@ import MoveAnimation from "./components_Amap/MoveAnimation/index";
 import EditPlugin from "./components_Amap/EditPlugin/index";
 
 // components_Tree
-import tree from "./components_Tree/tree/index" 
-console.log(tree.name)
+import Tree from "./components_Tree/tree/index" 
+import TreeSearch from "./components_Tree/treeSearch/index" 
 const modules={
     Map,
     Marker,
@@ -21,7 +21,8 @@ const modules={
     PathSimplifierIns ,
     MoveAnimation,
     EditPlugin,
-    tree
+    Tree,
+    TreeSearch
 }
 
 const install = function (app:any) {

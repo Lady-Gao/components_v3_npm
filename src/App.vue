@@ -50,6 +50,7 @@ function tabClick(val:String){
       <el-tab-pane label="history" name='history'> </el-tab-pane>
       <el-tab-pane label="fenceManage" name='fenceManage'> </el-tab-pane> -->
        <el-tab-pane label="baseTree" name='baseTree'> </el-tab-pane>
+         <el-tab-pane label="treeSearchView" name='treeSearchView'> </el-tab-pane>
     </el-tabs>
       </div>
     <div class='flex1' v-if="waitToken"><router-view /></div>
@@ -57,18 +58,39 @@ function tabClick(val:String){
 </template>
 
 <style lang='scss'>
-// #app {
-//   font-family: Avenir, Helvetica, Arial, sans-serif;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   text-align: center;
-//   color: #2c3e50;
-//   margin-top: 60px;
-// }
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  height: 100%;
+}
 .flexRoute{
+   height: 100%;
   display: flex;
   .flex1{
     flex: 1;
   }
 }
+
+/*定义滚动条高宽及背景
+ 高宽分别对应横竖滚动条的尺寸*/
+ ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: #fff;
+  }
+  /*定义滚动条轨道
+   内阴影+圆角*/
+  ::-webkit-scrollbar-track {
+    background-color: #fff;
+  }
+  /*定义滑块
+   内阴影+圆角*/
+  ::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background-color: #d4d3d3;;
+  }
+
 </style>

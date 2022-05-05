@@ -73,7 +73,6 @@ export default class BaseTree {
      * @param {Boolean} isFreeze: false 默认不冻结
      */
     setIsFirstNodesExpand(data) {
-        console.log(this.isExpand,'isExpand')
         if(Array.isArray(data) && data.length > 0) {
             data[0].open = this.isExpand;
             data[0].chkDisabled = this.isFreeze;
@@ -87,7 +86,6 @@ export default class BaseTree {
      */
     treeConfig() {
         const _self = this;
-console.log( this.autoParam,'this.lazy')
         return {
             data: {
                 key: {name: this.name},//zTree 显示节点时,将返回的text作为节点名称
@@ -106,7 +104,7 @@ console.log( this.autoParam,'this.lazy')
                     isMove: this.isMove,//拖拽时, 设置是否允许移动节点
                     prev: false//true / false 分别表示 允许 / 不允许 移动到目标节点前面
                 },
-                enable: true,//设置 zTree 是否处于编辑状态
+                enable: this.edit,//设置 zTree 是否处于编辑状态
                 showRemoveBtn: this.showRemoveBtn,
                 showRenameBtn: this.showRenameBtn
             },
@@ -117,14 +115,14 @@ console.log( this.autoParam,'this.lazy')
                 txtSelectedEnable: true,
                 showIcon:this.showIcon,
                 fontCss(treeId, treeNode) {
-                    return !!treeNode.highlight ? {color: 'red'} : {color: '#333'};
+                    return treeNode.highlight ? {color: 'red'} : {color: '#333'};
                 },
                 addHoverDom(treeId, treeNode) {
-                    var a_node = $('#' + treeNode.tId + '_a');
-                    var operation = _self.operation ? _self.operation(treeNode) : {};
+                    let a_node = $('#' + treeNode.tId + '_a');
+                    let operation = _self.hoverOperation(treeNode);
                     if($(`#operation-btn${treeNode.id}`).length > 0) return;
                     
-                    var html = `<span id="operation-btn${treeNode.id}">${!operation.template?'':operation.template}</span>`;
+                    let html = `<span id="operation-btn${treeNode.id}">${!operation.template?'':operation.template}</span>`;
                     a_node.append(html);
                     typeof operation.methods == 'function' && operation.methods();
                 },
