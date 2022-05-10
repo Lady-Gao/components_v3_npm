@@ -131,24 +131,31 @@ export default defineComponent({
      const zTree = ref()
     treeId.value = randomMakeTreeid()
     onMounted(() => {
-      tree.value = new BaseTree({
+      init()
+     
+ 
+    });
+    function init(){
+       tree.value = new BaseTree({
         el: treeId.value,
         options:getOptions(props),
         methods:getMethods(props,context)
       });
+ 
       //如果传了treeData  就不是异步
-      if (Array.isArray(props.treeData) && props.treeData.length) {
+      if (Array.isArray(props.treeData)) {
         //传进来的数据是数组
          setInitialTree(props.treeData)
-      } else {
+      } else if(props.lazy) {
         getHttpTreeData()
       }
-      zTree.value=tree.value.zTree
-    });
+    }
 //设置树的初始化数据
   function setInitialTree(data:any) {
-     tree.value.setInitialTree(data);
-       context.emit('tree-ready')
+       
+         tree.value.setInitialTree(data);
+         zTree.value=tree.value.zTree
+     context.emit('tree-ready')
     }
     // 使用请求数据 lazy headers  type otherParam
   function getHttpTreeData() {
@@ -187,20 +194,19 @@ export default defineComponent({
     //   return nodes
     // }
 
-
+// console.log(777)
     // 监听 treeData
-    //   watch(() => props.treeData, watchTreeData,
-    //     )
-    // //输入框改变
-    // function watchTreeData(val: any) {
-    //   console.log( props.treeData,'watchTreeData')
-    //   setInitialTree()
-
-    // }
+      watch(() => props.treeData, watchTreeData,
+        )
+    //输入框改变
+    function watchTreeData(val: any) {
+     init()
+    }
     return {
       treeId,
       tree,
       zTree,
+      init,
     }
   },
 });

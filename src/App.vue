@@ -51,7 +51,7 @@ function tabClick(val:String){
       <el-tab-pane label="fenceManage" name='fenceManage'> </el-tab-pane> -->
        <el-tab-pane label="baseTree" name='baseTree'> </el-tab-pane>
          <el-tab-pane label="treeSearchView" name='treeSearchView'> </el-tab-pane>
-                <el-tab-pane label="inputTreeView" name='inputTreeView'> </el-tab-pane>
+                <el-tab-pane label="inputLinkTreeView" name='inputLinkTreeView'> </el-tab-pane>
     </el-tabs>
       </div>
     <div class='flex1' v-if="waitToken"><router-view /></div>

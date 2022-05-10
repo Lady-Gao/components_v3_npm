@@ -12,8 +12,7 @@ import EditPlugin from "./components_Amap/EditPlugin/index";
 // components_Tree
 import Tree from "./components_Tree/tree/index" 
 import TreeSearch from "./components_Tree/treeSearch/index" 
-import InputTree from "./components_Tree/inputTree/index" 
- console.log(InputTree,'InputTree')
+import inputLinkTree from "./components_Tree/inputLinkTree/index" 
 const modules={
     Map,
     Marker,
@@ -25,7 +24,7 @@ const modules={
     EditPlugin,
     Tree,
     TreeSearch,
-    InputTree
+    inputLinkTree
 }
 
 const install = function (app:any) {

@@ -5,7 +5,7 @@ const router = createRouter({
       
         {
             path: "/:pathMatch(.*)",
-           redirect:'/baseTree'
+           redirect:'/inputLinkTreeView'
         },
         {
             path: "/home",
@@ -40,9 +40,9 @@ const router = createRouter({
             component: () => import( "../views/treeView/treeSearchView/treeSearchView.vue")
         },
         {
-            name:  'inputTreeView',
-            path: "/inputTreeView",
-            component: () => import( "../views/treeView/inputTreeView/inputTreeView.vue")
+            name:  'inputLinkTreeView',
+            path: "/inputLinkTreeView",
+            component: () => import( "../views/treeView/inputLinkTreeView/inputLinkTreeView.vue")
         },
       ]
   })

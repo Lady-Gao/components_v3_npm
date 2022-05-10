@@ -1,15 +1,18 @@
 <template>
   <div :class="open ? 'treeSearch' : 'treeSearch inputTree'" @mouseleave="mouseleave">
-    <!--  @input='fliterNode' @clear="fliterNode" -->
-    <el-input placeholder="Please input" ref="Input" @keydown.enter="fliterNode" v-model="inputValue" :maxlength="20"
-      clearable @input='fliterNode' @focus="focus">
+    <!--  @input='fliterNode' @clear="fliterNode"  -->
+    <el-input placeholder="Please input" ref="Input"  v-model="inputValue" :maxlength="20"
+      clearable  @focus="focus"  @input='fliterNode'>
       <template #suffix>
-        <span @click="fliterNode" class="cvIcon_search"></span>
+        <!--  @click="fliterNode" -->
+        <span class="cvIcon_search"></span>
       </template>
     </el-input>
     <tree ref="baseTree" v-show="isShowTree" :treeData="treeData" :lazy='lazy' :headers='headers' :autoParam="autoParam"
-      :otherParam="otherParam" :isCheck="isCheck" :showIcon="showIcon" :limit-check="limitCheck"
-      :hoverOperation="hoverOperation" @node-check="nodeCheck" @node-click='nodClick'>
+      :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
+      :hoverOperation="hoverOperation" @node-check="nodeCheck" @node-click='nodClick'
+      @tree-loaded="treeLoaded" @tree-ready="treeReady"
+      >
     </tree>
   </div>
 </template>
@@ -21,7 +24,7 @@ const props = defineProps({
     default: null
   },
 
-  valueName: { //v-model的key 反选查找节点时 使用的字段 valueName：value
+  valueName: { //v-model的key 
     type: String,
     default() {
       return "id";
@@ -92,11 +95,9 @@ const props = defineProps({
 })
 
 const inputValue = ref('')
-
+const nondeClickinputValue = ref('')
 const baseTree = ref()
 function fliterNode() {
-  console.log('fliterNode')
-
   const { zTree } = baseTree.value
   const all_nodes = zTree.getNodes();
   const { childs, filterNodes } = filterNodes_search();
@@ -105,7 +106,16 @@ function fliterNode() {
     children && zTree.hideNodes(children);
   });
 
-  zTree.showNodes(inputValue.value == "" ? childs : filterNodes);
+  let showNode={}
+  if(inputValue.value == ""){//清空了输入框，要把modelvalue清空
+    emit("update:modelValue",'')
+     emit("clear")
+     nondeClickinputValue.value=''
+    showNode=childs
+  }else{
+    showNode=filterNodes
+  }
+  zTree.showNodes(showNode);
   filterNodes_highlight(all_nodes, childs);
 }
 
@@ -168,10 +178,11 @@ function filterNodes_highlight(Nodes: any, childs: any) {
 }
 
 
-const emit = defineEmits(['update:modelValue', 'node-click', 'node-check'])
+const emit = defineEmits(['clear','update:modelValue', 'node-click', 'node-check','tree-ready'])
 
 function nodClick(mess: any) {
-  inputValue.value = mess.treeNode[props.name]
+ nondeClickinputValue.value= inputValue.value = mess.treeNode[props.name]
+
   emit('node-click', mess)
   // 更新当前的text显示和当前的node节点信息
   emit("update:modelValue", mess.treeNode[props.valueName]);
@@ -193,6 +204,8 @@ function focus() {
   }
 }
 function mouseleave() {
+  //鼠标移开 保持选中的文本（防止选中后删除文字）
+  inputValue.value=nondeClickinputValue.value
   if (!props.open) {//inputTree模式
     //移除光标
     Input.value.blur();
@@ -200,6 +213,59 @@ function mouseleave() {
   }
 
 }
+
+function treeLoaded(){
+}
+function treeReady(){
+ emit('node-check', true)
+     props.modelValue&&selectNode()
+     emit('tree-ready',true)
+}
+
+
+
+
+  watch(() => props.modelValue, watchModelValue,
+            { immediate: true, deep: true }
+        )
+// function watchTreeData(val:any){
+//   console.log(val,'watchTreeData')
+// }
+//监听传入的ModelValue 在树上选中 
+  function watchModelValue(val:any){
+    if(val&&baseTree.value){
+        selectNode()
+    }else{
+      //值被删除但未清除文字和筛选状态
+      if(nondeClickinputValue.value){
+         nondeClickinputValue.value= inputValue.value =''
+          fliterNode()//过滤数据 选中
+      }
+    }
+  }
+
+  function selectNode(){
+   
+      let nodes=getNodeByParam()
+      if (nodes && typeof nodes === "object") {
+          nondeClickinputValue.value= inputValue.value = nodes[props.name]//显示文字更改
+          fliterNode()//过滤数据 选中
+      }else{
+
+      }
+  }
+
+  function getNodeByParam(){
+    const { zTree } = baseTree.value
+      const all_nodes = zTree.getNodes(); 
+      let nodes=zTree.getNodeByParam(props.valueName,props.modelValue)
+    return nodes
+  }
+
+  // 重点！！这里需要使用defineExpose暴露出去
+defineExpose({
+	getNodeByParam,
+})
 </script>
 
 <style lang="scss" >
@@ -223,6 +289,7 @@ function mouseleave() {
     overflow: scroll;
     position: absolute;
     width: 100%;
+    z-index: 1;
   }
 }
 </style>
