@@ -12,7 +12,17 @@ import "../assets/js/jquery.ztree.exhide"
 
 export default class BaseTree {
     constructor(options) {
-        const _self = this;
+        // Promise.all([
+        //     import('../assets/css/awesome.scss'),
+        //     import('../assets/js/jquery-1.4.4.min.js'),
+        //     import('../assets/js/jquery.ztree.core'),
+        //     import('../assets/js/jquery.ztree.excheck'),
+        //     import('../assets/js/jquery.ztree.exedit'),
+        //     import('../assets/js/jquery.ztree.exhide')
+        //   ])
+        //   .then(() => {
+            console.log(3434)
+            const _self = this;
         this.zTree = null;
         this.treeId = options.el;
         this.el = $('#' + this.treeId);
@@ -23,7 +33,11 @@ export default class BaseTree {
 
         // 当前的事件名称(expand or check)
         this.currentHandlerName = null;
+        //   });
+        
     }
+   
+       
 
     /**
      * 初始化树的配置和方法

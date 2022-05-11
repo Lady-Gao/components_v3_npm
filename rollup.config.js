@@ -11,7 +11,7 @@ module.exports = [
     // 出口
     output: [
       {
-         file: "package/lib/index.js",
+        dir: "package/lib",
         // file:'package/Amap_components/lib/index.js',
         // 配置打包模块化的方式 es:ESM  cjs:CommonJS
         format: "es",

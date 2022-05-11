@@ -10,6 +10,7 @@
  * email: hunter.z@263.net
  * Date: 2017-06-19
  */
+// @ts-nocheck # 忽略全文
 (function($){
 	//default consts of excheck
 	var _consts = {

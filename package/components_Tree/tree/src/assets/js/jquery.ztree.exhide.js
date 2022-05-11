@@ -10,6 +10,7 @@
  * email: hunter.z@263.net
  * Date: 2017-06-19
  */
+// @ts-nocheck # 忽略全文
 (function($){
 	//default init node of exLib
 	var _initNode = function(setting, level, n, parentNode, isFirstNode, isLastNode, openFlag) {

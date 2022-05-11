@@ -13,7 +13,7 @@
  * 传进来的数据为简单json （平铺数据没有层级）  会进行异步请求
  */
 import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue";
-import BaseTree from "./js/base-tree";
+
 import {getOptions,getMethods} from './js/treeMinxi'
 export default defineComponent({
   name: "Tree",
@@ -127,11 +127,11 @@ export default defineComponent({
     treeId.value = randomMakeTreeid()
     onMounted(() => {
       init()
-     
- 
     });
     function init(){
-       tree.value = new BaseTree({
+      import("./js/base-tree").then(BaseTree=>{
+        console.log(888888)
+       tree.value = new BaseTree.default({
         el: treeId.value,
         options:getOptions(props),
         methods:getMethods(props,context)
@@ -144,6 +144,7 @@ export default defineComponent({
       } else if(props.lazy) {
         getHttpTreeData()
       }
+       })
     }
 //设置树的初始化数据
   function setInitialTree(data:any) {

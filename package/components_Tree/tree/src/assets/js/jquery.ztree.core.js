@@ -10,7 +10,7 @@
  *
  * Date: 2020-11-21
  */
-
+// @ts-nocheck # 忽略全文
 (function ($) {
     var settings = {}, roots = {}, caches = {},
       //default consts of core
