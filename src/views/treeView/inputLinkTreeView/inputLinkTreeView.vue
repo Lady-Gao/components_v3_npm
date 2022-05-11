@@ -6,10 +6,10 @@
         <inputLinkTree :modelFormObj="ruleForm" 
         :treeData="OrganizationTreeList"
          :lazy='lazy'  
-       :headers='headers'
        @tree-ready="treeReady"
-       @node-click="nodeClick"
+       @current-change="currentChange"
         />
+      
         <!-- :modelKey="['enterpriseId','fleetId']" -->
     </el-form>
   </div>
@@ -20,11 +20,15 @@ import { reactive, ref, watch } from 'vue'
   import findEnterpriseOrganizationTreeList from '@/utils/findEnterpriseOrganizationTreeList.json'
   const {OrganizationTreeList}=findEnterpriseOrganizationTreeList
  const lazy='http://web2.test.cvtsp.com/api/basic/fleet/findFleetTreeList'
-    const token=localStorage.getItem('token')
-    const headers={
-                    token,
-                   'Authorization':'Bearer '+token
-    }
+ const dataT=[
+      {text: "父节点1", 
+       id:999,
+        children: [
+            {text: "子节点1",id:1},
+            {text: "子节点2",id:2}
+        ]
+      }
+    ]
 
 //点击事件
 function nodClick(mess: any) {
@@ -73,8 +77,8 @@ function enterpriseIdChange(val: any) {
 // ruleForm.enterpriseId fleetId
 
 
-function nodeClick(val:{}){
-  console.log(val,'inputLinkTreeClick')
+function currentChange(val:{}){
+  console.log(val,'currentChange')
 }
 function treeReady(){
    ruleForm.enterpriseId= '4811864113058280'

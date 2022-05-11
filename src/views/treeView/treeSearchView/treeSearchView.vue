@@ -1,17 +1,13 @@
 <template>
   <div class='treeSearchView'>
     <p>
-      <!-- <treeSearch :treeData="VehicleTreeInfoList" :lazy='lazy' :headers='headers' :isCheck="false" :showIcon="true"
-        :hoverOperation="hoverOperation" @node-check="nodeCheck" @node-click='nodClick' /> -->
+      <!-- <treeSearch :treeData="VehicleTreeInfoList" :lazy='lazy' :headers='headers' :isCheck="true" :showIcon="true"
+        :hoverOperation="hoverOperation"  @node-check="nodeCheck" @node-click='nodClick' /> -->
     </p>
     <el-form  class="demo-form-inline"  :model="ruleForm"  ref="ruleFormRef"
     :rules="rules">
       <el-form-item label="Approved by" prop="myId">
         <treeSearch :treeData="EnterpriseTreeList" v-model="ruleForm.myId" :open="false" @node-check="nodeCheck"
-          @node-click='nodClick' />
-      </el-form-item>
-       <el-form-item label="Approved 45"  prop="myId2">
-        <treeSearch :treeData="EnterpriseTreeList" v-model="ruleForm.myId2" :open="false" @node-check="nodeCheck"
           @node-click='nodClick' />
       </el-form-item>
       <el-form-item>
@@ -22,7 +18,7 @@
     </el-form>
  <el-form >
       <el-form-item label="Approved by">
-        <treeSearch :treeData="EnterpriseTreeList" v-model="ruleForm.myId3" :open="false" @node-check="nodeCheck"
+        <treeSearch :treeData="Mockdata" v-model="ruleForm.myId3" :open="false" @node-check="nodeCheck"
           @node-click='nodClick' />
       </el-form-item>
       
@@ -44,7 +40,15 @@ const headers = {
   'Authorization': 'Bearer ' + token
 }
 
-
+const Mockdata=[
+      {text: "父节点1", 
+      id:0,
+        children: [
+            {text: "子节点1",id:1},
+            {text: "子节点2",id:2}
+        ]
+      }
+    ]
 function hoverOperation(val: any) {
   if (val.type != 4) return {}
   return {
@@ -57,6 +61,7 @@ function hoverOperation(val: any) {
 //点击事件
 function nodClick(mess: any) {
   console.log(mess, 'onClicktreeSearch')
+  console.log(ruleForm.myId3,'ruleForm.myId3')
 }
 //复选框点击事件
 function nodeCheck(mess: any) {
@@ -90,12 +95,8 @@ const submitForm =async (formEl:any) => {
   })
 }
 setTimeout(() => {
-  ruleForm.myId= '10000000000'
-   ruleForm.myId3= '10000000000'
-   setTimeout(() => {
-      ruleForm.myId3= ''
-      console.log(' ruleForm.myId3= ')
-   }, 1000);
+  // ruleForm.myId= '10000000000'
+  
 }, 1000);
 watch(() => ruleForm.myId, myIdChange)
 //输入框改变

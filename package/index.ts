@@ -39,5 +39,5 @@ let moduleComponent = {
      install,
      ...modules
 }
-
+console.log(moduleComponent,'moduleComponent')
 export default moduleComponent

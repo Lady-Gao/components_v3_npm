@@ -8,8 +8,9 @@
 
 .cv-ztree {
   width: 100%;
-  max-width: 320px;
+  min-width: 200px;
   height: 95%;
+  min-height: 200px;
   overflow-y: scroll;
   background-color: #fff;
   min-height: 320px;

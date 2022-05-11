@@ -26,9 +26,7 @@ export default defineComponent({
     },
     name: {//显示节点时,将返回的text作为节点名称
       type: String,
-      default() {
-        return "text";
-      },
+      default:"text"
     },
     showIcon: { // 是否显示图标
       type: Boolean,
@@ -44,10 +42,10 @@ export default defineComponent({
     isEdit:{//设置 zTree 是否处于编辑状态
       default: false,
     },
-    isRemoveBtn: {//
+    isRemoveBtn: {//设置是否显示删除按钮[isEdit = true 时生效]
       default: false,
     },
-    isRenameBtn: {//
+    isRenameBtn: {//设置是否显示编辑名称按钮。[isEdit = true 时生效]
       default: false,
     },
     isMove: {//拖拽时，设置是否允许移动节点
@@ -70,11 +68,8 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    baseUrl: {//请求的域名
-      type: String,
-      default: '',
-    },
-    lazy: {// 树的接口(/monitor/findVehicleTreeInfoList)
+   
+    lazy: {// 树的接口(http:wwww.test./monitor/findVehicleTreeInfoList)
       type: String,
       default: '',
     },

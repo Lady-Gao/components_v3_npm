@@ -4,6 +4,7 @@
     <el-input placeholder="Please input" ref="Input"  v-model="inputValue" :maxlength="20"
       clearable  @focus="focus"  @input='fliterNode'>
       <template #suffix>
+        <!--  @click="fliterNode" -->
         <span class="cvIcon_search"></span>
       </template>
     </el-input>
@@ -16,12 +17,10 @@
   </div>
 </template>
 
-<script lang="ts" >
+<script lang="ts" setup>
 import { computed, defineComponent, onMounted, reactive, ref, watch, watchEffect } from "vue";
-export default defineComponent({
-  name: "TreeSearch",
-  props: {
-     modelValue: {//v-model的value 文本内容(目前默认id值)
+const props = defineProps({
+  modelValue: {//v-model的value 文本内容(目前默认id值)
     default: null
   },
 
@@ -97,11 +96,9 @@ export default defineComponent({
         return ["type", 4];
       },
     },
-  },
-   emits:['clear','update:modelValue', 'node-click', 'node-check','tree-ready'],
-   
-   setup(props: any, context: any) {
-     
+})
+const emit = defineEmits(['clear','update:modelValue', 'node-click', 'node-check','tree-ready'])
+
 const inputValue = ref('')
 const nondeClickinputValue = ref('')
 const baseTree = ref()
@@ -116,9 +113,9 @@ function fliterNode() {
 
   let showNode={}
   if(inputValue.value == ""){//清空了输入框，要把modelvalue清空
-    context.emit("update:modelValue",'')
-     context.emit("clear")
-     nondeClickinputValue.value=""
+    emit("update:modelValue",'')
+     emit("clear")
+     nondeClickinputValue.value=''
     showNode=childs
   }else{
     showNode=filterNodes
@@ -194,15 +191,15 @@ interface mess{
 function nodClick(mess: mess) {
  nondeClickinputValue.value= inputValue.value = mess.treeNode[props.name]
 
-  context.emit('node-click', mess)
+  emit('node-click', mess)
   // 更新当前的text显示和当前的node节点信息
-  context.emit("update:modelValue", mess.treeNode[props.valueName]);
+  emit("update:modelValue", mess.treeNode[props.valueName]);
   if (!props.open) {//inputTree模式
     isShowTree.value = false
   }
 }
 function nodeCheck(mess: any) {
-  context.emit('node-check', mess)
+  emit('node-check', mess)
 }
 
 
@@ -229,7 +226,7 @@ function treeLoaded(){
 }
 function treeReady(){
      props.modelValue&&selectNode()
-     context.emit('tree-ready',true)
+     emit('tree-ready',true)
 }
 
 
@@ -247,7 +244,7 @@ function treeReady(){
         selectNode()
     }else{
       //值被删除但未清除文字和筛选状态
-      if(nondeClickinputValue.value!==""){
+      if(nondeClickinputValue.value){
          nondeClickinputValue.value= inputValue.value =''
           fliterNode()//过滤数据 选中
       }
@@ -272,21 +269,9 @@ function treeReady(){
     return nodes
   }
 
-      return{
-        baseTree,
-        Input,
-        mouseleave,
-        inputValue,
-        focus,
-        fliterNode,
-        isShowTree,
-        nodeCheck,
-        nodClick,
-        treeLoaded,
-        treeReady,
-        getNodeByParam
-      }
-   }
+  // 重点！！这里需要使用defineExpose暴露出去
+defineExpose({
+	getNodeByParam,
 })
 </script>
 

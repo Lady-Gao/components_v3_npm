@@ -1,177 +1,153 @@
 <template>
-  <div class='inputLinkTree' >
-    <el-form-item
-      :label="label"
-      prop="enterpriseId"
-      class="myinputLinkTree"
-    >
-      <InputTree
-      :width='width'
-        :disabled="disabled"
-       :data="data"
-        v-model="enterpriseId"
-        ref="InputTree1"
-        @node-click="nodeClick1"
-        @clear='clear'
-        @tree-load='treeLoad'
-      />
-    </el-form-item>
-    <el-form-item label="车组" prop="fleetId">
-      <InputTree
-      v-loading="treeLoading"
-      :width='width'
-        :disabled="disabled"
-         :data="data2"
-        :initLoadUrl='false'
-        v-model="fleetId"
-        ref="InputTree2"
-        @tree-load="treeLoad2"
-        @node-click="nodeClick2"
-         @clear='clear2'
-      />
-    </el-form-item>
+  <div class='inputLinkTree'>
+      <el-form-item label="Approved by">
+        <treeSearch :treeData="treeData" :name="name" v-model="value1" :open="false" ref="treeSearch1"  @tree-ready="treeReady1"
+         @node-click='nodeClick1' @clear='clear1'/>
+      </el-form-item>
+       <el-form-item label="Approved by">
+        <treeSearch :treeData="treeData2" :name="name"  v-model="value2"  :open="false" ref="treeSearch2"  @tree-ready="treeReady2"
+        @node-click='nodeClick2'  @clear='clear2'/>
+          
+      </el-form-item>
   </div>
 </template>
 
-<script>
-/**
- *   
- * <inputLinkTree  v-model="search" :data="$store.getters.getOrganization"  :disabled="true"  @node-click='nodeClick'/>
- * 
- * 
- */
-export default {
-  name: "InputLinkTree",
-  props: {
-    // v-model对象
-    value: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-    //传入的是数据方式：第一棵树的数据
-    data: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-   
-   
-       //是否禁用
-    disabled: {
-      type:Boolean,
-      default:false,
-    },
-     //传入的是接口方式：第二棵树  车组树接口
-    url2: {
-      type: String,
-      default: "/basic/fleet/findFleetTreeList",
-    },
-       //input框宽度
-    width: {
-      type:String,
-      default(){
-        return '215'
-      },
-    },
-    //第一棵树的文字
-  label:{
-     type:String,
-      default:'所属公司'
-  }
-  },
-  data() {
-    return {
-      enterpriseId: "",
-      fleetId: "",
-      data2: [], //车组树数据
-      treeLoading: false,
-    };
-  },
-  methods: {
-      //树加载完成    value.enterpriseId接口请求还没有回来还没有数据
-    treeLoad() {
-    },
-    //车组树渲染完成 赋值
-    treeLoad2() {
-        this.fleetId=this.value.fleetId
-    },
-    /**
-     *  1 公司树的点击事件
-     *  2 公司反选上之后  会触发该事件，请求完车组接口后会重新渲染
-     */
-    nodeClick1(val) {
-   
-     if(val.id){
-        //请求车组树
-      this.findFleetTreeList(val);
-     }
-     
-      this.value.enterpriseId=val.id||null
-        //  console.log( this.value.enterpriseId,'nodeClick1')
-      // this.value.fleetId=''
-    },
-     //车组树的点击 通知父组件
-    nodeClick2(val) {
+<script setup lang="ts">
+import { computed, defineComponent, onMounted, reactive, ref, watch, watchEffect } from "vue";
+const props = defineProps({
 
-      // this.$emit("node-click", {
-      //   enterpriseId: val.enterpriseId,
-      //   fleetId: val.id,
-      // },val);
-       this.value.fleetId=val.id||null
-        // console.log( this.value.fleetId,'nodeClick2')
-    },
-    //车组的数据请求
-    async findFleetTreeList(val) {
-      this.treeLoading = true;
-      let params = this.autoParams? this.autoParams: {
-                                                            enterpriseId: val.enterpriseId,
-                                                            pId: val.id,
-                                                            type: val.type,
-                                                        };
-     const { data } = await this.$http({
-        url: this.url2,
-        params,
-        method: "GET",
-      });
-      if (data) {
-        this.data2 = data;
-      } else {
-        this.data2 = [];
+  modelFormObj: { //表单绑定的对象
+    type: Object,
+    required: true,
+    default() {
+      return {
+        enterpriseId:'',
+        fleetId:''
       }
-      this.treeLoading = false;
-    },
-    //公司框清空事件
-    clear(){
-         this.data2 = [];
-         this.value.enterpriseId=''
-        this.value.fleetId=''
-    },
-    //车组框清空事件
-    clear2(){
-         this.value.fleetId=''
     }
   },
-  watch: {
-      "value.enterpriseId": {
-      immediate: true,
-      handler(val) {
-        //主要是修改时  进入页面 树加载完成  但是value可能会没有值  所以放在监听
-        val&&(this.enterpriseId = val);
-       
-      },
-     
+  // modelKey: {//表单的key值 modelFormObj['enterpriseId'] 
+  //   type: Array,
+  //   default() {
+  //     return ['enterpriseId','fleetId'];
+  //   },
+  // },
+  treeData: {//树的初始化数据
+    type: Array,
+    default() {
+      return [];
     },
+  },
+  // tree2url: { //传入的是接口方式：第二棵树  车组树接口
+  //     type: String,
+  //     default: "/basic/fleet/findFleetTreeList",
+  // },
+   lazy: {// 传入的是接口方式：第二棵树  车组树接口(/basic/fleet/findFleetTreeList)
+      type: String,
+      default: '',
+    },
+    type: { //树的异步请求方式
+      type: String,
+      default: 'get'
+    },
+    headers: { //树的异步请求头部 
+      type: Object,
+      default: {
+        'token':localStorage.getItem("token"),
+        'Authorization':'Bearer '+localStorage.getItem("token")
+      }
 
-   }
-};
+    },
+  name: {//显示节点时,将返回的text作为节点名称
+    type: String,
+    default: "text"
+  },
+  showIcon: { // 是否显示图标
+    type: Boolean,
+    default: true,
+  },
+})
+
+
+const value1=ref(props.modelFormObj.enterpriseId)
+const value2=ref(props.modelFormObj.fleetId)
+const treeData2=ref([])
+const treeSearch1=ref()
+const treeSearch2=ref()
+watch(() => props.modelFormObj, modelFormObjChange, { immediate: true, deep: true })
+//父级传值
+function modelFormObjChange(val: any) {
+  value1.value=val.enterpriseId
+  if(val.enterpriseId&&treeSearch1.value){
+    getHttptreeData2()
+  }
+}
+
+const nodeSendArr=ref()
+const emit = defineEmits(['current-change','tree-ready'])
+// nodeClick
+function nodeClick1(mess:any){
+   value2.value=''
+  getHttptreeData2(mess.treeNode)
+  nodeSendArr.value=[mess.treeNode.id,'']
+     emit('current-change', nodeSendArr.value)
+}
+function nodeClick2(mess:any){
+ nodeSendArr.value=[value1.value,mess.treeNode.id]
+   emit('current-change', nodeSendArr.value)
+}
+// clear
+function clear1(){
+    value2.value=''
+   treeData2.value=[]
+   nodeSendArr.value=['','']
+   emit('current-change', nodeSendArr.value)
+}
+function clear2(){
+  let clear2value=[value1.value,'']
+  //避免重复更新
+ if(nodeSendArr.value.join(',')!=clear2value.join(',')){
+    nodeSendArr.value=clear2value
+  emit('current-change',  nodeSendArr.value)
+ }
+}
+function treeReady1(){
+      value1.value&&getHttptreeData2()
+}
+function treeReady2(){
+ emit('tree-ready')
+}
+
+
+const token=localStorage.getItem('token')
+
+const  headers={
+              token,
+              'Authorization':'Bearer '+token
+  }
+//请求第二棵树数据
+function getHttptreeData2(treeNode=null){
+  let nodes=treeNode||treeSearch1.value.getNodeByParam()
+
+
+ let str = `?enterpriseId=${nodes.enterpriseId}&pId=${nodes.id}&type=${nodes.type}`
+ 
+      fetch(props.lazy + str, {
+        method: props.type,
+        headers:props.headers
+      }).then(response => {
+        return response.json();
+      }).then(res => {
+        if(res.data){
+          treeData2.value=res.data
+        }else{
+  treeData2.value=[]
+        }
+      })
+}
+
 </script>
 
-<style lang="scss" scoped>
-.inputLinkTree {
-  display: inline-block;
- 
-}
+<style lang='scss'>
+
 </style>

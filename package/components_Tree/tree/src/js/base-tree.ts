@@ -1,3 +1,4 @@
+// @ts-nocheck # 忽略全文
 import '../assets/css/awesome.scss'
 import "../assets/js/jquery-1.4.4.min.js"
 import "../assets/js/jquery.ztree.core"

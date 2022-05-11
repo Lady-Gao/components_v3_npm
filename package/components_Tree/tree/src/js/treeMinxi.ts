@@ -1,5 +1,5 @@
-
-export function getOptions(props) {
+// @ts-nocheck # 忽略全文
+export function getOptions(props:any) {
     function iconsFilter(nodes: any) {//更改节点得图标
         var { data, flag } = nodes;
         if (props.iconsFilter && Array.isArray(data)) {
@@ -35,7 +35,6 @@ export function getOptions(props) {
     }
 
     return {
-        baseUrl: props.baseUrl,
         lazy: props.lazy,
         type: props.type,
         headers: props.headers,
@@ -63,7 +62,7 @@ export function getOptions(props) {
  * @param props  tree.vue 里的对象
  */
 export function getMethods(props:any,context:any) {
-    var lastTid=null
+    var lastTid:any=null
     //勾选之后，向父组件传递
     /**
      * 
@@ -81,6 +80,7 @@ export function getMethods(props:any,context:any) {
         // if(treeNode.checked){ //勾选时遍历取id
              const fkey=props.nodeFilter[0]
              const fvalue=props.nodeFilter[1]
+             console.log(fkey,fvalue,'nodeFilter')
              let checkedNode=  zTree.getNodesByParam(fkey, fvalue, treeNode);//当前被选中
             for (let index = 0; index < checkedNode.length; index++) {
                 let id = checkedNode[index].id//这里的取值 也可以做成传入式allNode[props.checkkey]
@@ -233,7 +233,7 @@ export function getMethods(props:any,context:any) {
         onAsyncSuccess(event: Event, treeId: string, treeNode: any, msg) {
             let zTree = this.getZTreeObj(treeId)
             //父节点是勾选状态 
-            if (treeNode.checked) {
+            if (treeNode&&treeNode.checked) {
                 zTree.checkNode(treeNode, true, true);//需要把子节点也够选上 checked
                 onChecAfterEmit(treeNode,zTree)
             }

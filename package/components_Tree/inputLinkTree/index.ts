@@ -1,4 +1,3 @@
-import inputLinkTree from './src/inputLinkTree.vue'
+import InputLinkTree from './src/inputLinkTree.vue'
 
-
-export default inputLinkTree;
+export default InputLinkTree;
