@@ -21,14 +21,12 @@
         <div class="treeList-lists" v-loading="loading">
             <el-checkbox-group v-if="isCheck">
                 <el-checkbox :label="item.id" v-for="(item, index) in listsData" :key="index">
-                    <div class="group_content">
-
+                    <template class="group_content" :scope="item">
                         <p class="content_text">
-                            <!-- 图标 -->
                             <span :class="item.icon + 'car'"></span>
                             <span class="text">{{ item[name] }}</span>
-                            <el-tooltip effect="dark" :content="item.remark" placement="top-start">
-                                <i class="remark" v-if="!isCollection">{{ item.remark }}</i>
+                            <el-tooltip effect="dark" :content="item.remark" placement="top-start"  v-if="!isCollection">
+                                <i class="remark">{{ item.remark }}</i>
                             </el-tooltip>
 
                         </p>
@@ -39,16 +37,16 @@
                             <span v-if="isEdit" class="cvIcon_edit" @click="clcik_edit($event, item)"></span>
                             <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete($event, item)"></span>
                         </p>
-                    </div>
+                    </template>
 
                 </el-checkbox>
             </el-checkbox-group>
 
             <el-popover ref="popoverRef" :visible="showPopover" trigger="click" title="备注" virtual-triggering>
-                <el-input size="mini" clearable v-model="popover.remark" :maxlength="50" />
+                <el-input  clearable v-model="popover.remark" :maxlength="50" />
                 <div style="text-align: right;">
-                    <el-button size="mini" type="text" @click="showPopover = false">取消</el-button>
-                    <el-button size="mini" type="text" @click="node_collection">确定</el-button>
+                    <el-button  type="text" @click="showPopover = false">取消</el-button>
+                    <el-button  type="text" @click="node_collection">确定</el-button>
                 </div>
             </el-popover>
         </div>
@@ -59,7 +57,7 @@
         <div class="pagination">
             <p>{{ pagination.total }}条</p>
             <el-pagination v-show="pagination.total ? true : false" v-model:currentPage="pagination.current"
-                :page-size="pagination.size" layout=" prev, next" :total="pagination.total"  @current-change="handlerCurrentChange"/>
+                :page-size="pagination.size" layout="prev, next" :total="pagination.total"  @current-change="handlerCurrentChange"/>
             <p v-show="pagination.total ? true : false" class="tabspan">{{ pagination.current }} / {{ allPage }}</p>
         </div>
     </div>
@@ -359,6 +357,7 @@ export default defineComponent({
 
 <style lang="scss" >
 .treeList {
+    position: relative;
     max-width: 300px;
     width: 100%;
     height: 95%;
@@ -408,11 +407,10 @@ export default defineComponent({
         display: flex;
         justify-content: space-between;
         line-height: 32px;
-
-        span {
-            margin: 0 5px;
-            // font-size: 18px;
-        }
+        color: #7d7d7b;
+        position: absolute;
+    bottom: 5px;
+            width: 100%;
     }
 
 }
