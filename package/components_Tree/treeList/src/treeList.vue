@@ -17,47 +17,63 @@
             <el-checkbox :label="item.value" v-for="(item, index) in onlinection" :key="index">{{ item.label }}
             </el-checkbox>
         </el-checkbox-group>
-        <!-- 多选(checkbox)列表选择 -->
+        <!-- 多选(checkbox)列表选择 @change="checkListChange"-->
         <div class="treeList-lists" v-loading="loading">
-            <el-checkbox-group v-if="isCheck">
-                <el-checkbox :label="item.id" v-for="(item, index) in listsData" :key="index">
-                    <template class="group_content" :scope="item">
-                        <p class="content_text">
-                            <span :class="item.icon + 'car'"></span>
+            <el-checkbox-group v-if="isCheck" v-model="checkList" >
+                <li v-for="(item, index) in listsData" :key="index" class="el-checkbox group_content">
+                    <el-checkbox :label="item.id" class="content_text" @change="checkcheckboxChange($event,item)">
+                            <span :class="[item.icon + 'car', Number(item.onlineStatus) ? 'online' : '']"></span>
                             <span class="text">{{ item[name] }}</span>
-                            <el-tooltip effect="dark" :content="item.remark" placement="top-start"  v-if="!isCollection">
+                            <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                                 <i class="remark">{{ item.remark }}</i>
                             </el-tooltip>
 
-                        </p>
-                        <p class="operation">
-                            <span v-if="isCollection"
-                                :class="item.isAttention ? 'cvIcon_collection' : 'cvIcon_uncollection'"
-                                @click="clcik_collection($event, item)"></span>
-                            <span v-if="isEdit" class="cvIcon_edit" @click="clcik_edit($event, item)"></span>
-                            <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete($event, item)"></span>
-                        </p>
-                    </template>
-
-                </el-checkbox>
+                    </el-checkbox>
+                    <p class="operation">
+                        <span v-if="isCollection"
+                            :class="item.isAttention ? 'cvIcon_collection' : 'cvIcon_uncollection'"
+                            @click="clcik_collection($event,item)"></span>
+                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_edit($event,item)"></span>
+                        <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete($event)"></span>
+                    </p>
+                </li>
             </el-checkbox-group>
+            <div v-else class="radioGroup">
 
+                <div class="group_content" v-for="(item, index) in listsData" :key="index">
+                    <p class="content_text">
+                        <span :class="[item.icon + 'car', Number(item.onlineStatus) ? 'online' : '']"></span>
+                        <span class="text">{{ item[name] }}</span>
+                        <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
+                            <i class="remark">{{ item.remark }}</i>
+                        </el-tooltip>
+
+                    </p>
+                     <p class="operation">
+                        <span v-if="isCollection"
+                            :class="item.isAttention ? 'cvIcon_collection' : 'cvIcon_uncollection'"
+                            @click="clcik_collection($event,item)"></span>
+                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_edit($event,item)"></span>
+                        <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete($event)"></span>
+                    </p>
+                </div>
+            </div>
             <el-popover ref="popoverRef" :visible="showPopover" trigger="click" title="备注" virtual-triggering>
-                <el-input  clearable v-model="popover.remark" :maxlength="50" />
+                <el-input clearable v-model="popover.remark" :maxlength="50" />
                 <div style="text-align: right;">
-                    <el-button  type="text" @click="showPopover = false">取消</el-button>
-                    <el-button  type="text" @click="node_collection">确定</el-button>
+                    <el-button type="text" @click="showPopover = false">取消</el-button>
+                    <el-button type="text" @click="node_collection">确定</el-button>
                 </div>
             </el-popover>
         </div>
         <!-- 单选(radio)列表选择 -->
-        <!-- <div  class="treeList-lists">
-         </div> -->
+
         <!-- 分页 -->
         <div class="pagination">
             <p>{{ pagination.total }}条</p>
             <el-pagination v-show="pagination.total ? true : false" v-model:currentPage="pagination.current"
-                :page-size="pagination.size" layout="prev, next" :total="pagination.total"  @current-change="handlerCurrentChange"/>
+                :page-size="pagination.size" layout="prev, next" :total="pagination.total"
+                @current-change="handlerCurrentChange" />
             <p v-show="pagination.total ? true : false" class="tabspan">{{ pagination.current }} / {{ allPage }}</p>
         </div>
     </div>
@@ -67,10 +83,8 @@
 import { Http } from '../../../asset/common'
 import { defineComponent, PropType, reactive, ref, unref, getCurrentInstance, computed } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus'
-type Opstions = {
-    label: string
-    value: string
-}[]
+
+
 export default defineComponent({
     name: "TreeList",
     props: {
@@ -80,15 +94,13 @@ export default defineComponent({
         },
         collectionApi: { //收藏接口url
             type: String,
-            default: ''
+            default: 'http://web2.test.cvtsp.com/api/basic/vehicle/insertVehicleAttentionInfo'
         },
         uncollectionApi: { // 取消收藏接口url
             type: String,
-            default: ''
+            default: 'http://web2.test.cvtsp.com/api/basic/vehicle/deleteVehicleAttentionInfo'
         },
-        deleteApi: {//删除关注接口url
-            type: String,
-        },
+
         isCheck: {//是否多选
             type: Boolean,
             default: true
@@ -106,20 +118,26 @@ export default defineComponent({
             default: false
         },
         selection: { // 搜索下拉数据
-            type: Array as PropType<Opstions>,
+             type: Array as PropType<{
+                label: string
+                value: string
+            }[]>,
             default() {
                 return [
                     { label: 'plateCode', value: "plateCode" },
-                    { label: 'company', value: 'enterpriseName' },
-                    { label: 'wasName', value: 'fleetName' },
-                    { label: 'Terminal', value: 'terminalCode' },
-                    { label: 'VINNumber', value: 'carVin' },
-                    { label: 'SIMNumber', value: 'mobileCode' }
+                    { label: 'enterpriseName', value: 'enterpriseName' },
+                    { label: 'fleetName', value: 'fleetName' },
+                    { label: 'terminalCode', value: 'terminalCode' },
+                    { label: 'carVin', value: 'carVin' },
+                    { label: 'mobileCode', value: 'mobileCode' }
                 ]
             }
         },
         onlinection: {//在线离线数据
-            type: Array as PropType<Opstions>,
+             type: Array as PropType<{
+                label: string
+                value: string
+            }[]>,
             default() {
                 return [
                     { label: '在线', value: "1" },
@@ -144,7 +162,7 @@ export default defineComponent({
             },
         },
     },
-    emits: ["clcik_collection", "clcik_edit", "clcik_delete"],
+    emits: ["current-change"],
     setup(props: any, context: any) {
 
         const search = reactive({
@@ -179,9 +197,15 @@ export default defineComponent({
         })
         const showPopover = ref(true)
         const popoverRef = ref()
+        const checkList = ref([])
+        function checkListChange(list) {
+            context.emit('current-change', list)
+        }
+        function checkcheckboxChange($event,val){
+            context.emit('current-change', $event,val.id)
+        }
         // 收藏事件
         function clcik_collection(event, row) {
-            console.log(row.remark, 'row.remark')
             popover.remark = row.remark
             popover.row = row
             if (!row.isAttention) {
@@ -191,7 +215,7 @@ export default defineComponent({
             } else {
                 //取消收藏
                 showPopover.value = false
-                unnode_collection()
+                unnode_collection(row)
             }
         }
         // 编辑事件
@@ -203,7 +227,7 @@ export default defineComponent({
             // context.emit('clcik_edit',row)
         }
         // 删除事件
-        function clcik_delete(event, row) {
+        function clcik_delete(row) {
             ElMessageBox.confirm(
                 '是否确认当前操作?',
                 '提示',
@@ -221,26 +245,8 @@ export default defineComponent({
         }
         //删除的请求
         function node_delete(row: any) {
-            Http({
-                url: props.deleteApi,
-                method: 'DELETE',
-                headers: props.headers,
-                params: {
-                    vehicleId: row.id
-                }
-            }).then(res => {
-                //删除该车辆 障眼法
-                if (res.flag) {
-                    //列表中删除
-                    listsData.value = unref(listsData).filter(item => {
-                        return item.id != row.id
-
-                    })
-                    //分页删除一条
-                    pagination.total=pagination.total-1
-                }
-
-            })
+            popover.row.id = ''
+            unnode_collection(row)
         }
         //关注请求
         function node_collection() {
@@ -264,13 +270,13 @@ export default defineComponent({
             })
         }
         //取消关注请求
-        function unnode_collection() {
+        function unnode_collection(row) {
             Http({
                 url: props.uncollectionApi,
                 method: 'DELETE',
                 headers: props.headers,
                 params: {
-                    vehicleId: popover.row.id
+                    vehicleId: row.id
                 }
             }).then(res => {
                 showPopover.value = false
@@ -279,7 +285,22 @@ export default defineComponent({
                     //     message: '操作成功',
                     //     type: 'success',
                     // })
-                    popover.row.isAttention = 0
+                    if (popover.row.id) {
+                        //改变收藏状态
+                        popover.row.isAttention = 0
+                    } else {
+                        //删除关注事件 //列表中删除
+                        listsData.value = unref(listsData).filter(item => {
+                            return item.id != row.id
+
+                        })
+                        //分页删除一条
+                        pagination.total = pagination.total - 1
+
+                    }
+
+
+
                 } else {
                     //  ElMessage({
                     //     message: '操作失败',
@@ -288,22 +309,23 @@ export default defineComponent({
                 }
             })
         }
-        const onClickOutside = () => {
-            // unref(popoverRef).popperRef?.delayHide?.()
+        //选中与取消
+        const changeCheckStates = (list) => {
+                checkList.value=list
         }
 
-            //分页变化
-         function handlerCurrentChange(val){
-             search.current = val;
-                handlerSearch();
+        //分页变化
+        function handlerCurrentChange(val) {
+            search.current = val;
+            handlerSearch();
         }
 
         // 搜索
-        function handlerSearch(repeat?:boolean) {
+        function handlerSearch(repeat?: boolean) {
             loading.value = true
             let onlineStatus = search.onlineStatus.length == 1 ? search.onlineStatus[0] : ''
             let params = {
-                current:repeat?1: search.current,
+                current: repeat ? 1 : search.current,
                 [search.selectionValue]: search.text,//输入框文本
                 onlineStatus,//在线状态
                 ...props.otherParam
@@ -311,7 +333,7 @@ export default defineComponent({
             }
             getHttpTreeData(params)
         }
-       
+
         function getHttpTreeData(params: any) {
             Http({
                 url: props.ListApi,
@@ -342,13 +364,16 @@ export default defineComponent({
             clcik_collection,
             clcik_edit,
             clcik_delete,
-            onClickOutside,
+            changeCheckStates,
             popover,
             popoverRef,
             buttonRef,
             showPopover,
             node_collection,
-            handlerCurrentChange
+            handlerCurrentChange,
+            checkList,
+            checkListChange,
+            checkcheckboxChange
         }
     }
 
@@ -364,41 +389,65 @@ export default defineComponent({
 
     .treeList-lists {
         min-height: 320px;
+        height: 80%;
+
+        .online {
+            color: #008000cf;
+        }
 
         .el-checkbox {
             width: 100%;
             border-bottom: 1px solid #eee;
+            float: left;
+            // .el-checkbox__label {
+            //     width: 80% !important;
+            // }
 
-            .el-checkbox__label {
-                width: 100% !important;
+        }
+
+        .group_content {
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            width: 100%;
+            .content_text{
+                flex: 2;
+                text-align: left;
+            }
+            .text {
+                display: inline-block;
+                padding-left: 5px;
             }
 
+            .remark {
+                padding-left: 5px;
+                color: #b3b0b0;
+                font-size: 12px;
+                display: inline-block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: left;
+                line-height: 10px;
+                width: 80px;
+            }
+
+            .cvIcon_edit {
+                margin-right: 5px;
+                display: inline-block;
+            }
+
+            .operation {
+                // position: absolute;
+                // right: 0;
+            }
+        }
+
+        .radioGroup {
             .group_content {
-                display: flex;
-                justify-content: space-between;
-
-                .text {
-                    display: inline-block;
-                    padding-left: 5px;
-                }
-
-                .remark {
-                    padding-left: 5px;
-                    color: #b3b0b0;
-                    font-size: 12px;
-                    display: inline-block;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    text-align: left;
-                    line-height: 10px;
-                    width: 80px;
-                }
-
-                .cvIcon_edit {
-                    margin-right: 5px;
-                    display: inline-block;
-                }
+                border-bottom: 1px solid #eee;
+                margin-right: 30px;
+                line-height: 32px;
             }
         }
     }
@@ -409,8 +458,8 @@ export default defineComponent({
         line-height: 32px;
         color: #7d7d7b;
         position: absolute;
-    bottom: 5px;
-            width: 100%;
+        bottom: 5px;
+        width: 100%;
     }
 
 }

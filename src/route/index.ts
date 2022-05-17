@@ -49,6 +49,11 @@ const router = createRouter({
             path: "/treeListView",
             component: () => import( "../views/treeView/treeListView/treeListView.vue")
         },
+        {
+            name:  'treeTabView',
+            path: "/treeTabView",
+            component: () => import( "../views/treeView/treeTabView/treeTabView.vue")
+        },
       ]
   })
 

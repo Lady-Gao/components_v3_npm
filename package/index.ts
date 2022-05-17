@@ -14,6 +14,7 @@ import Tree from "./components_Tree/tree/index"
 import TreeSearch from "./components_Tree/treeSearch/index" 
 import InputLinkTree from "./components_Tree/inputLinkTree/index" 
 import TreeList from "./components_Tree/treeList/index"
+import TreeTab from "./components_Tree/treeTab/index"
 const modules={
     Map,
     Marker,
@@ -26,7 +27,8 @@ const modules={
     Tree,
     TreeSearch,
     InputLinkTree,
-    TreeList
+    TreeList,
+    TreeTab
 }
 
 const install = function (app:any) {

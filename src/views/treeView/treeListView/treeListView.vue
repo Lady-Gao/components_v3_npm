@@ -3,7 +3,7 @@
         <treeList  :ListApi="ListApi1" :headers="headers"
             :isCollection="true" :collectionApi="collectionApi" :uncollectionApi="uncollectionApi"
              @clcik_collection='clcik_collection'/>
-         <treeList  :ListApi="ListApi2" :headers="headers" :deleteApi="deleteApi"
+         <treeList  :ListApi="ListApi2" :headers="headers"  :uncollectionApi="uncollectionApi"
          :isEdit="true" :isDelete="true"  :collectionApi="collectionApi"   @clcik_edit='clcik_edit'  @clcik_delete='clcik_delete' 
 />
     </div>

@@ -53,6 +53,7 @@ function tabClick(val:String){
          <el-tab-pane label="treeSearchView" name='treeSearchView'> </el-tab-pane>
          <el-tab-pane label="inputLinkTreeView" name='inputLinkTreeView'> </el-tab-pane>
           <el-tab-pane label="treeListView" name='treeListView'> </el-tab-pane>
+           <el-tab-pane label="treeTabView" name='treeTabView'> </el-tab-pane>
    </el-tabs>
       </div>
     <div class='flex1' v-if="waitToken"><router-view /></div>

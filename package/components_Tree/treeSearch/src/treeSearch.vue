@@ -1,7 +1,7 @@
 <template>
   <div :class="open ? 'treeSearch' : 'treeSearch inputTree'" @mouseleave="mouseleave">
     <!--  @input='fliterNode' @clear="fliterNode"  -->
-    <el-input placeholder="Please input" ref="Input"  v-model="inputValue" :maxlength="20"
+    <el-input  ref="Input"  v-model="inputValue" :maxlength="20"
       clearable  @focus="focus"  @input='fliterNode'>
       <template #suffix>
         <span class="cvIcon_search"></span>
@@ -265,13 +265,29 @@ function treeReady(){
       }
   }
 
-  function getNodeByParam(){
+  function getNodeByParam(valueName?,modelValue?){
     const { zTree } = baseTree.value
       const all_nodes = zTree.getNodes(); 
-      let nodes=zTree.getNodeByParam(props.valueName,props.modelValue)
+      let key=valueName||props.valueName,value=modelValue||props.modelValue
+      let nodes=zTree.getNodeByParam(key,value)
     return nodes
   }
-
+//更改勾选状态
+function changeCheckStates(check,ids){
+   const { zTree } = baseTree.value
+    // 找到node  
+    if(typeof ids =="string"){
+      let node=getNodeByParam(props.valueName,ids)
+        //设置勾选状态
+      node&&zTree.checkNode(node, check, true);
+    }else{
+      ids.forEach(id => {
+        let node=getNodeByParam(props.valueName,id)
+       //设置勾选状态
+        node&&zTree.checkNode(node, check, true);
+      });
+    }
+}
       return{
         baseTree,
         Input,
@@ -284,7 +300,8 @@ function treeReady(){
         nodClick,
         treeLoaded,
         treeReady,
-        getNodeByParam
+        getNodeByParam,
+        changeCheckStates
       }
    }
 })
@@ -294,14 +311,15 @@ function treeReady(){
 @import '../../../asset';
 
 .treeSearch {
-  min-width: 320px;
+ width:100%;
+ min-width:200px;
   box-sizing: border-box;
   height: 95%;
   position: relative;
 }
 
 .cv-ztree {
-  padding-top: 8px;
+  margin-top:15px;
 }
 
 .inputTree {
@@ -312,6 +330,8 @@ function treeReady(){
     position: absolute;
     width: 100%;
     z-index: 1;
+    padding-top:8px;
+     margin-top:0px;
   }
 }
 </style>

@@ -18,7 +18,7 @@
     </el-form>
  <el-form >
       <el-form-item label="Approved by">
-        <treeSearch :treeData="Mockdata" v-model="ruleForm.myId3" :open="false" @node-check="nodeCheck"
+        <treeSearch :treeData="EnterpriseTreeList" v-model="ruleForm.myId3" :open="false" @node-check="nodeCheck"
           @node-click='nodClick' />
       </el-form-item>
       

@@ -80,7 +80,7 @@ export function getMethods(props:any,context:any) {
         // if(treeNode.checked){ //勾选时遍历取id
              const fkey=props.nodeFilter[0]
              const fvalue=props.nodeFilter[1]
-             console.log(fkey,fvalue,'nodeFilter')
+            //  console.log(fkey,fvalue,'nodeFilter')
              let checkedNode=  zTree.getNodesByParam(fkey, fvalue, treeNode);//当前被选中
             for (let index = 0; index < checkedNode.length; index++) {
                 let id = checkedNode[index].id//这里的取值 也可以做成传入式allNode[props.checkkey]
@@ -98,12 +98,23 @@ export function getMethods(props:any,context:any) {
 
             context.emit('node-check',{
                 checked:treeNode.checked,//点击的状态
-                treeNode,//当前选中
+                // treeNode,//当前选中
                 checkedList,//当前点击的数据，
                allList//所有已勾选的数据
             })
         
     }
+
+        // 选中时异步加载父节点下面的所有子节点
+          function  _asyncLoadChilds(parentNode, zTree:any) {
+                let childs = parentNode.children;
+                childs &&
+                childs.forEach((child) => {
+                  zTree.checkNode(child, true, true);
+                  !child.zAsync && zTree.reAsyncChildNodes(child, true, true);
+                });
+               
+              }
     return {
         // 数据成功渲染完成的回调
         treeLoaded() {
@@ -182,13 +193,15 @@ export function getMethods(props:any,context:any) {
             //勾选时
             if (treeNode.checked) {
                 zTree.expandNode(treeNode, true, false, true);//展开子节点
-
-               
                 // zAsync==true 该子节点为正常加载 zAsync==false 该子节点为异步加载
                 if(treeNode.zAsync){
-                        onChecAfterEmit(treeNode,zTree)//正常加载 直接传递
+                    if (treeNode.isParent) {
+                        _asyncLoadChilds(treeNode,zTree );
+                     }
+                         onChecAfterEmit(treeNode,zTree)//正常加载 直接传递
                 }else{
-                    return  //异步加载 会走onAsyncSuccess，方法内进行处理
+                   //异步加载 会走onAsyncSuccess，方法内进行处理 所以不用走这里
+                    return  
                 }
             }else{
                 onChecAfterEmit(treeNode,zTree)
@@ -198,6 +211,7 @@ export function getMethods(props:any,context:any) {
             
            
         },
+   
         /**
         * 用于捕获节点被删除之前的事件回调函数
         * @param   treeId 对应 zTree 的 treeId
@@ -235,6 +249,10 @@ export function getMethods(props:any,context:any) {
             //父节点是勾选状态 
             if (treeNode&&treeNode.checked) {
                 zTree.checkNode(treeNode, true, true);//需要把子节点也够选上 checked
+                      // 如果当前状态为父节点输出父节点和子节点／状态为不是父节点输出当前节点信息
+                    if (treeNode.isParent) {
+                        _asyncLoadChilds(treeNode,zTree );
+                     }
                 onChecAfterEmit(treeNode,zTree)
             }
         },
