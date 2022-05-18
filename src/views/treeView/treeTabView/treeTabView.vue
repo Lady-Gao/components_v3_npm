@@ -1,7 +1,8 @@
 <template>
     <div class="content">
+      <!--   :titles="treeTitle" -->
         <treeTab
-       :titles="treeTitle"
+     
          :isCheck='false'
          :otherParam="{categories:'2'}"
         />
@@ -10,6 +11,7 @@
          :isCheck='true'
          :otherParam="{categories:'2'}"
          @current-change="currentChange"
+         @node-click='nodeClick'
         />
     </div>
 </template>
@@ -20,6 +22,9 @@
   const treeTitle=[false, '车辆列表',false ]
   function currentChange(val:any){
     console.log(val,'currentChange')
+  }
+  function nodeClick(mess:{}){
+    console.log(mess,'nodeClick')
   }
 </script>
 

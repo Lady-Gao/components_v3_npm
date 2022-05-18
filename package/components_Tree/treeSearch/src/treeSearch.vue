@@ -273,8 +273,12 @@ function treeReady(){
     return nodes
   }
 //更改勾选状态
-function changeCheckStates(check,ids){
-   const { zTree } = baseTree.value
+function changeCheckStates(allCurrentIds,check,ids){
+  const { zTree } = baseTree.value
+  //没有选中的就取消所有
+  if(!allCurrentIds.length){
+    zTree.checkAllNodes(false);
+  }
     // 找到node  
     if(typeof ids =="string"){
       let node=getNodeByParam(props.valueName,ids)

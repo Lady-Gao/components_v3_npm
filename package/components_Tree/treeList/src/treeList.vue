@@ -22,11 +22,11 @@
             <el-checkbox-group v-if="isCheck" v-model="checkList" >
                 <li v-for="(item, index) in listsData" :key="index" class="el-checkbox group_content">
                     <el-checkbox :label="item.id" class="content_text" @change="checkcheckboxChange($event,item)">
-                            <span :class="[item.icon + 'car', Number(item.onlineStatus) ? 'online' : '']"></span>
+                            <span :class="item.onlineStatus=='1'?`${item.icon||'icon0'}car_online_ico_docu`: `${item.icon||'icon0'}car_ico_docu`"></span>
                             <span class="text">{{ item[name] }}</span>
                             <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                                 <i class="remark">{{ item.remark }}</i>
-                            </el-tooltip>
+                            </el-tooltip> 
 
                     </el-checkbox>
                     <p class="operation">
@@ -42,7 +42,7 @@
 
                 <div class="group_content" v-for="(item, index) in listsData" :key="index">
                     <p class="content_text">
-                        <span :class="[item.icon + 'car', Number(item.onlineStatus) ? 'online' : '']"></span>
+                      <span :class="item.onlineStatus=='1'?`${item.icon||'icon0'}car_online_ico_docu`: `${item.icon||'icon0'}car_ico_docu`"></span>
                         <span class="text">{{ item[name] }}</span>
                         <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                             <i class="remark">{{ item.remark }}</i>

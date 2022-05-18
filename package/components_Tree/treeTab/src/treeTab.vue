@@ -125,7 +125,7 @@ export default defineComponent({
       },
     
   },
-  emits:['current-change'],
+  emits:['current-change','node-click'],
     setup (props:any, context: any) {
     const treeSearch=ref()
     const vehicleList=ref()
@@ -149,6 +149,10 @@ function currentChange(type,id){
     let index=allCurrentIds.value.indexOf(id)
     allCurrentIds.value.splice(index,1)
   }
+   context.emit('node-click',{
+   type,
+   data: [id]
+  })
   // 更改状态
   changeCheckStates(type,id)
 }
@@ -170,6 +174,10 @@ function nodeCheck(mess){
      }
    
   }
+  context.emit('node-click',{
+   type: mess.checked,
+   data: mess.checkedList
+  })
   vehiclestates()
 }
 
@@ -178,7 +186,7 @@ function changeCheckStates(type,id){
    // 车辆列表的状态
  vehiclestates()
   // 车辆树的状态
-   treeSearch.value.changeCheckStates(type,id)
+   treeSearch.value.changeCheckStates(allCurrentIds.value,type,id)
 }
 function vehiclestates(){
   vehicleList.value.changeCheckStates(allCurrentIds.value)

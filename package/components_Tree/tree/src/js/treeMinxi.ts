@@ -10,7 +10,7 @@ export function getOptions(props:any) {
         } else {
             Array.isArray(data) &&
                 data.forEach((val) => {
-                    switch (val.type) {
+                    switch (val.type) {//后台可否直接传过来
                         case 1:
                             return (val.iconSkin = "company");
                         case 2:
@@ -18,14 +18,15 @@ export function getOptions(props:any) {
                         case 3:
                             return (val.iconSkin = "fleed");
                         case 4:
-                            return (val.iconSkin =
-                                val.deviceTypeCode == 2
-                                    ? val.online
-                                        ? "onlineCamera"
-                                        : "unlineCamera"
-                                    : val.online
-                                        ? "online" + (val.icon || "icon1")
-                                        : "unline" + (val.icon || "icon1"));
+                            if(val.deviceTypeCode == 2){
+                                //视频设备
+                                val.iconSkin = val.online ? "onlineCamera" : "unlineCamera"
+                            }else{//icon0car icon0car_online
+                                val.iconSkin =val.online?`${val.icon||'icon0'}car_online`
+                                : `${val.icon||'icon0'}car`
+                            }
+                            console.log(val.iconSkin,'val.iconSkin')
+                            return 
                         case 5:
                             return (val.iconSkin = "camera");
                     }
@@ -80,7 +81,9 @@ export function getMethods(props:any,context:any) {
         // if(treeNode.checked){ //勾选时遍历取id
              const fkey=props.nodeFilter[0]
              const fvalue=props.nodeFilter[1]
-            //  console.log(fkey,fvalue,'nodeFilter')
+             if(treeNode[fkey]==fvalue){//直接勾选车辆
+                checkedList.push(treeNode.id)
+             }
              let checkedNode=  zTree.getNodesByParam(fkey, fvalue, treeNode);//当前被选中
             for (let index = 0; index < checkedNode.length; index++) {
                 let id = checkedNode[index].id//这里的取值 也可以做成传入式allNode[props.checkkey]
@@ -88,13 +91,14 @@ export function getMethods(props:any,context:any) {
              }
         //  }
         let allNode=zTree.getCheckedNodes()//所有被选中
+       
         for (let index = 0; index < allNode.length; index++) {
             if(allNode[index][fkey]==fvalue){
                 allList.push(allNode[index].id)
             }
            
          }
-
+ 
 
             context.emit('node-check',{
                 checked:treeNode.checked,//点击的状态
@@ -165,6 +169,7 @@ export function getMethods(props:any,context:any) {
              context.emit('node-click',{
                 click:treeNode.click,
                 id:treeNode.id,
+                type:treeNode.type,
                 treeNode
              })
 

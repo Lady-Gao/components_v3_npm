@@ -36,14 +36,25 @@
    font-family: 'iconfont-cv_components_v3';
    content: '\e6b4';
 }
-
-.icon0car::before{
+// 离线车辆图标
+.icon0car_ico_docu::before{
   font-family: 'iconfont-cv_components_v3';
   content: '\e65a';
 }
-.icon1car::before{
+.icon1car_ico_docu::before{
   font-family: 'iconfont-cv_components_v3';
   content: '\e9cc';
+}
+// 在线车辆图标
+.icon0car_online_ico_docu::before{
+  font-family: 'iconfont-cv_components_v3';
+  content: '\e65a';
+  color: #008000cf;
+}
+.icon1car_online_ico_docu::before{
+  font-family: 'iconfont-cv_components_v3';
+  content: '\e9cc';
+  color: #008000cf;
 }
 .cvIcon-jiantouLeft::before{
   font-family: 'iconfont-cv_components_v3';
