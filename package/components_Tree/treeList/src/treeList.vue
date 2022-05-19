@@ -33,8 +33,8 @@
                         <span v-if="isCollection"
                             :class="item.isAttention ? 'cvIcon_collection' : 'cvIcon_uncollection'"
                             @click="clcik_collection($event,item)"></span>
-                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_edit($event,item)"></span>
-                        <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete($event)"></span>
+                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_collection($event,item)"></span>
+                        <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete(item)"></span>
                     </p>
                 </li>
             </el-checkbox-group>
@@ -53,18 +53,18 @@
                         <span v-if="isCollection"
                             :class="item.isAttention ? 'cvIcon_collection' : 'cvIcon_uncollection'"
                             @click="clcik_collection($event,item)"></span>
-                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_edit($event,item)"></span>
-                        <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete($event)"></span>
+                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_collection($event,item)"></span>
+                        <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete(item)"></span>
                     </p>
                 </div>
             </div>
-            <el-popover ref="popoverRef" :visible="showPopover" trigger="click" title="备注" virtual-triggering>
+            <!-- <el-popover ref="popoverRef" :visible="showPopover" trigger="click" title="备注" virtual-triggering>
                 <el-input clearable v-model="popover.remark" :maxlength="50" />
                 <div style="text-align: right;">
                     <el-button type="text" @click="showPopover = false">取消</el-button>
                     <el-button type="text" @click="node_collection">确定</el-button>
                 </div>
-            </el-popover>
+            </el-popover> -->
         </div>
         <!-- 单选(radio)列表选择 -->
 
@@ -80,11 +80,9 @@
 </template>
 
 <script lang="ts">
-import { Http } from '../../../asset/common'
 import { defineComponent, PropType, reactive, ref, unref, getCurrentInstance, computed } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus'
-
-
+import { getHttpListData } from "../../../util/http";
 export default defineComponent({
     name: "TreeList",
     props: {
@@ -94,11 +92,11 @@ export default defineComponent({
         },
         collectionApi: { //收藏接口url
             type: String,
-            default: 'http://web2.test.cvtsp.com/api/basic/vehicle/insertVehicleAttentionInfo'
+            default: '/basic/vehicle/insertVehicleAttentionInfo'
         },
         uncollectionApi: { // 取消收藏接口url
             type: String,
-            default: 'http://web2.test.cvtsp.com/api/basic/vehicle/deleteVehicleAttentionInfo'
+            default: '/basic/vehicle/deleteVehicleAttentionInfo'
         },
 
         isCheck: {//是否多选
@@ -107,7 +105,7 @@ export default defineComponent({
         },
         isCollection: {//是否显示收藏五角星
             type: Boolean,
-            default: false
+            default: true
         },
         isEdit: {//是否显示收藏五角星
             type: Boolean,
@@ -149,20 +147,20 @@ export default defineComponent({
             type: String,
             default: "plateCode"
         },
-        headers: { //树的异步请求头部 
-            type: Object,
-            default: {
-                // 'token':localStorage.getItem("token"),
-                // 'Authorization':'Bearer '+localStorage.getItem("token")
-            }
-        },
+        // headers: { //树的异步请求头部 
+        //     type: Object,
+        //     default: {
+        //         // 'token':localStorage.getItem("token"),
+        //         // 'Authorization':'Bearer '+localStorage.getItem("token")
+        //     }
+        // },
         otherParam: { // 额外的参数 在这里传
             default() {
                 return {};
             },
         },
     },
-    emits: ["current-change"],
+    emits: ["clcik_collection","clcik_delete","current-change"],
     setup(props: any, context: any) {
 
         const search = reactive({
@@ -195,7 +193,7 @@ export default defineComponent({
                 isAttention: 1
             }
         })
-        const showPopover = ref(true)
+        const showPopover = ref(false)
         const popoverRef = ref()
         const checkList = ref([])
         function checkListChange(list) {
@@ -206,28 +204,31 @@ export default defineComponent({
         }
         // 收藏事件
         function clcik_collection(event, row) {
-            popover.remark = row.remark
-            popover.row = row
-            if (!row.isAttention) {
-                //弹备注信息框
-                unref(popoverRef).popperRef.triggerRef = event.target;
-                showPopover.value = true
-            } else {
-                //取消收藏
-                showPopover.value = false
-                unnode_collection(row)
-            }
+            return  context.emit('clcik_collection', event, row)
+            // popover.remark = row.remark
+            // popover.row = row
+            // if (!row.isAttention) {
+            //     //弹备注信息框
+            //     unref(popoverRef).popperRef.triggerRef = event.target;
+            //     showPopover.value = true
+            // } else {
+            //     //取消收藏
+            //     showPopover.value = false
+            //     unnode_collection(row)
+            // }
         }
         // 编辑事件
         function clcik_edit(event, row) {
-            popover.remark = row.remark
-            popover.row = row
-            unref(popoverRef).popperRef.triggerRef = event.target;
-            showPopover.value = true
-            // context.emit('clcik_edit',row)
+            // popover.remark = row.remark
+            // popover.row = row
+            // unref(popoverRef).popperRef.triggerRef = event.target;
+            // showPopover.value = true
+               return  context.emit('clcik_collection', event, row)
         }
         // 删除事件
         function clcik_delete(row) {
+            row.isAttention=1
+            return  context.emit('clcik_delete', row)
             ElMessageBox.confirm(
                 '是否确认当前操作?',
                 '提示',
@@ -241,73 +242,62 @@ export default defineComponent({
                 .then(() => {
                     node_delete(row)
                 })
-            // context.emit('clcik_delete',row)
         }
         //删除的请求
         function node_delete(row: any) {
             popover.row.id = ''
+            console.log(row,'row')
             unnode_collection(row)
         }
         //关注请求
         function node_collection() {
-            Http({
-                url: props.collectionApi,
-                method: 'post',
-                headers: props.headers,
-                params: {
-                    remark: popover.remark,
-                    vehicleId: popover.row.id
-                }
-            }).then(res => {
-                showPopover.value = false
-                if (res.flag) {
-                    //更改状态 障眼法
-                    popover.row.isAttention = 1
-                    popover.row.remark = popover.remark
-                    // context.emit('clcik_collection')
-                } else {
-                }
-            })
+        //    insertVehicleAttentionInfo({
+        //             remark: popover.remark,
+        //             vehicleId: popover.row.id
+        //     }).then(res => {
+        //         showPopover.value = false
+        //         if (res.flag) {
+        //             //更改状态 障眼法
+        //             popover.row.isAttention = 1
+        //             popover.row.remark = popover.remark
+        //             // context.emit('clcik_collection')
+        //         } else {
+        //         }
+        //     })
         }
         //取消关注请求
         function unnode_collection(row) {
-            Http({
-                url: props.uncollectionApi,
-                method: 'DELETE',
-                headers: props.headers,
-                params: {
-                    vehicleId: row.id
-                }
-            }).then(res => {
-                showPopover.value = false
-                if (res.flag) {
-                    //  ElMessage({
-                    //     message: '操作成功',
-                    //     type: 'success',
-                    // })
-                    if (popover.row.id) {
-                        //改变收藏状态
-                        popover.row.isAttention = 0
-                    } else {
-                        //删除关注事件 //列表中删除
-                        listsData.value = unref(listsData).filter(item => {
-                            return item.id != row.id
+          
+            // deleteVehicleAttentionInfo(row.id).then(res => {
+            //     showPopover.value = false
+            //     if (res.flag) {
+            //         //  ElMessage({
+            //         //     message: '操作成功',
+            //         //     type: 'success',
+            //         // })
+            //         if (popover.row.id) {
+            //             //改变收藏状态
+            //             popover.row.isAttention = 0
+            //         } else {
+            //             //删除关注事件 //列表中删除
+            //             listsData.value = unref(listsData).filter(item => {
+            //                 return item.id != row.id
 
-                        })
-                        //分页删除一条
-                        pagination.total = pagination.total - 1
+            //             })
+            //             //分页删除一条
+            //             pagination.total = pagination.total - 1
 
-                    }
+            //         }
 
 
 
-                } else {
-                    //  ElMessage({
-                    //     message: '操作失败',
-                    //     type: 'error',
-                    // })
-                }
-            })
+            //     } else {
+            //         //  ElMessage({
+            //         //     message: '操作失败',
+            //         //     type: 'error',
+            //         // })
+            //     }
+            // })
         }
         //选中与取消
         const changeCheckStates = (list) => {
@@ -331,13 +321,13 @@ export default defineComponent({
                 ...props.otherParam
 
             }
-            getHttpTreeData(params)
+            getListData(params)
         }
 
-        function getHttpTreeData(params: any) {
-            Http({
+        function getListData(params: any) {
+            getHttpListData({
                 url: props.ListApi,
-                headers: props.headers,
+                method:'get',
                 params
             }).then(res => {
                 loading.value = false
@@ -353,6 +343,18 @@ export default defineComponent({
             })
         }
         const buttonRef = ref()
+       // 更新收藏和在线图标
+        function upNodeIcon(val){
+              const { id, isAttention,onlineStatus } = val;
+               //列表查找ID 有就更新
+               listsData.value.some((item,index)=>{
+                   if(item.id==id){
+                       item.isAttention=Number(isAttention)
+                   item.onlineStatus=onlineStatus
+                   }
+                   return item.id==id
+               })
+        }
         return {
             search,
             listsData,
@@ -373,7 +375,8 @@ export default defineComponent({
             handlerCurrentChange,
             checkList,
             checkListChange,
-            checkcheckboxChange
+            checkcheckboxChange,
+            upNodeIcon
         }
     }
 

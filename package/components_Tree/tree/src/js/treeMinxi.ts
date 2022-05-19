@@ -1,4 +1,5 @@
 // @ts-nocheck # 忽略全文
+import { baseUrl,headers } from "../../../../util/http";
 export function getOptions(props:any) {
     function iconsFilter(nodes: any) {//更改节点得图标
         var { data, flag } = nodes;
@@ -25,7 +26,6 @@ export function getOptions(props:any) {
                                 val.iconSkin =val.online?`${val.icon||'icon0'}car_online`
                                 : `${val.icon||'icon0'}car`
                             }
-                            console.log(val.iconSkin,'val.iconSkin')
                             return 
                         case 5:
                             return (val.iconSkin = "camera");
@@ -36,9 +36,9 @@ export function getOptions(props:any) {
     }
 
     return {
-        lazy: props.lazy,
+        lazy:baseUrl+ props.lazy,
         type: props.type,
-        headers: props.headers,
+        headers: headers,//props.headers,
         autoParam: props.autoParam,
         otherParam: props.otherParam,
         name: props.name,
@@ -154,6 +154,7 @@ export function getMethods(props:any,context:any) {
          * @param treeNode 被点击的节点 JSON 数据对象
          */
         onClick(event: Event, treeId:string, treeNode: any) {
+            event.stopPropagation();
             let zTree = this.getZTreeObj(treeId)
             if(lastTid==treeNode.tId){
                 treeNode.click = false;

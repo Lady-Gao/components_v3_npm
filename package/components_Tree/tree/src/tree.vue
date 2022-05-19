@@ -13,7 +13,7 @@
  * 传进来的数据为简单json （平铺数据没有层级）  会进行异步请求
  */
 import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue";
-
+import { getHttpTreeData } from "../../../util/http";
 import {getOptions,getMethods} from './js/treeMinxi'
 export default defineComponent({
   name: "Tree",
@@ -77,14 +77,13 @@ export default defineComponent({
       type: String,
       default: 'get'
     },
-    headers: { //树的异步请求头部 
-      type: Object,
-      default: {
-        // 'token':localStorage.getItem("token"),
-        // 'Authorization':'Bearer '+localStorage.getItem("token")
-      }
-
-    },
+    // headers: { //树的异步请求头部 ,目前放在util/http内
+    //   type: Object,
+    //   default: {
+    //     // 'token':localStorage.getItem("token"),
+    //     // 'Authorization':'Bearer '+localStorage.getItem("token")
+    //   }
+    // },
     autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id', "type",]
       type: Array,
       default() {
@@ -130,7 +129,6 @@ export default defineComponent({
     });
     function init(){
       import("./js/base-tree").then(BaseTree=>{
-        console.log(888888)
        tree.value = new BaseTree.default({
         el: treeId.value,
         options:getOptions(props),
@@ -138,35 +136,30 @@ export default defineComponent({
       });
  
       //如果传了treeData  就不是异步
-      if (Array.isArray(props.treeData)) {
+      if (Array.isArray(props.treeData)&&props.treeData.length) {
         //传进来的数据是数组
          setInitialTree(props.treeData)
       } else if(props.lazy) {
-        getHttpTreeData()
+        getTreeData()
       }
        })
     }
 //设置树的初始化数据
   function setInitialTree(data:any) {
-       
          tree.value.setInitialTree(data);
          zTree.value=tree.value.zTree
      context.emit('tree-ready')
     }
     // 使用请求数据 lazy headers  type otherParam
-  function getHttpTreeData() {
-      console.log('内部请求数据')
-      let str = '?'
-      for (const key in props.otherParam) {
-        str += key + '=' + props.otherParam[key] + '&'
-      }
-      fetch(props.lazy + str, {
+  function getTreeData() {
+     getHttpTreeData({
+       url:props.lazy,
         method: props.type,
-        headers: props.headers
-      }).then(response => {
-        return response.json();
+        params:props.otherParam,
       }).then(res => {
         setInitialTree(res.data);
+              console.log(res.data,'内部请求数据')
+
       })
     }
 

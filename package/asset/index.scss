@@ -2,9 +2,9 @@
 
 @font-face {
   font-family: 'iconfont-cv_components_v3';  /* Project id 3365244 */
-  src: url('//at.alicdn.com/t/font_3365244_bbxy6i2qerr.woff2?t=1652671169950') format('woff2'),
-       url('//at.alicdn.com/t/font_3365244_bbxy6i2qerr.woff?t=1652671169950') format('woff'),
-       url('//at.alicdn.com/t/font_3365244_bbxy6i2qerr.ttf?t=1652671169950') format('truetype');
+  src: url('//at.alicdn.com/t/font_3365244_bhcmryp6sn4.woff2?t=1652941071966') format('woff2'),
+  url('//at.alicdn.com/t/font_3365244_bhcmryp6sn4.woff?t=1652941071966') format('woff'),
+  url('//at.alicdn.com/t/font_3365244_bhcmryp6sn4.ttf?t=1652941071966') format('truetype');
 }
 //阿里图标账号 15386671927@163.com
   .cvIcon_search{
@@ -63,4 +63,10 @@
 .cvIcon-jiantouRight::before{
   font-family: 'iconfont-cv_components_v3';
   content: '\e63c';
+}
+//司机图标
+.yunwei_ico_docu::before{
+  font-family: 'iconfont-cv_components_v3';
+  content: '\e652';
+  color: #6b6a6a;
 }

@@ -32,7 +32,7 @@ import getEnterpriseTreeList from '@/utils/getEnterpriseTreeList.json'
 import { reactive, ref, watch } from 'vue'
 const { VehicleTreeInfoList } = findVehicleTreeInfoList
 const { EnterpriseTreeList } = getEnterpriseTreeList
-const lazy = 'http://web2.test.cvtsp.com/api/basic/tree/findVehicleTreeInfoList'
+const lazy = '/basic/tree/findVehicleTreeInfoList'
 const token = localStorage.getItem('token')
 console.log(token)
 const headers = {

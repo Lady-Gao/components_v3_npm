@@ -1,14 +1,16 @@
 <template>
     <div class="TreeTab">
+       
         <el-tabs type="border-card"  v-model="activeName">
             <el-tab-pane :label="titles[0]" name="tab0" v-if="titles[0]">
                 <treeSearch  ref="treeSearch"
                  :treeData='treeData'
                  :lazy='lazy' 
-                 :headers='headers' 
                  :autoParam="autoParam"
                  :otherParam="otherParam"
                  :isCheck='isCheck'
+                 :isCollection="isCollection" 
+                  :hoverOperation="isCollection&&hoverOperation"
                  @node-click="nodeClick"
                  @node-check="nodeCheck"
                  
@@ -16,31 +18,41 @@
             </el-tab-pane>
             <el-tab-pane :label="titles[1]" name="tab1" v-if="titles[1]">
                 <treeList :ListApi="vehicleListApi" ref="vehicleList"
-                 :headers='headers' 
                  :otherParam="otherParam"
                  :isCheck='isCheck'
-                  :isCollection="true" 
+                  :isCollection="isCollection" 
                   :selection="selection"
+                  @clcik_collection="collectionOnclick"
                   @current-change="currentChange"
                 />
             </el-tab-pane>
             <el-tab-pane :label="titles[2]" name="tab2" v-if="titles[2]">
                 <treeList :ListApi="vehicleAttentionApi" ref="vehicleAttentionList"
-                 :headers='headers' 
                  :otherParam="otherParam"
                  :isCheck='isCheck'
+                   :isCollection="false"
                   :isEdit="true" :isDelete="true"
                   :selection="selection"
+                   @clcik_collection="collectionOnclick"
+                   @clcik_delete="collection_delete"
                    @current-change="currentChange"
                 />
              </el-tab-pane>
           
         </el-tabs>
+    <el-popover ref="popoverRefTab" v-if="isCollection"  :visible="showPopover" trigger="click" title="备注" virtual-triggering>
+                  <el-input clearable v-model="popover.remark" :maxlength="50" />
+                <div style="text-align: right;">
+                    <el-button type="text" @click="showPopover = false">取消</el-button>
+                    <el-button type="text" @click="node_collection">确定</el-button>
+                </div>
+            </el-popover>
     </div>
 </template>
 
 <script lang="ts" >
-import { computed, defineComponent, onMounted, PropType, reactive, ref, watch, watchEffect } from "vue";
+import { computed, defineComponent, onMounted, PropType, reactive, ref, unref, watch, watchEffect } from "vue";
+import {insertVehicleAttentionInfo, deleteVehicleAttentionInfo } from "../../../util/http";
 export default defineComponent({
   name: "TreeTab",
   props:{
@@ -89,21 +101,24 @@ export default defineComponent({
     type: Boolean,
     default: false,
   },
+    isCollection: {//是否显示收藏
+        type: Boolean,
+        default: true
+    },
+      
   lazy: {// 树的接口(/monitor/findVehicleTreeInfoList)
     type: String,
-    default: 'http://web2.test.cvtsp.com/api/basic/tree/findVehicleTreeInfoList',
+    default: '/basic/tree/findVehicleTreeInfoList',
   },
   type: { //树的异步请求方式
     type: String,
     default: 'get'
   },
-  headers: { //树的异步请求头部 
-    type: Object,
-    default: {
-      'token':localStorage.getItem("token"),
-      'Authorization':'Bearer '+localStorage.getItem("token")
-    }
-  },
+  // headers: { //树的异步请求头部 
+  //   type: Object,
+  //   default: {
+  //   }
+  // },
   autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
     type: Array,
     default() {
@@ -117,11 +132,11 @@ export default defineComponent({
   },
   vehicleListApi: { // 车辆列表 搜索接口url
             type: String,
-            default: 'http://web2.test.cvtsp.com/api/basic/tree/getVehicleListByPlate'
+            default: '/basic/tree/getVehicleListByPlate'
       },
  vehicleAttentionApi: { // 车辆关注 搜索接口url
             type: String,
-            default: 'http://web2.test.cvtsp.com/api/basic/vehicle/findVehicleAttentionInfoList'
+            default: '/basic/vehicle/findVehicleAttentionInfoList'
       },
     
   },
@@ -181,7 +196,7 @@ function nodeCheck(mess){
   vehiclestates()
 }
 
-//改变树和列表的选中状态
+//改变树和列表的选中状态--复选
 function changeCheckStates(type,id){
    // 车辆列表的状态
  vehiclestates()
@@ -196,6 +211,86 @@ function vehiclestates(){
 function sendcurrentChange(){
 context.emit('current-change',allCurrentIds.value)
 }
+const currentTreeNode=ref()
+  const showPopover = ref(false)
+function hoverOperation(val: any){
+ if (val.type != 4) return
+ console.log(Number(val.isAttention),'Number(val.isAttention)')
+  return {
+    template: `<span id="${val.id}" class="${Number(val.isAttention) ? 'cvIcon_collection' : 'cvIcon_uncollection'}"
+                         ></span>`,
+    methods() {//点击会触发onclick方法
+      const collection = document.getElementById(val.id);
+                    if(collection) {
+                        collection.onclick = (event) => {
+                         collectionOnclick(event,val)
+                        }
+                    }
+    }
+  }
+}
+  const popover = reactive({
+            remark: '',
+        })
+        const popoverRefTab=ref()
+        // 收藏事件
+function collectionOnclick(event,val){
+ popover.remark=val.remark
+ currentTreeNode.value = val;
+  handlerCollection(event);
+}
+function collection_delete(val){
+   currentTreeNode.value=val
+ handlerCollection();
+}
+//车辆列表关注按钮点击事件
+async function handlerCollection(event?){
+  event&&event.stopPropagation();
+            const { isAttention, id } = currentTreeNode.value;
+            console.log(isAttention,'handlerCollection')
+            if(Number(isAttention)) {
+            //     // 已经关注过，执行取消(cancel)操作
+                    const { flag } = await deleteVehicleAttentionInfo(id);
+                    currentTreeNode.value.isAttention =0
+                    monitor_vehicleAttention(currentTreeNode.value)
+                   
+            }else {
+            //     // 未关注过， 执行打开气泡，显示input内容
+             unref(popoverRefTab).popperRef.triggerRef = event.target;
+            showPopover.value=true
+            
+            }
+          
+}
+async function node_collection(event){
+   const { flag } =await insertVehicleAttentionInfo({
+                    remark: popover.remark,
+                    vehicleId: currentTreeNode.value.id
+            })
+            if(flag){
+              showPopover.value=false
+               currentTreeNode.value.isAttention =1
+             monitor_vehicleAttention(currentTreeNode.value)
+            }
+}
+   // 监听车辆关注变化
+      function  monitor_vehicleAttention(val) {
+      
+        let params={
+          id:val.vehicleId||val.id,
+          isAttention:val.isAttention,//关注状态
+          onlineStatus:(val.messageText&&val.messageText =='上线')?true:false,//在线状态
+        }
+        treeSearch.value.upNodeIcon(params)
+         vehicleList.value.upNodeIcon(params)//只是关注或者上下线条，可以前端做显示图标处理
+         vehicleAttentionList.value.handlerSearch()//取消关注时重新刷新
+        }
+
+ // 监听车辆添加还是删除还是修改 add remove modify
+      function   monitor_vehicle(val){
+
+        }
+        
         return {
             activeName,
             currentChange,
@@ -204,6 +299,14 @@ context.emit('current-change',allCurrentIds.value)
             treeSearch,
             vehicleList,
 vehicleAttentionList,
+hoverOperation,
+currentTreeNode,
+showPopover,
+popover,
+popoverRefTab,
+node_collection,
+collectionOnclick,
+collection_delete
         }
     }
 })

@@ -51,7 +51,7 @@
     const {EnterpriseTreeList}=getEnterpriseTreeList
 
     const {OrganizationTreeList}=findEnterpriseOrganizationTreeList
-    const lazy='http://web2.test.cvtsp.com/api/basic/tree/findVehicleTreeInfoList'
+    const lazy='/basic/tree/findVehicleTreeInfoList'
     const token=localStorage.getItem('token')
     console.log(token)
     const headers={

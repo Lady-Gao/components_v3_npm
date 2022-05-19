@@ -4,10 +4,10 @@
     <el-input  ref="Input"  v-model="inputValue" :maxlength="20"
       clearable  @focus="focus"  @input='fliterNode'>
       <template #suffix>
-        <span class="cvIcon_search"></span>
+        <span class="cvIcon_search" @click="loadTree"></span>
       </template>
     </el-input>
-    <tree ref="baseTree" v-show="isShowTree" :treeData="treeData" :lazy='lazy' :headers='headers' :autoParam="autoParam"
+    <tree ref="baseTree" v-loading="loading" v-show="isShowTree" :treeData="treeData" :lazy='lazy'  :autoParam="autoParam"
       :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
       :hoverOperation="hoverOperation" :nodeFilter="nodeFilter" @node-check="nodeCheck" @node-click='nodClick'
       @tree-loaded="treeLoaded" @tree-ready="treeReady"
@@ -57,13 +57,11 @@ export default defineComponent({
     type: String,
     default: 'get'
   },
-  headers: { //树的异步请求头部 
-    type: Object,
-    default: {
-      // 'token':localStorage.getItem("token"),
-      // 'Authorization':'Bearer '+localStorage.getItem("token")
-    }
-  },
+  // headers: { //树的异步请求头部 
+  //   type: Object,
+  //   default: {
+  //   }
+  // },
   autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
     type: Array,
     default() {
@@ -101,7 +99,7 @@ export default defineComponent({
    emits:['clear','update:modelValue', 'node-click', 'node-check','tree-ready'],
    
    setup(props: any, context: any) {
-     
+     const loading=ref(true)
 const inputValue = ref('')
 const nondeClickinputValue = ref('')
 const baseTree = ref()
@@ -226,10 +224,13 @@ function mouseleave() {
 }
 
 function treeLoaded(){
+  console.log('treeLoaded')
 }
 function treeReady(){
      props.modelValue&&selectNode()
      context.emit('tree-ready',true)
+     console.log('treeReady')
+     loading.value=false
 }
 
 
@@ -292,6 +293,32 @@ function changeCheckStates(allCurrentIds,check,ids){
       });
     }
 }
+
+// 更新收藏和在线图标
+function upNodeIcon(val){
+const { zTree } = baseTree.value
+   const { id, isAttention,onlineStatus } = val;
+  const node = zTree.getNodeByParam('id', id);
+if(node){
+  // 关注更新
+     // const isClickedNode=document.getElementById(id);
+    //     if(isClickedNode){
+    //       isClickedNode.setAttribute('class', `${Number(isAttention) ? 'cvIcon_collection' : 'cvIcon_uncollection'}`);
+    //  console.log(isClickedNode,'isClickedNode')
+    //  }
+     node.isAttention=isAttention
+//在线离线
+   node.iconSkin = onlineStatus? `${node.icon||'icon0'}car_online`: `${node.icon||'icon0'}car`;
+   node.online = onlineStatus ? true : false;
+          zTree.updateNode(node);
+}
+      
+}
+//重新加载树
+function loadTree(){
+  loading.value=true
+ baseTree.value.init()
+}
       return{
         baseTree,
         Input,
@@ -305,7 +332,10 @@ function changeCheckStates(allCurrentIds,check,ids){
         treeLoaded,
         treeReady,
         getNodeByParam,
-        changeCheckStates
+        changeCheckStates,
+        upNodeIcon,
+        loadTree,
+        loading
       }
    }
 })

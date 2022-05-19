@@ -1,25 +1,21 @@
 <template>
     <div class="treeListView">
-        <treeList  :ListApi="ListApi1" :headers="headers"
+        <treeList  :ListApi="ListApi1" 
             :isCollection="true" :collectionApi="collectionApi" :uncollectionApi="uncollectionApi"
              @clcik_collection='clcik_collection'/>
-         <treeList  :ListApi="ListApi2" :headers="headers"  :uncollectionApi="uncollectionApi"
+         <treeList  :ListApi="ListApi2"  :uncollectionApi="uncollectionApi"
          :isEdit="true" :isDelete="true"  :collectionApi="collectionApi"   @clcik_edit='clcik_edit'  @clcik_delete='clcik_delete' 
 />
     </div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-const ListApi1='http://web2.test.cvtsp.com/api/basic/tree/getVehicleListByPlate'                         
-const ListApi2='http://web2.test.cvtsp.com/api/basic/vehicle/findVehicleAttentionInfoList'
-const collectionApi='http://web2.test.cvtsp.com/api/basic/vehicle/insertVehicleAttentionInfo'
-const uncollectionApi='http://web2.test.cvtsp.com/api/basic/vehicle/deleteVehicleAttentionInfo'
-const deleteApi='http://web2.test.cvtsp.com/api/basic/vehicle/deleteVehicleAttentionInfo'
-const token = localStorage.getItem('token')
-const headers = {
-  token,
-  'Authorization': 'Bearer ' + token
-}
+const ListApi1='/basic/tree/getVehicleListByPlate'                         
+const ListApi2='/basic/vehicle/findVehicleAttentionInfoList'
+const collectionApi='/basic/vehicle/insertVehicleAttentionInfo'
+const uncollectionApi='/basic/vehicle/deleteVehicleAttentionInfo'
+const deleteApi='/basic/vehicle/deleteVehicleAttentionInfo'
+
  // 收藏事件
         function clcik_collection(row:{}){
             console.log(row,'row')

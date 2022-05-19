@@ -39,28 +39,28 @@ export default class BaseTree {
    
        
 
-    /**
-     * 初始化树的配置和方法
-     * @param {Array} data: []
-     */
-    initialTree(name,data, callback) {
-        var data = this.iconsFilter({data});
-        /**
-         * $.fn.zTree.init(obj,zSettingJSON,zNodesArray)
-         * @param (obj,zSettingJSON,zNodesArray)
-         * 用于展现 zTree 的 DOM 容器,
-         * zTree 的配置数据,
-         * zTree 的节点数据
-         */
-        $.fn.zTree.init(this.el, this.treeConfig(this.isCheck,name), this.setIsFirstNodesExpand(data, this.isExpand, this.isFreeze));
-        this.zTree = $.fn.zTree.getZTreeObj(this.treeId);//获取zTree 对象
+    // /**
+    //  * 初始化树的配置和方法
+    //  * @param {Array} data: []
+    //  */
+    // initialTree(name,data, callback) {
+    //     var data = this.iconsFilter({data});
+    //     /**
+    //      * $.fn.zTree.init(obj,zSettingJSON,zNodesArray)
+    //      * @param (obj,zSettingJSON,zNodesArray)
+    //      * 用于展现 zTree 的 DOM 容器,
+    //      * zTree 的配置数据,
+    //      * zTree 的节点数据
+    //      */
+    //     $.fn.zTree.init(this.el, this.treeConfig(this.isCheck,name), this.setIsFirstNodesExpand(data, this.isExpand, this.isFreeze));
+    //     this.zTree = $.fn.zTree.getZTreeObj(this.treeId);//获取zTree 对象
 
-        //展开所有节点
-        this.expandAll && this.zTree.expandAll(true)
-        typeof callback === 'function' && callback(this.zTree);
-        this.treeLoaded(data);
+    //     //展开所有节点
+    //     this.expandAll && this.zTree.expandAll(true)
+    //     typeof callback === 'function' && callback(this.zTree);
+    //     this.treeLoaded(data);
        
-    }
+    // }
 
     /**
      * 设置初始化树
@@ -68,7 +68,7 @@ export default class BaseTree {
      */
     setInitialTree(data, callback) {
         var data = this.iconsFilter({data});
-       
+       console.log('setInitialTree')
         $.fn.zTree.init(
             this.el, 
             this.treeConfig(), 
@@ -88,6 +88,7 @@ export default class BaseTree {
      * @param {Boolean} isFreeze: false 默认不冻结
      */
     setIsFirstNodesExpand(data) {
+        console.log(data,'data')
         if(Array.isArray(data) && data.length > 0) {
             data[0].open = this.isExpand;
             data[0].chkDisabled = this.isFreeze;
@@ -134,7 +135,8 @@ export default class BaseTree {
                 },
                 addHoverDom(treeId, treeNode) {
                     let a_node = $('#' + treeNode.tId + '_a');
-                    let operation = _self.hoverOperation(treeNode);
+                    let operation = _self.hoverOperation&& _self.hoverOperation(treeNode);
+                    if(!operation) return
                     if($(`#operation-btn${treeNode.id}`).length > 0) return;
                     
                     let html = `<span id="operation-btn${treeNode.id}">${!operation.template?'':operation.template}</span>`;
