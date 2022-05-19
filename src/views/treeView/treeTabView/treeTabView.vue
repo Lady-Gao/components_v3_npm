@@ -6,14 +6,18 @@
          :isCheck='false'
  
         />
-         <!-- <treeTab
-       :lazy="lazy"
+         <treeTab :titles="treeTitle" 
+       :lazy="divervehilceApi"
+       :vehicleListApi="diverlistsApi"
+       :selection="selection"
    :isCollection="false"
          :isCheck='true'
+          :isOnlineStatus="false"
+         vehicleListName="text"
          :otherParam="{categories:'2'}"
          @current-change="currentChange"
          @node-click='nodeClick'
-        /> -->
+        />
     </div>
 </template>
 
@@ -22,7 +26,13 @@
    const {VehicleTreeInfoList}=findVehicleTreeInfoList
   const treeTitle=['车辆树', '车辆列表',false ]
   const lazy="/basic/tree/findVehicleTreeInfoList"//车多
-  const lazy1="/basic/sysEnterprise/findEnterpriseTreeDriverList"//司机树
+   const diverlistsApi= "/basic/driver/findDriverMenuPage"
+  const divervehilceApi='/basic/sysEnterprise/findEnterpriseTreeDriverList'
+  const selection =[
+        { label: "司机姓名", value: "username" },
+        { label: "components.common.company", value: "enterpriseName" },
+        { label: "components.common.plateCode", value: "plateCode" },
+      ]
   function currentChange(val:any){
     console.log(val,'currentChange')
   }

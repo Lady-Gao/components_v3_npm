@@ -13,10 +13,13 @@
             </template>
         </el-input>
         <!-- 多选框  在线离线-->
-        <el-checkbox-group v-model="search.onlineStatus">
+            
+        <div class="onlineStatusCheck">
+        <el-checkbox-group v-model="search.onlineStatus" v-if="isOnlineStatus">
             <el-checkbox :label="item.value" v-for="(item, index) in onlinection" :key="index">{{ item.label }}
             </el-checkbox>
         </el-checkbox-group>
+        </div>
         <!-- 多选(checkbox)列表选择 @change="checkListChange"-->
         <div class="treeList-lists" v-loading="loading">
             <el-checkbox-group v-if="isCheck" v-model="checkList" >
@@ -101,6 +104,10 @@ export default defineComponent({
 
         isCheck: {//是否多选
             type: Boolean,
+            default: true
+        },
+        isOnlineStatus:{//是否显示在线离线搜索条件
+             type: Boolean,
             default: true
         },
         isCollection: {//是否显示收藏五角星
@@ -389,7 +396,9 @@ export default defineComponent({
     max-width: 300px;
     width: 100%;
     height: 95%;
-
+.onlineStatusCheck{
+    margin: 5px 0;
+}
     .treeList-lists {
         min-height: 320px;
         height: 80%;
@@ -420,6 +429,7 @@ export default defineComponent({
             .text {
                 display: inline-block;
                 padding-left: 5px;
+                
             }
 
             .remark {

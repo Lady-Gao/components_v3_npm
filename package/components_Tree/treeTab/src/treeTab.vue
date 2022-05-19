@@ -4,6 +4,7 @@
         <el-tabs type="border-card"  v-model="activeName">
             <el-tab-pane :label="titles[0]" name="tab0" v-if="titles[0]">
                 <treeSearch  ref="treeSearch"
+                 :name="name"
                  :treeData='treeData'
                  :lazy='lazy' 
                  :autoParam="autoParam"
@@ -17,22 +18,26 @@
                  />
             </el-tab-pane>
             <el-tab-pane :label="titles[1]" name="tab1" v-if="titles[1]">
-                <treeList :ListApi="vehicleListApi" ref="vehicleList"
+                <treeList :ListApi="vehicleListApi" ref="vehicleList" 
+                 :name="vehicleListName"
                  :otherParam="otherParam"
                  :isCheck='isCheck'
                   :isCollection="isCollection" 
                   :selection="selection"
+                  :isOnlineStatus="isOnlineStatus"
                   @clcik_collection="collectionOnclick"
                   @current-change="currentChange"
                 />
             </el-tab-pane>
             <el-tab-pane :label="titles[2]" name="tab2" v-if="titles[2]">
                 <treeList :ListApi="vehicleAttentionApi" ref="vehicleAttentionList"
+                 :name="vehicleListName"
                  :otherParam="otherParam"
                  :isCheck='isCheck'
                    :isCollection="false"
                   :isEdit="true" :isDelete="true"
                   :selection="selection"
+                  :isOnlineStatus="isOnlineStatus"
                    @clcik_collection="collectionOnclick"
                    @clcik_delete="collection_delete"
                    @current-change="currentChange"
@@ -89,10 +94,15 @@ export default defineComponent({
       return [];
     },
   },
-  name: {//显示节点时,将返回的text作为节点名称
+  name: {//车辆树显示节点时,将返回的text作为节点名称
     type: String,
     default: "text"
   },
+  vehicleListName: {//车辆列表列表显示节点时,将返回的text作为节点名称
+    type: String,
+    default: "plateCode"
+  },
+
   showIcon: { // 是否显示图标
     type: Boolean,
     default: true,
@@ -101,6 +111,10 @@ export default defineComponent({
     type: Boolean,
     default: false,
   },
+  isOnlineStatus:{//是否显示在线离线搜索条件
+             type: Boolean,
+            default: true
+        },
     isCollection: {//是否显示收藏
         type: Boolean,
         default: true
