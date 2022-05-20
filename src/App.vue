@@ -54,7 +54,10 @@ function tabClick(val:String){
          <el-tab-pane label="inputLinkTreeView" name='inputLinkTreeView'> </el-tab-pane>
           <el-tab-pane label="treeListView" name='treeListView'> </el-tab-pane>
            <el-tab-pane label="treeTabView" name='treeTabView'> </el-tab-pane>
-   </el-tabs>
+           <el-tab-pane label="publictreeContentView" name='publictreeContentView'> </el-tab-pane>
+  
+  
+  </el-tabs>
       </div>
     <div class='flex1' v-if="waitToken"><router-view /></div>
   </div>
@@ -95,5 +98,11 @@ function tabClick(val:String){
     border-radius: 6px;
     background-color: #d4d3d3;;
   }
-
+.Content {
+   
+    overflow: scroll;
+    height: calc(100% - 65px);
+    width: 100%;
+    position: relative;
+}
 </style>
