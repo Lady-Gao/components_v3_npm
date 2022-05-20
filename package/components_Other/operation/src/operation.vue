@@ -5,7 +5,7 @@
                 <slot></slot>
             </el-col>
             <el-col style="text-align:right;height:55px" :span="Span[1]" >
-                <el-form-item>
+                <el-form-item class="buttonForm">
                  <el-button type="text" v-if="$slots.header" class="toggle" @click="showItem">
                     {{flag ?"收起":"展开"}}
                  </el-button>
@@ -63,6 +63,10 @@ function showItem(){
 text-align: left;
 .el-input__inner{
     width: 173px;
+}
+.buttonForm{
+    display: flex;
+    justify-content: flex-end;
 }
 }
 </style>

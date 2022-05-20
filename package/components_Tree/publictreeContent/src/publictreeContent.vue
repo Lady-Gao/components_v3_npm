@@ -9,7 +9,9 @@
                  <slot name="main"></slot>
             </el-main> -->
                  <slot ></slot>
-                  <slot name="main"></slot>
+                 <!-- <div class="main"> -->
+                  <slot name="main" ></slot>
+                 <!-- </div> -->
         </div>
         <div  :class="['aside' ,treeState?'asideopen':'asideclose']">
              <el-button class="jiantou" @click="changeTreeStates">
@@ -55,7 +57,9 @@ console.log(treeState.value,'treeState.value')
 
 <style lang="scss" scoped>
 .publictreeContent {
-    
+    .main{
+        position: relative;
+    }
     .aside{
        width:300px;
         position: absolute;
@@ -76,14 +80,15 @@ console.log(treeState.value,'treeState.value')
       transition: all 0.3s ease-in-out; 
       display: flex;
       flex-direction: column;
+       width:  calc(100% - 300px);
     }
     .containeropen{
     //    width:  calc(100% - 300px);
-    left: 283px;
+     width:  calc(100% - 300px);
     }
       .containerclose{
-        //   width:  100%;
-        left: 0px;
+         width:  100%;
+        // left: 5px;
     }
      .asideopen{
              left: 0px;

@@ -17,6 +17,7 @@ import TreeList from "./components_Tree/treeList/index"
 import TreeTab from "./components_Tree/treeTab/index"
 import PublicTreeContent from "./components_Tree/publictreeContent/index"
 import Operation from "./components_Other/operation/index"
+import Grid from "./components_Other/grid/index"
 const modules={
     Map,
     Marker,
@@ -32,7 +33,8 @@ const modules={
     TreeList,
     TreeTab,
     PublicTreeContent,
-    Operation
+    Operation,
+    Grid
 }
 
 const install = function (app:any) {
