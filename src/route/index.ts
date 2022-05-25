@@ -57,7 +57,12 @@ const router = createRouter({
         {
             name:  'publictreeContentView',
             path: "/publictreeContentView",
-            component: () => import( "../views/treeView/publictreeContentView/publictreeContentView.vue")
+            component: () => import( "../views/otherView/publictreeContentView/publictreeContentView.vue")
+        },
+        {
+            name:  'gridView',
+            path: "/gridView",
+            component: () => import( "../views/otherView/gridView/gridView.vue")
         },
       ]
   })

@@ -23,7 +23,7 @@
         <template #main>
          
 
-                <grid :data="tableData" class="bgr" :renderArr="columnList">
+                <grid :data="tableData" class="bgr" :renderArr="columnList" >
   <el-table-column prop="date" label="Date" width="180"  align="center"  header-align="center"/>
     <template #opertion>
   
@@ -79,7 +79,7 @@ const columnList=ref([
 function filterLogStuas(item:{}){
 console.log(item)
 }
-     
+ 
 </script>
 <style lang="scss" scoped>
 .publictreeContentView{
