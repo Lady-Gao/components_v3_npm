@@ -20,10 +20,9 @@
                     :filters="item.filter?filters(item):null" 
                      :filter-method="item.filter?(item.nodefilters?item.nodefilters:nodefilters):null"
                 >
-            <template #header="{column}" v-if="item.filter_input" @mouseout="column.show=false">
+            <template #header="{column}" v-if="item.filter_input" >
                 <span @mouseenter="column.show=true" v-show="!column.show"> {{column['property']}} </span>
-                
-                <el-input  v-show="column.show" 
+                <el-input  v-show="column.show"  @mouseleave="column.show=false"
                 v-model="column.input_text" size="small" 
                 @input="(val)=>input_textChange(val,column)" clearable
                 placeholder="Type to search" />
@@ -131,17 +130,18 @@ function  addFilters(key:string,filtertext?:any){
        })
    return filters
 }
-onMounted(() => {
-    console.log(table)
-})
-
+// function mouseEvent(column){
+//     column.show=!column.show
+//     console.log(column,'vvvv')
+// }
         return { table,tableData ,
         filters,
         addFilters,
         nodefilters,
         filterTableData,
         input_textChange,
-        columnList
+        columnList,
+        // mouseEvent
         }
     }
 })
