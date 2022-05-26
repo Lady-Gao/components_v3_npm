@@ -305,8 +305,9 @@ export default defineComponent({
 <style lang="scss" >
 .TreeTab {
   width: 280px;
-  height: 95%;
-  position: relative;
+  position: absolute;
+    bottom: 5px;
+    top: 0;
 
   .el-tabs {
     height: 100%;

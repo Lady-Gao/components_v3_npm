@@ -1,6 +1,6 @@
 <template>
     <div class="publictreeContentView">
-        <div class="header"></div>
+        <div class="header">header</div>
         <PublicTreeContent :treeData="VehicleTreeInfoList">
       
             <Operation :powerTool="powerTool1">

@@ -1,16 +1,16 @@
 <template>
  <el-form :inline="true"  class="Operation" label-position="right" label-width="80px">
     <el-row>
-            <el-col :span="Span[0]" >
+            <el-col :span="$slots.default?Span[0]:0" >
                 <slot></slot>
             </el-col>
-            <el-col style="text-align:right;height:55px" :span="Span[1]" >
+            <el-col style="text-align:right;height:55px" :span="$slots.default?Span[1]:24" >
                 <el-form-item class="buttonForm">
                  <el-button type="text" v-if="$slots.header" class="toggle" @click="showItem">
                     {{flag ?"收起":"展开"}}
                  </el-button>
                 <!-- <slot name="operations"></slot> -->
-                <el-button  v-for="item in powerTool" >{{item}}</el-button>
+                <el-button  v-for="item in powerTool"  @click="bottomClick(item)">{{getText(item)}}</el-button>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -22,7 +22,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+/**
+ * powerTool类型
+ * search
+ * add
+ * modify
+ * import
+ * export
+ */
+import { defineComponent, PropType, ref } from 'vue'
 
 export default defineComponent({
     name:"Operation",
@@ -35,22 +43,43 @@ export default defineComponent({
             }
         },
         powerTool:{//按钮权限
-        type:Array,
+        type:Array as PropType<string[]>,
         default(){
             return ['search']
         }
 
         },
     },
-    setup () {
+    setup (props: any, context: any) {
    const flag=ref(false)
 function showItem(){
     flag.value=!flag.value
     console.log(flag.value)
 }
+//点击按钮
+function bottomClick(item:string){
+    context.emit(item)
+}
+//显示按钮权限对应的中文
+function getText(key:string){
+    switch (key) {
+        case "search":
+            return "搜索"
+        case "add":
+            return "添加"
+        case "modify":
+            return "修改"
+        case "import":
+             return "导入"
+        case "export":
+             return "导出"
+    }
+}
         return {
            flag,
-           showItem
+           showItem,
+           bottomClick,
+           getText
         }
     }
 })

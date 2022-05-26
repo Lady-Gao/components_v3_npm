@@ -1,89 +1,50 @@
 <template>
     <div class="gridView">
-         <grid :data="filterTableData"  :renderArr="columnList">
-  
-     <el-table-column prop="name" label="Name" width="180" 
-     > 
-    
-    <!-- <template #header="{column}" >
-   <span @mouseenter="column.show=true" v-show="!column.show"> {{column['property']}} {{column['show']}}</span>
-        <el-input @mouseout="column.show=false" v-show="column.show" v-model="search" size="small" placeholder="Type to search" />
-      </template> -->
-     </el-table-column>
-     
-    <el-table-column prop="address" label="Address"  />
-  
-      </grid> 
+         <grid :data="tableData" v-loading="loading"  :renderArr="columnList" @row-click="rowClick"
+          @selection-change="selectionChange" :expand="true"
+         @loadTable="loadTable"
+         @expand-change="expandChange" 
+         >
+          <el-table-column  type="selection"></el-table-column>
+       <el-table-column type="expand">
+        <template #default="props">
+            <p >State: {{ props.row.plateCode }}</p>
+        </template>
+      </el-table-column>
+         </grid> 
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { addFilters } from "../../../utils/common";
-const tableData = ref([
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'jj',
-    isLogout:0
-  },
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'Home',
-    input_text:'',
-    isLogout:1
-  },
-  {
-    date: '2016-05-02',
-    name: 'dd',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'Office',
-    isLogout:0
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'Home',
-    isLogout:1
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'Office',
-    isLogout:0
-  },
-])
-const filterTableData = computed(() =>{
-  let arr=tableData.value.filter(
-    (data) =>{
+import { computed, reactive, ref } from "vue";
+import { addFilters } from "@/utils/common";
+import {findAlarmPolymerizationInfoList,findAlarmInfoDetails} from '../../../utils/API'
+const tableData = ref({})
+const loading = ref(true)
+let params={
+  vehicleIds: '',
+alarmTypeIds: '',
+mapType: 3,
+startTime: '2022-05-21 00:00:00',
+endTime: '2022-05-25 23:59:59',
+status: '',
+current: 1
+}
 
-     return !search.value ||
-      data.name.includes(search.value)}
-  )
-  return arr
-  }
-)
-const search=ref()
 const columnList=ref([
-     { label: 'date', prop: "date",filter:true,sortable:true},
-      { label: 'filter_inputtag', prop: "tag",filter_input:true},
-       { label: 'filter_inputname', prop: "name",filter_input:true},
-        { label: 'filtername', prop: "name",filter:true,sortable:true},
-        { label: 'columnListlabelus', prop: "isLogout",filter:true,
+     { label: 'plateCode', prop: "plateCode",filter:true,},
+      { label: '所属公司', prop: "enterpriseName",filter_input:true},
+       { label: '车牌頗色', prop: "plateColorName",filter:true,filters:filter},
+        { label: '持续时间', prop: "alarmDurationStr",filter:true,sortable:true},
+        { label: '报警类型', prop: "alarmTypeName",filter:false,},
+         { label: '在线状态', prop: "isLogout",filter:true,
        formatter:filterLogStuas,
         filtertext:LogStuasfiltertext
          },
 ])
 
-function filterHandler ( value: string,  row: {},  column: any) {
-  const property = column['property']
-  return row[property] === value
-}
+loadTable()
+
 function filterLogStuas  (row:any) {
   return row.isLogout?'在线':'离线'
  
@@ -91,6 +52,30 @@ function filterLogStuas  (row:any) {
 
 function LogStuasfiltertext(item:any){
   return {text:item?'在线':'离线',value:item}
+}
+function filter(){
+  return [
+    {text:'红色',value:1},
+    {text:"粉色",value:5},
+    {text:"蓝色",value:"蓝色"}
+  ]
+}
+function rowClick(row:any){
+  console.log(row,'rowClick')
+}
+function selectionChange(val:any){
+  console.log(val,'selectionChange')
+}
+function loadTable(val={}){
+  loading.value=true
+   findAlarmPolymerizationInfoList(Object.assign(params,val) ).then(res=>{
+   tableData.value=res.data
+    loading.value=false
+})
+}
+
+function expandChange(val:any){
+ 
 }
 </script>
 

@@ -56,10 +56,10 @@ function tabClick(val:String){
            <el-tab-pane label="treeTabView" name='treeTabView'> </el-tab-pane> -->
            <el-tab-pane label="publictreeContentView" name='publictreeContentView'> </el-tab-pane>
             <el-tab-pane label="gridView" name='gridView'> </el-tab-pane>
-  
+            <el-tab-pane label="contentView" name='contentView'> </el-tab-pane>
   </el-tabs>
       </div>
-    <div class='flex1' v-if="waitToken"><router-view /></div>
+    <div class='flex1 Content' v-if="waitToken"><router-view /></div>
   </div>
 </template>
 
@@ -99,10 +99,11 @@ function tabClick(val:String){
     background-color: #d4d3d3;;
   }
 .Content {
-   
+   margin-top: 65px;
     overflow: scroll;
     height: calc(100% - 65px);
     width: 100%;
     position: relative;
+    // background-color: #d4d3d3;
 }
 </style>

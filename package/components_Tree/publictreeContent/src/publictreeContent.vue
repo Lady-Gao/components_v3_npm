@@ -1,6 +1,6 @@
 <template>
 
-    <div class="Content publictreeContent">
+    <div class="publictreeContent">
         <div :class="['container',treeState?'containeropen':'containerclose']">
             <!-- <el-header>
                   <slot ></slot>
@@ -56,7 +56,13 @@ console.log(treeState.value,'treeState.value')
 </script>
 
 <style lang="scss" scoped>
-.publictreeContent {
+.publictreeContent { 
+    overflow: scroll;
+    width: 100%;
+    position: absolute;
+    top:65px;
+    bottom: 0;
+    overflow: hidden;
     .main{
         position: relative;
     }
