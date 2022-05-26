@@ -1,6 +1,6 @@
 <template>
     <div class="grid">
-        <div class="boxTable havePagin">
+        <div :class="['boxTable', pagination.pages?'havePagin':'']">
             <el-table :data="filterTableData" ref="table" @row-click="rowClick" @selection-change="selectionChange"
                 @expand-change="expandChange"
                 highlight-current-row :expand-row-keys="expands" :row-key="rowKey">
