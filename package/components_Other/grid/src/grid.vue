@@ -4,12 +4,8 @@
             <el-table :data="filterTableData" ref="table" @row-click="rowClick" @selection-change="selectionChange"
                 @expand-change="expandChange"
                 highlight-current-row :expand-row-keys="expands" :row-key="rowKey">
-                <!-- <el-table-column v-if="selection" type="selection"></el-table-column>
-               <el-table-column v-if="expand" type="expand" >
-                <template #default="props">
-                  <slot name="expand" :scope="props.row"></slot>
-                    </template>
-                </el-table-column> -->
+               <el-table-column v-if="selection" type="selection"></el-table-column>
+               
                 <!-- 默认模板 -->
                 <slot></slot>
                 <!-- render模板 -->
@@ -86,10 +82,7 @@ export default defineComponent({
             type: Boolean,
             default: false,
         },
-        expand: {  //是否启用展开
-            type: Boolean,
-            default: false,
-        },
+      
         expandKeyID: {//展开时取的列表的值 不能有重复 不然展开出问题
             type: String,
             default: "id"
