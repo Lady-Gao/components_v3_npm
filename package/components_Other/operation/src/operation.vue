@@ -10,8 +10,9 @@
                     {{flag ?"收起":"展开"}}
                  </el-button>
                 <!-- <slot name="operations"></slot> -->
-                <el-button  v-for="item in powerTool"  @click="bottomClick(item)">{{getText(item)}}</el-button>
-                </el-form-item>
+                <!-- <el-button  v-for="item in powerTool"  @click="bottomClick(item)">{{getText(item)}}</el-button> -->
+               <OpretionTool :powerTool="powerTool" @bottonClick="bottonClick"/>
+               </el-form-item>
             </el-col>
         </el-row>
  <el-row>
@@ -57,29 +58,16 @@ function showItem(){
     console.log(flag.value)
 }
 //点击按钮
-function bottomClick(item:string){
+function bottonClick(item:string){
     context.emit(item)
 }
 //显示按钮权限对应的中文
-function getText(key:string){
-    switch (key) {
-        case "search":
-            return "搜索"
-        case "add":
-            return "添加"
-        case "modify":
-            return "修改"
-        case "import":
-             return "导入"
-        case "export":
-             return "导出"
-    }
-}
+
         return {
            flag,
            showItem,
-           bottomClick,
-           getText
+           bottonClick
+          
         }
     }
 })

@@ -5,14 +5,24 @@
  @add="add" @modify="modify" @export="exportL"
    :powerTool="powerTool"> </Operation>
             <grid :data="tableData" class="bgr" >
-  <el-table-column prop="date" label="Date"   align="center"  header-align="center"/>
-    <template #opertion>
-  
-     <el-table-column   label="操作"   align="center"  header-align="center" >
-         <el-button>dr</el-button>
-         </el-table-column>
-           </template>
+                <el-table-column prop="date" label="Date"   align="center"  header-align="center"/>
+                <el-table-column   label="操作"   align="center"  header-align="center" fixed="right">
+                    <OpretionTool :Heard="false" :powerTool="powerTool" @look="lookL"/>
+                </el-table-column>
             </grid> 
+           
+
+  <el-dialog v-model="dialogVisible" title="Tips" width="30%" draggable>
+    <span>It's a draggable Dialog</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >Confirm</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
   </PublicTreeContent>
     </div>
 </template>
@@ -24,6 +34,7 @@ import { ref } from 'vue'
   const {VehicleTreeInfoList}=findVehicleTreeInfoList
     const {OrganizationTreeList}=findEnterpriseOrganizationTreeList
 const formInline = ref()
+const dialogVisible=ref(false)
 const tableData = [
   {
     date: '2016-05-03',
@@ -46,7 +57,7 @@ const tableData = [
     address: 'No. 189, Grove St, Los Angeles',
   },
 ]
- const powerTool=["search","add","modify","import","export"]
+ const powerTool=["search","add","modify","import","export","look"]
 function search(){
   console.log('search-')
 }
@@ -61,6 +72,9 @@ function importL(){
 }
 function exportL(){
   console.log('exportL-')
+}
+function lookL(){
+  console.log('lookL')
 }
 </script>
 
