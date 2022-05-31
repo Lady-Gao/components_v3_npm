@@ -23,20 +23,12 @@ export  function Http({url='',method='get',params={}}){
 
 
 //车辆树接口
-export function getHttpTreeData({url,method,params}){
-    return Http({
-        url,
-        method,
-        params
-    }) 
+export function getHttpTreeData(params:any){
+    return Http(params) 
 }
 // 车辆列表
-export function getHttpListData({url,method,params}){
-    return Http({
-        url,
-        method,
-        params
-    }) 
+export function getHttpListData(params:any){
+    return Http(params) 
 }
 // 取消关注
 export function deleteVehicleAttentionInfo(vehicleId:string){

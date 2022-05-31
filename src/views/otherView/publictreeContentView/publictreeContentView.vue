@@ -1,7 +1,8 @@
 <template>
     <div class="publictreeContentView">
         <div class="header">header</div>
-        <PublicTreeContent :treeData="VehicleTreeInfoList">
+        <PublicTreeContent :treeData="VehicleTreeInfoList"     :isCheck='true'  @current-change="currentChange"
+         @node-click='nodeClick'>
       
             <Operation :powerTool="powerTool1">
                 <el-form-item label="起止时间">
@@ -20,7 +21,6 @@
                 </template>
             </Operation>
   
-        <template #main>
          
 
                 <grid :data="tableData" class="bgr" :renderArr="columnList" >
@@ -32,9 +32,7 @@
          </el-table-column>
            </template>
             </grid> 
-               <!-- <div class="bgr"></div> -->
            
-        </template> 
         </PublicTreeContent>
     </div>
 </template>
@@ -136,9 +134,14 @@ const columnList=ref([
         { label: 'labelus', prop: "isLogout",formatter:filterLogStuas },
 ])
 function filterLogStuas(item:{}){
-console.log(item)
+// console.log(item)
 }
- 
+  function currentChange(val:any){
+    console.log(val)
+  }
+  function nodeClick(mess:{}){
+    console.log(mess)
+  }
 </script>
 <style lang="scss" scoped>
 .publictreeContentView{

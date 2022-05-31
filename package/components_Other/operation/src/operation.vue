@@ -55,7 +55,6 @@ export default defineComponent({
    const flag=ref(false)
 function showItem(){
     flag.value=!flag.value
-    console.log(flag.value)
 }
 //点击按钮
 function bottonClick(item:string){

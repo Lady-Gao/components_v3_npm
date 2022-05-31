@@ -1,11 +1,14 @@
 <template>
-    <div class="content">
+    <div class="treeTabView">
       <!--   :titles="treeTitle"       :isCollection="false" -->
-        <treeTab
+      <el-col span="6">
+          <treeTab
       :treeData="VehicleTreeInfoList"
          :isCheck='false'
- 
+  @node-click='nodeClick'
         />
+      </el-col>
+       <el-col span="6">
          <treeTab :titles="treeTitle" 
        :lazy="divervehilceApi"
        :vehicleListApi="diverlistsApi"
@@ -18,6 +21,7 @@
          @current-change="currentChange"
          @node-click='nodeClick'
         />
+         </el-col>
     </div>
 </template>
 
@@ -42,9 +46,15 @@
 </script>
 
 <style lang="scss" scoped>
-.content{
+.treeTabView{
     height:100%;
-    display: flex;
-  justify-content: space-between;
+ width: 100%;
+     display: flex;
+    justify-content: space-between;
+  .el-col{
+        height:100%;
+         width: 320px;
+    position: relative;
+  }
 }
 </style>

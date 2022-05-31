@@ -20,7 +20,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { listPoints, icon1, icon2 } from "@/utils/data";
 console.log('history2')
 const lineArr = ref();
 const hMoveAnimation = ref();

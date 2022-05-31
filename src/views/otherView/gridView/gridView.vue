@@ -1,7 +1,7 @@
 <template>
     <div class="gridView">
          <grid :data="tableData" v-loading="loading"  :renderArr="columnList" @row-click="rowClick"
-          @selection-change="selectionChange" :expand="true"
+          @selection-change="selectionChange" s
          @loadTable="loadTable"
          @expand-change="expandChange" 
          >
@@ -36,7 +36,7 @@ const columnList=ref([
       { label: '所属公司', prop: "enterpriseName",filter_input:true},
        { label: '车牌頗色', prop: "plateColorName",filter:true,filters:filter},
         { label: '持续时间', prop: "alarmDurationStr",filter:true,sortable:true},
-        { label: '报警类型', prop: "alarmTypeName",filter:false,},
+        { label: '报警类型', prop: "alarmTypeName",},
          { label: '在线状态', prop: "isLogout",filter:true,
        formatter:filterLogStuas,
         filtertext:LogStuasfiltertext

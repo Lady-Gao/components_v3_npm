@@ -266,7 +266,7 @@ function treeReady(){
       }
   }
 
-  function getNodeByParam(valueName?,modelValue?){
+  function getNodeByParam(valueName?:any,modelValue?:any){
     const { zTree } = baseTree.value
       const all_nodes = zTree.getNodes(); 
       let key=valueName||props.valueName,value=modelValue||props.modelValue
@@ -274,7 +274,7 @@ function treeReady(){
     return nodes
   }
 //更改勾选状态
-function changeCheckStates(allCurrentIds,check,ids){
+function changeCheckStates(allCurrentIds:any,check:boolean,ids:any){
   const { zTree } = baseTree.value
   //没有选中的就取消所有
   if(!allCurrentIds.length){
@@ -286,7 +286,7 @@ function changeCheckStates(allCurrentIds,check,ids){
         //设置勾选状态
       node&&zTree.checkNode(node, check, true);
     }else{
-      ids.forEach(id => {
+      ids.forEach((id:any) => {
         let node=getNodeByParam(props.valueName,id)
        //设置勾选状态
         node&&zTree.checkNode(node, check, true);
@@ -295,7 +295,7 @@ function changeCheckStates(allCurrentIds,check,ids){
 }
 
 // 更新收藏和在线图标
-function upNodeIcon(val){
+function upNodeIcon(val:any){
 const { zTree } = baseTree.value
    const { id, isAttention,onlineStatus } = val;
   const node = zTree.getNodeByParam('id', id);

@@ -54,8 +54,25 @@ export default {
 
         function linerClick(val:any,e:any){
             
-            console.log(val,e,'val,e')
         }
-        return () => h('div', { class: 'Liner' }, 'Liner')
+        /**
+         * 移除marker
+         */
+         function removeMarker(){
+           if( myLiner.value){
+              myLiner.value.off('click', linerClick)
+              map.remove( myLiner.value)
+              myLiner.value=null
+          }
+          
+       }
+       return {
+        removeMarker,
+        myLiner
     }
+},
+render(){
+   
+    return () => h('div', { class: 'Liner' }, 'Liner')
+}
 }

@@ -2,27 +2,22 @@
 
     <div class="publictreeContent">
         <div :class="['container',treeState?'containeropen':'containerclose']">
-            <!-- <el-header>
-                  <slot ></slot>
-            </el-header> -->
-            <!-- <el-main>
-                 <slot name="main"></slot>
-            </el-main> -->
+           
                  <slot ></slot>
-                 <!-- <div class="main"> -->
-                  <slot name="main" ></slot>
-                 <!-- </div> -->
+                
         </div>
         <div  :class="['aside' ,treeState?'asideopen':'asideclose']">
              <el-button class="jiantou" @click="changeTreeStates">
                  <span :class="treeState?'cvIcon-jiantouLeft':'cvIcon-jiantouRight'"></span>
              </el-button>
-                 <treeTab :treeData="treeData" :isCheck='false' />
+                 <treeTab :treeData="treeData" :isCheck='isCheck'   
+                 @current-change="currentChange"
+         @node-click='nodeClick'/>
         </div>
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, defineComponent, onMounted, reactive, ref, unref, watch, watchEffect } from "vue";
 
 export default defineComponent({
@@ -38,18 +33,29 @@ export default defineComponent({
             type: String,
             default: "text"
         },
-    },
-    setup(){
+        isCheck: { // 是否是多选还是单选模式 true(多选) 
+            type: Boolean,
+            default: false,
+            },
+         },
+     emits: ['current-change', 'node-click'],//多选时用current-change，单选用node-click
+    setup(props: any, context: any){
 const treeState=ref(true)
 //更改tabtree收缩状态
         function changeTreeStates(){
 treeState.value=!treeState.value
-console.log(treeState.value,'treeState.value')
         }
-
+ function currentChange(val:any){
+     context.emit('current-change',val)
+  }
+  function nodeClick(mess:{}){
+      context.emit('node-click',mess)
+  }
         return {
             treeState,
-            changeTreeStates
+            changeTreeStates,
+            currentChange,
+            nodeClick
         }
     }
 })
@@ -77,6 +83,7 @@ console.log(treeState.value,'treeState.value')
             top: 46%;
             right: 0px;
             padding: 3px;
+            z-index: 2;
         }
     }
     .container{
@@ -89,12 +96,10 @@ console.log(treeState.value,'treeState.value')
        width:  calc(100% - 300px);
     }
     .containeropen{
-    //    width:  calc(100% - 300px);
      width:  calc(100% - 300px);
     }
       .containerclose{
          width:  100%;
-        // left: 5px;
     }
      .asideopen{
              left: 0px;

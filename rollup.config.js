@@ -3,6 +3,7 @@ import vue from "rollup-plugin-vue";
 import { terser } from "rollup-plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import typescript from 'rollup-plugin-typescript2'
+import commonjs from 'rollup-plugin-commonjs';
 module.exports = [
   {
     // 入口
@@ -28,7 +29,9 @@ module.exports = [
       // 代码压缩
       terser(),
       postcss(),
-      typescript()
+      typescript(),
+    
+      commonjs()
     ],
   },
 ];

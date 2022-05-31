@@ -39,7 +39,7 @@
  * 点击车辆时  讲当前车辆图片设置为透明
  */
 import { computed, reactive, ref } from "vue";
-import {listPoints,icon1,icon2} from "../../../utils/data";
+import {listPoints,icon1,icon2} from "../../../utils/dataC";
 const mapName = "AMap";
 
 const carObj = reactive<any>({});

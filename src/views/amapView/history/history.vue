@@ -5,11 +5,11 @@
     history实现1
     <Map  :zoom="3" ref="MAP" id="history">
       <!-- 不能跳点 -->
-      <PathSimplifierIns
+      <PathSimplifierIns ref="hPathSimplifierIns"
         :position="hisdata"
-        :icon="icon1"
         model="history"
         @pointClick='pointClicks'
+        @moveing="moveing"
       />
       
       <!-- <Liner :path="path" /> -->
@@ -20,30 +20,31 @@
     <el-button @click="pauseAnimation">暂停动画</el-button>
     <el-button @click="resumeAnimation">继续动画</el-button>
     <el-button @click="stopAnimation">停止动画</el-button>
-    <el-button>跳点</el-button>
+    <el-button @click="destroy">销毁</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { listPoints, icon1, icon2 } from "@/utils/data";
-const hMoveAnimation = ref();
+import { listPoints, icon1, icon2 } from "@/utils/dataC";
+const hPathSimplifierIns = ref();
 function startAnimation() {
-
+ hPathSimplifierIns.value.start();
 }
 function pauseAnimation() {
-
+ hPathSimplifierIns.value.pause()
 }
 function resumeAnimation() {
-
+ hPathSimplifierIns.value.resume()
 }
 function stopAnimation() {
-
+ hPathSimplifierIns.value.stop()
 }
-function jump() {
-
+function destroy() {
+ hPathSimplifierIns.value.destroy()
 }
-
+function moveing(val:any){
+}
 //平滑对象
 const hisdata = [
   { point: [111.497428, 39.20923], icon: icon2 },

@@ -41,36 +41,24 @@ export default {
                 return 'realTime'// realTime/ history
             }
         },
-        // //实时数据，medel=='realTime' 传入改值 [116.497428, 39.20923]
-        // position: {
-        //     type: Array,
-        //     default() {
-        //         return []
-        //     }
-        // },
         icon: {
             type: String || null,
             default: ''
         },
         // 巡航器更换标识，id改变，将重置巡航器
-        id: null
-        ,
-
-
-        // //历史数据 medel=='history' 传入改值 [[],[]]
-        // historyData: {
-        //     type: Array,
-        //     default() {
-        //         return []
-        //     }
-        // },
+        id: null,
         //定位信息
         position: {
             type: Array,
             default() {
                 return []
             }
+        },
+        speed:{//速度
+            type:Number,
+            default: 0
         }
+
     },
     emits: ['moveing','pointClick'],
     setup(props:any, context:any) {
@@ -168,7 +156,7 @@ export default {
             data.value[0].path[0] = props.position
             pathSimplifierIns.value.setData(data.value);
             navg1.value = pathSimplifierIns.value.createPathNavigator(0, {
-                speed: 1000000, //巡航速度，单位千米/小时\
+                speed: props.speed||1000000, //巡航速度，单位千米/小时\
                 loop: false, //循环播放
                 pathNavigatorStyle: {
                     width: 32,
@@ -211,7 +199,7 @@ export default {
                 //对第一条线路（即索引 0）创建一个巡航器
                 navg1.value = pathSimplifierIns.value.createPathNavigator(0, {
                     loop: false, //循环播放
-                    speed: 1000000, //巡航速度，单位千米/小时
+                    speed: props.speed||1000000, //巡航速度，单位千米/小时
                     pathNavigatorStyle: {
                         width: 32,
                         height: 32,
@@ -249,7 +237,7 @@ export default {
                 //重新建立一个巡航器
                 navg1.value = pathSimplifierIns.value.createPathNavigator(0, {
                     //loop: true, //循环播放
-                    speed: 1000000, //巡航速度，单位千米/小时
+                    speed: props.speed||1000000, //巡航速度，单位千米/小时
                     pathNavigatorStyle: {
                         width: 32,
                         height: 32,
@@ -321,7 +309,7 @@ export default {
                     }
                 } else {
                     //轨迹
-                    historyStart()
+                    // historyStart()
                 }
             } else {
                 //值已传入 但js文件未加载完成  
@@ -348,7 +336,7 @@ export default {
 
             // }
             if (!oldval) return
-            navg1.value && navg1.value.destroy()
+            navg1.value && destroy()
             navg1.value = null
             if (props.model == 'realTime' && newval) {
                 data.value[0].path = [props.position]
@@ -359,8 +347,32 @@ export default {
 
         }
 
+        function start(){
+            historyStart()
+        }
+        function pause(){
+             navg1.value.pause();
+        }
+        function resume(){
+            navg1.value.resume();
+       }
+       function stop(){
+        navg1.value.stop();
+   }
+   //销毁
+   function destroy(){
+    navg1.value.destroy();
+   }
+        return {
+            start,
+             pause,
+            resume,
+            stop,
+            destroy
+        }
+    },
+    render() {
 
-
-        return () => h('div', { class: 'PathSimplifierIns' }, 'PathSimplifierIns')
+        return () => h('div', { class: 'MoveAnimation' }, 'MoveAnimation')
     }
 }

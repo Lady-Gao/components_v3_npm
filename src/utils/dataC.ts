@@ -30,6 +30,5 @@ export const listPoints=[
         [113.373916,23.086728],
         [120.282954,30.196059],
         ]
-
         export const       icon1 ="https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png"
         export const     icon2 = "https://fs.cvtsp.com/images-shihang-login.png"

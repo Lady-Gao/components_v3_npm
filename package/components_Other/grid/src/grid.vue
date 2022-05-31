@@ -16,7 +16,7 @@
                     :filter-method="item.filter ? nodefilters : null">
                     <template #header="{ column }" v-if="item.filter_input">
                         <span @mouseenter="column.show = true" v-show="!column.show"> {{ column['property'] }} </span>
-                        <el-input v-show="column.show" @mouseleave="column.show = false" v-model="column.input_text"
+                        <el-input class="inputFilter" v-show="column.show" @mouseleave="column.show = false" v-model="column.input_text"
                             size="small" @input="(val) => input_textChange(val, column)" clearable
                             placeholder="Type to search" />
                     </template>
@@ -61,10 +61,11 @@ type Row = {
 
     filtertext?: Function//勾选_该列的筛选数据需要做转换，显示的文字更改
 }
+
 export default defineComponent({
     name: 'Grid',
     props: {
-        data: {
+        data: {//显示的数据 可以是分页数据和全部数据
             type: [Object, Array],
             default() {
                 return {
@@ -72,7 +73,7 @@ export default defineComponent({
                 }
             }
         },
-        renderArr: {//入参模板
+        renderArr: {//显示的column模板  
             type: Array as PropType<Row[]>,
             default() {
                 return []
@@ -83,7 +84,7 @@ export default defineComponent({
             default: false,
         },
       
-        expandKeyID: {//展开时取的列表的值 不能有重复 不然展开出问题
+        expandKeyID: {//行数据的 Key，用来优化 Table 的渲染；展开时取的列表的值 不能有重复 不然展开出问题
             type: String,
             default: "id"
         }
@@ -120,11 +121,11 @@ export default defineComponent({
 
 
         //  input搜索的方法
-        function input_textChange(val, column) {
+        function input_textChange(val:any, column:any) {
             let property = column['property']
             columnList.value[property] = val
             filterTableData.value = tableData.value.filter(
-                (item) => {
+                (item:any) => {
                     let arr = []
                     for (const key in columnList.value) {
                         let bool = columnList.value[key] ? item[key].includes(columnList.value[key]) : true
@@ -144,9 +145,9 @@ export default defineComponent({
         //数组去重，返回新的格式数组 
         function addFilters(key: string, filtertext?: any) {
             if (!tableData.value.length) return
-            let arrays = new Set(tableData.value.map(item => item[key]))
+            let arrays = new Set(tableData.value.map((item:any) => item[key]))
             let filterArr = Array.from(arrays)
-            let filters = filterArr.map(item => {
+            let filters = filterArr.map((item:any) => {
                 if (filtertext) {
                     return filtertext(item)
                 } else {
@@ -162,19 +163,19 @@ export default defineComponent({
         function selectionChange() {
             context.emit('selection-change', ...arguments)
         }
-        function sizeChange(val) {
+        function sizeChange(val:number|string) {
             context.emit('loadTable',{
                 current:pagination.current,
                 size:val
                 })
         }
-        function currentChange(val) {
+        function currentChange(val:number|string) {
             context.emit('loadTable',{
                 current:val,
                 size:pagination.size
                 })
         }
-        const expands = ref([])
+        const expands = ref()
         function expandChange(row: any, expandedRows: []) {
             context.emit('expand-change', ...arguments)
             expands.value = []
@@ -224,8 +225,6 @@ export default defineComponent({
         width: 99.8%;
         border: 1px solid #eee;
         border-radius: 3px;
-
-        // background-color: rgb(221, 206, 206);
         .el-table--fit {
             height: 100%;
 
@@ -264,6 +263,9 @@ export default defineComponent({
         .el-pagination {
             float: left;
         }
+    }
+    .inputFilter input{
+        height: 22px;
     }
 }
 </style>

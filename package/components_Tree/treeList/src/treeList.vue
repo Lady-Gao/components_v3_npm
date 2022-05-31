@@ -1,3 +1,4 @@
+
 <template>
     <div class="treeList">
         <!-- 条件下拉框搜索 -->
@@ -46,7 +47,7 @@
                 <div class="group_content" v-for="(item, index) in listsData" :key="index">
                     <p class="content_text">
                       <span :class="item.onlineStatus=='1'?`${item.icon||'icon0'}car_online_ico_docu`: `${item.icon||'icon0'}car_ico_docu`"></span>
-                        <span class="text">{{ item[name] }}</span>
+                        <span class="text" @click="textClick(item)">{{ item[name] }}</span>
                         <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                             <i class="remark">{{ item.remark }}</i>
                         </el-tooltip>
@@ -83,6 +84,7 @@
 </template>
 
 <script lang="ts">
+// @ts-ignore
 import { defineComponent, PropType, reactive, ref, unref, getCurrentInstance, computed } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getHttpListData } from "../../../util/http";
@@ -118,7 +120,7 @@ export default defineComponent({
             type: Boolean,
             default: false
         },
-        isDelete: {//是否显示收藏五角星
+        isDelete: {//是否显示删除按钮
             type: Boolean,
             default: false
         },
@@ -154,20 +156,13 @@ export default defineComponent({
             type: String,
             default: "plateCode"
         },
-        // headers: { //树的异步请求头部 
-        //     type: Object,
-        //     default: {
-        //         // 'token':localStorage.getItem("token"),
-        //         // 'Authorization':'Bearer '+localStorage.getItem("token")
-        //     }
-        // },
         otherParam: { // 额外的参数 在这里传
             default() {
                 return {};
             },
         },
     },
-    emits: ["clcik_collection","clcik_delete","current-change"],
+    emits: ["clcik_collection","clcik_delete","current-change","node-click"],
     setup(props: any, context: any) {
 
         const search = reactive({
@@ -203,116 +198,33 @@ export default defineComponent({
         const showPopover = ref(false)
         const popoverRef = ref()
         const checkList = ref([])
-        function checkListChange(list) {
-            context.emit('current-change', list)
-        }
-        function checkcheckboxChange($event,val){
-            context.emit('current-change', $event,val.id)
+    //   多选才会触发
+        function checkcheckboxChange(event:Event, row:any){
+            context.emit('current-change', event,row.id)
         }
         // 收藏事件
-        function clcik_collection(event, row) {
+        function clcik_collection(event:Event, row:any) {
             return  context.emit('clcik_collection', event, row)
-            // popover.remark = row.remark
-            // popover.row = row
-            // if (!row.isAttention) {
-            //     //弹备注信息框
-            //     unref(popoverRef).popperRef.triggerRef = event.target;
-            //     showPopover.value = true
-            // } else {
-            //     //取消收藏
-            //     showPopover.value = false
-            //     unnode_collection(row)
-            // }
         }
         // 编辑事件
-        function clcik_edit(event, row) {
-            // popover.remark = row.remark
-            // popover.row = row
-            // unref(popoverRef).popperRef.triggerRef = event.target;
-            // showPopover.value = true
+        function clcik_edit(event:Event, row:any) {
                return  context.emit('clcik_collection', event, row)
         }
         // 删除事件
-        function clcik_delete(row) {
+        function clcik_delete(row:any) {
             row.isAttention=1
             return  context.emit('clcik_delete', row)
-            ElMessageBox.confirm(
-                '是否确认当前操作?',
-                '提示',
-                {
-                    distinguishCancelAndClose: true,
-                    confirmButtonText: '确认',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                }
-            )
-                .then(() => {
-                    node_delete(row)
-                })
+           
         }
-        //删除的请求
-        function node_delete(row: any) {
-            popover.row.id = ''
-            console.log(row,'row')
-            unnode_collection(row)
-        }
-        //关注请求
-        function node_collection() {
-        //    insertVehicleAttentionInfo({
-        //             remark: popover.remark,
-        //             vehicleId: popover.row.id
-        //     }).then(res => {
-        //         showPopover.value = false
-        //         if (res.flag) {
-        //             //更改状态 障眼法
-        //             popover.row.isAttention = 1
-        //             popover.row.remark = popover.remark
-        //             // context.emit('clcik_collection')
-        //         } else {
-        //         }
-        //     })
-        }
-        //取消关注请求
-        function unnode_collection(row) {
-          
-            // deleteVehicleAttentionInfo(row.id).then(res => {
-            //     showPopover.value = false
-            //     if (res.flag) {
-            //         //  ElMessage({
-            //         //     message: '操作成功',
-            //         //     type: 'success',
-            //         // })
-            //         if (popover.row.id) {
-            //             //改变收藏状态
-            //             popover.row.isAttention = 0
-            //         } else {
-            //             //删除关注事件 //列表中删除
-            //             listsData.value = unref(listsData).filter(item => {
-            //                 return item.id != row.id
-
-            //             })
-            //             //分页删除一条
-            //             pagination.total = pagination.total - 1
-
-            //         }
-
-
-
-            //     } else {
-            //         //  ElMessage({
-            //         //     message: '操作失败',
-            //         //     type: 'error',
-            //         // })
-            //     }
-            // })
-        }
+       
+      
         //选中与取消
-        const changeCheckStates = (list) => {
+        const changeCheckStates = (list:any) => {
                 checkList.value=list
         }
 
         //分页变化
-        function handlerCurrentChange(val) {
+        function handlerCurrentChange(val:any) {
             search.current = val;
             handlerSearch();
         }
@@ -344,23 +256,27 @@ export default defineComponent({
                     pagination.total = total;
                     pagination.current = current;
                 } else {
-                    this.lists = [];
-                    this.pagination.total = 0;
+                   listsData.value= [];
+                   pagination.total = 0;
+                    pagination.current = 0;
                 }
             })
         }
         const buttonRef = ref()
        // 更新收藏和在线图标
-        function upNodeIcon(val){
+        function upNodeIcon(val:any){
               const { id, isAttention,onlineStatus } = val;
                //列表查找ID 有就更新
-               listsData.value.some((item,index)=>{
+               listsData.value.some((item:any)=>{
                    if(item.id==id){
                        item.isAttention=Number(isAttention)
                    item.onlineStatus=onlineStatus
                    }
                    return item.id==id
                })
+        }
+        function textClick(val:any){
+            context.emit('node-click',val)
         }
         return {
             search,
@@ -378,12 +294,11 @@ export default defineComponent({
             popoverRef,
             buttonRef,
             showPopover,
-            node_collection,
             handlerCurrentChange,
             checkList,
-            checkListChange,
             checkcheckboxChange,
-            upNodeIcon
+            upNodeIcon,
+            textClick
         }
     }
 
@@ -411,9 +326,7 @@ export default defineComponent({
             width: 100%;
             border-bottom: 1px solid #eee;
             float: left;
-            // .el-checkbox__label {
-            //     width: 80% !important;
-            // }
+          
 
         }
 
@@ -450,10 +363,7 @@ export default defineComponent({
                 display: inline-block;
             }
 
-            .operation {
-                // position: absolute;
-                // right: 0;
-            }
+          
         }
 
         .radioGroup {

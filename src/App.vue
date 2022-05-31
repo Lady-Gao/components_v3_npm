@@ -44,16 +44,16 @@ function tabClick(val:String){
   <div class='flexRoute'>
       <div >
         <el-tabs tab-position='left'  @tab-click='tabClick' v-model="activeName" >
-       <!-- <el-tab-pane label="home" name='home'> </el-tab-pane>
-      <el-tab-pane label="multiCar" name='multiCar'> </el-tab-pane>
+       <el-tab-pane label="home" name='home'> </el-tab-pane>
       <el-tab-pane label="MoveAnimation" name='history2'> </el-tab-pane>
+      <el-tab-pane label="multiCar" name='multiCar'> </el-tab-pane>
       <el-tab-pane label="history" name='history'> </el-tab-pane>
-      <el-tab-pane label="fenceManage" name='fenceManage'> </el-tab-pane> -->
-       <!-- <el-tab-pane label="baseTree" name='baseTree'> </el-tab-pane>
+      <el-tab-pane label="fenceManage" name='fenceManage'> </el-tab-pane>
+       <el-tab-pane label="baseTree" name='baseTree'> </el-tab-pane>
          <el-tab-pane label="treeSearchView" name='treeSearchView'> </el-tab-pane>
          <el-tab-pane label="inputLinkTreeView" name='inputLinkTreeView'> </el-tab-pane>
           <el-tab-pane label="treeListView" name='treeListView'> </el-tab-pane>
-           <el-tab-pane label="treeTabView" name='treeTabView'> </el-tab-pane> -->
+           <el-tab-pane label="treeTabView" name='treeTabView'> </el-tab-pane>
            <el-tab-pane label="publictreeContentView" name='publictreeContentView'> </el-tab-pane>
             <el-tab-pane label="gridView" name='gridView'> </el-tab-pane>
             <el-tab-pane label="contentView" name='contentView'> </el-tab-pane>

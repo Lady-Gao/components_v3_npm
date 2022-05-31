@@ -29,17 +29,17 @@ export default defineComponent({
         const ToolList = ref([])
 
         if (props.Heard) {
-            ToolList.value = props.powerTool.map(item => {
+            ToolList.value = props.powerTool.map((item:any) => {
                 let newitem = HeardText(item)
                 return newitem
             })
         } else {
-            ToolList.value = props.powerTool.map(item => {
+            ToolList.value = props.powerTool.map((item:any) => {
                 let newitem = GridText(item)
                 return newitem
             })
         }
-        function bottonClick(item) {
+        function bottonClick(item:any) {
              if (props.Heard) {
                  context.emit('bottonClick', item)
              }else{

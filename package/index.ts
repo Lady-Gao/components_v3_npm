@@ -15,7 +15,7 @@ import TreeSearch from "./components_Tree/treeSearch/index"
 import InputLinkTree from "./components_Tree/inputLinkTree/index" 
 import TreeList from "./components_Tree/treeList/index"
 import TreeTab from "./components_Tree/treeTab/index"
-import PublicTreeContent from "./components_Tree/publictreeContent/index"
+import PublicTreeContent from "./components_Other/publictreeContent/index"
 import Operation from "./components_Other/operation/index"
 import OpretionTool from "./components_Other/opretionTool/index"
 import Grid from "./components_Other/grid/index"
@@ -47,7 +47,7 @@ const install = function (app:any) {
 };
 // console.log(modules,'modules')
 let moduleComponent = {
-    version: '0.0.1',
+    version: '0.0.06',
      install,
      ...modules
 }
