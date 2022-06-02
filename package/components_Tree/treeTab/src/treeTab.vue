@@ -106,13 +106,9 @@ export default defineComponent({
       type: String,
       default: 'get'
     },
-    // headers: { //树的异步请求头部 
-    //   type: Object,
-    //   default: {
-    //   }
-    // },
+  
     autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
-      type: Array,
+      type: Array as PropType<String[]>,
       default() {
         return ["id", "type"];
       },
@@ -145,7 +141,7 @@ export default defineComponent({
       return item
     })
 
-    var allCurrentIds = ref([])
+    var allCurrentIds = ref()
     //type:勾选状态  多选
     function currentChange(type:boolean, id:string) {
       if (type) {
@@ -164,7 +160,7 @@ export default defineComponent({
       changeCheckStates(type, id)
     }
     // 只返回车辆
-    function nodeClick(val) {
+    function nodeClick(val:any) {
       let data={}
       if(!val.treeNode){
         data=val
@@ -316,13 +312,11 @@ export default defineComponent({
   position: absolute;
     bottom: 5px;
     top: 0;
-
   .el-tabs {
     height: 100%;
-
     .el-tabs__content {
       height: 97%;
-box-sizing: border-box;
+      box-sizing: border-box;
       .el-tab-pane {
         height: 100%;
       }

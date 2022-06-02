@@ -1,7 +1,7 @@
 
 
 export const baseUrl='http://web2.test.cvtsp.com/api'
-export const token = localStorage.getItem('token')
+export const token = window.localStorage.getItem('token')
 export const  headers:{token:any,Authorization:string}={
     token,
     'Authorization': 'Bearer ' + token
