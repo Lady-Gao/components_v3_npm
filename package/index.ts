@@ -47,7 +47,7 @@ const install = function (app:any) {
 };
 // console.log(modules,'modules')
 let moduleComponent = {
-    version: '0.0.07',
+    version: '0.0.08',
      install,
      ...modules
 }

@@ -7,13 +7,13 @@ import commonjs from 'rollup-plugin-commonjs';
 module.exports = [
   {
     // 入口
-    input: "package/index.ts",
-    // input: "package/Amap_components/index.ts",
+    // input: "package/index.ts",
+    input: "package/components_Amap/index.ts",
     // 出口
     output: [
       {
-        dir: "package/lib",
-        // file:'package/Amap_components/lib/index.js',
+        // dir: "package/lib",
+        dir:'package/components_Amap/lib',
         // 配置打包模块化的方式 es:ESM  cjs:CommonJS
         format: "es",
       },
