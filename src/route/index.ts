@@ -5,12 +5,13 @@ const router = createRouter({
       
         {
             path: "/:pathMatch(.*)",
-           redirect:'/inputLinkTreeView'
+           redirect:'/contentView'
         },
         {
             path: "/home",
             component: () => import( "../views/home/home.vue")
         },
+      
         {
             name:  'multiCar',
             path: "/multiCar",

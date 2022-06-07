@@ -5,6 +5,14 @@ console.log('vite-----------------------config')
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        nested: path.resolve(__dirname, 'lowCode.html')
+      }
+    }
+  },
   resolve: {
     alias: [
       {
