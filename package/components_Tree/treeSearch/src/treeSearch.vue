@@ -1,7 +1,7 @@
 <template>
   <div :class="open ? 'treeSearch' : 'treeSearch inputTree'" @mouseleave="mouseleave">
     <!--  @input='fliterNode' @clear="fliterNode"  -->
-    <el-input  ref="Input"  v-model="inputValue" :maxlength="20"
+    <el-input  ref="Input"  v-model="inputValue" 
       clearable  @focus="focus"  @input='fliterNode'>
       <template #suffix>
         <span class="cvIcon_search" @click="loadTree"></span>

@@ -225,8 +225,8 @@ export default {
             myMarker
         }
     },
-    render(){
+    // render(){
        
-        return () => h('div', { class: 'Marker' }, 'Marker')
-    }
+    //     return () => h('div', { class: 'Marker' })
+    // }
 }

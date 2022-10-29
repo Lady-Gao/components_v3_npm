@@ -1,6 +1,6 @@
 {
-  "name": "projectceshi",
-  "version": "0.0.20",
+  "name": "components_v3_npm",
+  "version": "0.0.09",
   "author": "monstergao",
   "scripts": {
     "dev": "vite",
@@ -40,5 +40,5 @@
     "lib",
     "README.md"
   ],
-  "main": "index.ts"
+  "main": "./package/index.ts"
 }
