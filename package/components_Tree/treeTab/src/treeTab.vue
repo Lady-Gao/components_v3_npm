@@ -141,7 +141,7 @@ export default defineComponent({
       return item
     })
 
-    var allCurrentIds = ref()
+    var allCurrentIds = ref([{}])
     //type:勾选状态  多选
     function currentChange(type:boolean, id:string) {
       if (type) {

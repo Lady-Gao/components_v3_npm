@@ -12,7 +12,7 @@
   "dependencies": {
     "@vue/cli-service": "^5.0.4",
     "default-passive-events": "^2.0.0",
-    "element-plus": "^2.0.4",
+    "element-plus": "^2.2.19",
     "jquery": "^3.6.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",

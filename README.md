@@ -62,4 +62,5 @@ https://monstergao.gitee.io/cv_components_v3/
  }
 ```
 ### 发布到 npm
+> components_v3_npm\package 终端
 -  npm publish 

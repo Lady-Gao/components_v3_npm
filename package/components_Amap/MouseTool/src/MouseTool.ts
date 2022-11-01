@@ -88,7 +88,7 @@ export default {
         }
     },
     render(){
-       
+        
         return () => h('div', { class: 'MouseTool' }, 'MouseTool')
     }
 }

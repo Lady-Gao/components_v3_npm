@@ -1,5 +1,5 @@
 // @ts-nocheck # 忽略全文
-import { baseUrl,headers } from "../../../../util/http";
+import { baseUrl } from "../../../../util/http";
 export function getOptions(props:any) {
     function iconsFilter(nodes: any) {//更改节点得图标
         var { data, flag } = nodes;
@@ -33,12 +33,14 @@ export function getOptions(props:any) {
                 });
             return data;
         }
-    }
-
+    } 
     return {
         lazy:baseUrl+ props.lazy,
         type: props.type,
-        headers: headers,//props.headers,
+        headers:{
+            token:localStorage.getItem('token'),
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },//props.headers,
         autoParam: props.autoParam,
         otherParam: props.otherParam,
         name: props.name,
