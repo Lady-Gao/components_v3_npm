@@ -14,31 +14,36 @@
             </template>
         </el-input>
         <!-- 多选框  在线离线-->
-            
+
         <div class="onlineStatusCheck">
-        <el-checkbox-group v-model="search.onlineStatus" v-if="isOnlineStatus">
-            <el-checkbox :label="item.value" v-for="(item, index) in onlinection" :key="index">{{ item.label }}
-            </el-checkbox>
-        </el-checkbox-group>
+            <el-checkbox-group v-model="search.onlineStatus" v-if="isOnlineStatus">
+                <el-checkbox :label="item.value" v-for="(item, index) in onlinection" :key="index">{{ item.label }}
+                </el-checkbox>
+            </el-checkbox-group>
         </div>
         <!-- 多选(checkbox)列表选择 @change="checkListChange"-->
-        <div class="treeList-lists" v-loading="loading">
-            <el-checkbox-group v-if="isCheck" v-model="checkList" >
+        <el-scrollbar  class="treeList-lists" v-loading="loading">
+            <el-checkbox-group v-if="isCheck" v-model="checkList">
                 <li v-for="(item, index) in listsData" :key="index" class="el-checkbox group_content">
-                    <el-checkbox :label="item.id" class="content_text" @change="checkcheckboxChange($event,item)">
-                            <span :class="item.onlineStatus=='1'?`${item.icon||'icon0'}car_online_ico_docu`: `${item.icon||'icon0'}car_ico_docu`"></span>
-                            <span class="text">{{ item[name] }}</span>
-                            <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
-                                <i class="remark">{{ item.remark }}</i>
-                            </el-tooltip> 
+                    <el-checkbox :label="item.id" class="content_text" @change="checkcheckboxChange($event, item)">
+                        <span
+                            :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
+                        <span class="text">{{ item[name] }}</span>
+                        <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
+                            <i class="remark">{{ item.remark }}</i>
+                        </el-tooltip>
 
                     </el-checkbox>
                     <p class="operation">
                         <span v-if="isCollection"
                             :class="item.isAttention ? 'cvIcon_collection' : 'cvIcon_uncollection'"
-                            @click="clcik_collection($event,item)"></span>
-                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_collection($event,item)"></span>
-                        <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete(item)"></span>
+                            @click="clcik_collection($event, item)"></span>
+                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_collection($event, item)"></span>
+                        <el-popconfirm title="您是否要进行删除操作" @confirm="clcik_delete(item)">
+                            <template #reference>
+                                <span v-if="isDelete" class="cvIcon_delete"></span>
+                            </template>
+                        </el-popconfirm>
                     </p>
                 </li>
             </el-checkbox-group>
@@ -46,19 +51,25 @@
 
                 <div class="group_content" v-for="(item, index) in listsData" :key="index">
                     <p class="content_text">
-                      <span :class="item.onlineStatus=='1'?`${item.icon||'icon0'}car_online_ico_docu`: `${item.icon||'icon0'}car_ico_docu`"></span>
+                        <span
+                            :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
                         <span class="text" @click="textClick(item)">{{ item[name] }}</span>
                         <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                             <i class="remark">{{ item.remark }}</i>
                         </el-tooltip>
 
                     </p>
-                     <p class="operation">
+                    <p class="operation">
                         <span v-if="isCollection"
                             :class="item.isAttention ? 'cvIcon_collection' : 'cvIcon_uncollection'"
-                            @click="clcik_collection($event,item)"></span>
-                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_collection($event,item)"></span>
-                        <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete(item)"></span>
+                            @click="clcik_collection($event, item)"></span>
+                        <span v-if="isEdit" class="cvIcon_edit" @click="clcik_collection($event, item)"></span>
+                        <el-popconfirm title="您是否要进行删除操作" @confirm="clcik_delete(item)">
+                            <template #reference>
+                                <span v-if="isDelete" class="cvIcon_delete"></span>
+                            </template>
+                        </el-popconfirm>
+                        <!-- <span v-if="isDelete" class="cvIcon_delete" @click="clcik_delete(item)"></span> -->
                     </p>
                 </div>
             </div>
@@ -69,7 +80,8 @@
                     <el-button type="text" @click="node_collection">确定</el-button>
                 </div>
             </el-popover> -->
-        </div>
+       
+        </el-scrollbar>
         <!-- 单选(radio)列表选择 -->
 
         <!-- 分页 -->
@@ -86,7 +98,6 @@
 <script lang="ts">
 // @ts-ignore
 import { defineComponent, PropType, reactive, ref, unref, getCurrentInstance, computed } from "vue"
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { getHttpListData } from "../../../util/http";
 export default defineComponent({
     name: "TreeList",
@@ -108,8 +119,8 @@ export default defineComponent({
             type: Boolean,
             default: true
         },
-        isOnlineStatus:{//是否显示在线离线搜索条件
-             type: Boolean,
+        isOnlineStatus: {//是否显示在线离线搜索条件
+            type: Boolean,
             default: true
         },
         isCollection: {//是否显示收藏五角星
@@ -125,7 +136,7 @@ export default defineComponent({
             default: false
         },
         selection: { // 搜索下拉数据
-             type: Array as PropType<{
+            type: Array as PropType<{
                 label: string
                 value: string
             }[]>,
@@ -141,7 +152,7 @@ export default defineComponent({
             }
         },
         onlinection: {//在线离线数据
-             type: Array as PropType<{
+            type: Array as PropType<{
                 label: string
                 value: string
             }[]>,
@@ -162,7 +173,7 @@ export default defineComponent({
             },
         },
     },
-    emits: ["clcik_collection","clcik_delete","current-change","node-click"],
+    emits: ["clcik_collection", "clcik_delete", "current-change", "node-click"],
     setup(props: any, context: any) {
 
         const search = reactive({
@@ -198,33 +209,33 @@ export default defineComponent({
         const showPopover = ref(false)
         const popoverRef = ref()
         const checkList = ref([])
-    //   多选才会触发
-        function checkcheckboxChange(event:Event, row:any){
-            context.emit('current-change', event,row.id)
+        //   多选才会触发
+        function checkcheckboxChange(event: Event, row: any) {
+            context.emit('current-change', event, row.id)
         }
         // 收藏事件
-        function clcik_collection(event:Event, row:any) {
-            return  context.emit('clcik_collection', event, row)
+        function clcik_collection(event: Event, row: any) {
+            return context.emit('clcik_collection', event, row)
         }
         // 编辑事件
-        function clcik_edit(event:Event, row:any) {
-               return  context.emit('clcik_collection', event, row)
+        function clcik_edit(event: Event, row: any) {
+            return context.emit('clcik_collection', event, row)
         }
         // 删除事件
-        function clcik_delete(row:any) {
-            row.isAttention=1
-            return  context.emit('clcik_delete', row)
-           
+        function clcik_delete(row: any) {
+            row.isAttention = 1
+            return context.emit('clcik_delete', row)
+
         }
-       
-      
+
+
         //选中与取消
-        const changeCheckStates = (list:any) => {
-                checkList.value=list
+        const changeCheckStates = (list: any) => {
+            checkList.value = list
         }
 
         //分页变化
-        function handlerCurrentChange(val:any) {
+        function handlerCurrentChange(val: any) {
             search.current = val;
             handlerSearch();
         }
@@ -246,7 +257,7 @@ export default defineComponent({
         function getListData(params: any) {
             getHttpListData({
                 url: props.ListApi,
-                method:'get',
+                method: 'get',
                 params
             }).then(res => {
                 loading.value = false
@@ -256,27 +267,27 @@ export default defineComponent({
                     pagination.total = total;
                     pagination.current = current;
                 } else {
-                   listsData.value= [];
-                   pagination.total = 0;
+                    listsData.value = [];
+                    pagination.total = 0;
                     pagination.current = 0;
                 }
             })
         }
         const buttonRef = ref()
-       // 更新收藏和在线图标
-        function upNodeIcon(val:any){
-              const { id, isAttention,onlineStatus } = val;
-               //列表查找ID 有就更新
-               listsData.value.some((item:any)=>{
-                   if(item.id==id){
-                       item.isAttention=Number(isAttention)
-                   item.onlineStatus=onlineStatus
-                   }
-                   return item.id==id
-               })
+        // 更新收藏和在线图标
+        function upNodeIcon(val: any) {
+            const { id, isAttention, onlineStatus } = val;
+            //列表查找ID 有就更新
+            listsData.value.some((item: any) => {
+                if (item.id == id) {
+                    item.isAttention = Number(isAttention)
+                    item.onlineStatus = onlineStatus
+                }
+                return item.id == id
+            })
         }
-        function textClick(val:any){
-            context.emit('node-click',val)
+        function textClick(val: any) {
+            context.emit('node-click', val)
         }
         return {
             search,
@@ -310,14 +321,16 @@ export default defineComponent({
     position: relative;
     max-width: 300px;
     width: 100%;
-    height: 95%;
-.onlineStatusCheck{
-    margin: 5px 0;
-}
-    .treeList-lists {
-        min-height: 320px;
-        height: 80%;
+    height: 100%;
 
+    .onlineStatusCheck {
+        margin: 5px 0;
+    }
+
+    .treeList-lists {
+        // min-height: 320px;
+        // height: 76%;
+        height: calc(100% - 100px);
         .online {
             color: #008000cf;
         }
@@ -326,7 +339,7 @@ export default defineComponent({
             width: 100%;
             border-bottom: 1px solid #eee;
             float: left;
-          
+
 
         }
 
@@ -335,26 +348,28 @@ export default defineComponent({
             justify-content: space-between;
             cursor: pointer;
             width: 100%;
-            .content_text{
+
+            .content_text {
                 flex: 2;
                 text-align: left;
             }
+
             .text {
                 display: inline-block;
                 padding-left: 5px;
-                
+
             }
 
             .remark {
                 padding-left: 5px;
                 color: #b3b0b0;
                 font-size: 12px;
-                display: inline-block;
+                // display: inline-block;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 text-align: left;
-                line-height: 10px;
+                // line-height: 10px;
                 width: 80px;
             }
 
@@ -363,7 +378,7 @@ export default defineComponent({
                 display: inline-block;
             }
 
-          
+
         }
 
         .radioGroup {
@@ -381,7 +396,7 @@ export default defineComponent({
         line-height: 32px;
         color: #7d7d7b;
         position: absolute;
-        bottom: 5px;
+        bottom: -15px;
         width: 100%;
     }
 

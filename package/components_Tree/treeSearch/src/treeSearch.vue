@@ -7,12 +7,15 @@
         <span class="cvIcon_search" @click="loadTree"></span>
       </template>
     </el-input>
-    <tree ref="baseTree" v-loading="loading" v-show="isShowTree" :treeData="treeData" :lazy='lazy'  :autoParam="autoParam"
-      :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
-      :hoverOperation="hoverOperation" :nodeFilter="nodeFilter" @node-check="nodeCheck" @node-click='nodClick'
-      @tree-loaded="treeLoaded" @tree-ready="treeReady"
-      >
-    </tree>
+    <el-scrollbar>
+
+      <tree ref="baseTree" v-loading="loading" v-show="isShowTree" :treeData="treeData" :lazy='lazy'  :autoParam="autoParam"
+        :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
+        :hoverOperation="hoverOperation" :nodeFilter="nodeFilter" @node-check="nodeCheck" @node-click='nodClick'
+        @tree-loaded="treeLoaded" @tree-ready="treeReady"
+        >
+      </tree>
+  </el-scrollbar>
   </div>
 </template>
 
@@ -360,7 +363,7 @@ function loadTree(){
 
   .cv-ztree {
     max-height: 320px;
-    overflow: scroll;
+    // overflow: scroll;
     position: absolute;
     width: 100%;
     z-index: 1;

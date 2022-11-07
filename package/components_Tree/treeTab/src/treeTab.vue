@@ -3,9 +3,11 @@
 
     <el-tabs type="border-card" v-model="activeName">
       <el-tab-pane :label="titles[0]" name="tab0" v-if="titles[0]">
-        <treeSearch ref="treeSearch" :name="name" :treeData='treeData' :lazy='lazy' :autoParam="autoParam"
+      
+          <treeSearch ref="treeSearch" :name="name" :treeData='treeData' :lazy='lazy' :autoParam="autoParam"
           :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection"
           :hoverOperation="isCollection && hoverOperation" @node-click="nodeClick" @node-check="nodeCheck" />
+      
       </el-tab-pane>
       <el-tab-pane :label="titles[1]" name="tab1" v-if="titles[1]">
         <treeList :ListApi="vehicleListApi" ref="vehicleList" :name="vehicleListName" :otherParam="otherParam"
@@ -36,6 +38,7 @@
 <script lang="ts" >
 import { computed, defineComponent, onMounted, PropType, reactive, ref, unref, watch, watchEffect } from "vue";
 import { insertVehicleAttentionInfo, deleteVehicleAttentionInfo } from "../../../util/http";
+import { ElMessage } from 'element-plus'
 export default defineComponent({
   name: "TreeTab",
   props: {
@@ -128,7 +131,7 @@ export default defineComponent({
     },
 
   },
-  emits: ['current-change', 'node-click'],
+  emits: ['current-change', 'node-click','node_collection'],
   setup(props: any, context: any) {
     const treeSearch = ref()
     const vehicleList = ref()
@@ -247,7 +250,10 @@ export default defineComponent({
         const { flag } = await deleteVehicleAttentionInfo(id);
         currentTreeNode.value.isAttention = 0
         monitor_vehicleAttention(currentTreeNode.value)
-
+       flag&& ElMessage({
+    message: '删除成功',
+    type: 'success',
+  })
       } else {
         //     // 未关注过， 执行打开气泡，显示input内容
         unref(popoverRefTab).popperRef.triggerRef = event.target;
@@ -261,11 +267,23 @@ export default defineComponent({
         remark: popover.remark,
         vehicleId: currentTreeNode.value.id
       })
+      ElMessage({
+    message: '操作成功',
+    type: 'success',
+  })
+      if(currentTreeNode.value.isAttention==0){
+  console.log('关注成功')
+  //关注成功
+}else{
+  console.log('修改成功')
+  //修改成功
+}
       if (flag) {
         showPopover.value = false
         currentTreeNode.value.isAttention = 1
         monitor_vehicleAttention(currentTreeNode.value)
       }
+      
     }
     // 监听车辆关注变化
     function monitor_vehicleAttention(val:any) {
@@ -314,13 +332,13 @@ export default defineComponent({
     top: 0;
   .el-tabs {
     height: 100%;
-    .el-tabs__content {
-      height: 97%;
+     .el-tabs__content {
+       height: calc(100% - 40px);
       box-sizing: border-box;
       .el-tab-pane {
         height: 100%;
       }
-    }
+   }
   }
 }
 </style>
