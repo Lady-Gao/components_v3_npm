@@ -101,7 +101,7 @@ treeState.value=!treeState.value
      width:  calc(100% - 300px);
     }
       .containerclose{
-         width:  100%;
+         width: calc(100% - 15px);
     }
      .asideopen{
              left: 0px;
