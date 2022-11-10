@@ -281,7 +281,7 @@ export default defineComponent({
         }
         function textClick(val: any,index:number) {
          
-            listsData.value.forEach(element => {
+            listsData.value.forEach((element:any) => {
                 if(element.id!==val.id){
                     element.isActive=false
                 }else{

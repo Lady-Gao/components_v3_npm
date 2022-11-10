@@ -40,5 +40,5 @@
     "lib",
     "README.md"
   ],
-  "main": "./package/index.ts"
+  "main": "./package/lib/index.js"
 }
