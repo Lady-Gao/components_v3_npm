@@ -44,9 +44,9 @@
 </template>
     
 <script setup lang='ts'>
-    import findVehicleTreeInfoList from '@/utils/findVehicleTreeInfoList.json'
-    import getEnterpriseTreeList from '@/utils/getEnterpriseTreeList.json'
-      import findEnterpriseOrganizationTreeList from '@/utils/findEnterpriseOrganizationTreeList.json'
+    import findVehicleTreeInfoList from '@utils/findVehicleTreeInfoList.json'
+    import getEnterpriseTreeList from '@utils/getEnterpriseTreeList.json'
+      import findEnterpriseOrganizationTreeList from '@utils/findEnterpriseOrganizationTreeList.json'
     const {VehicleTreeInfoList}=findVehicleTreeInfoList
     const {EnterpriseTreeList}=getEnterpriseTreeList
 

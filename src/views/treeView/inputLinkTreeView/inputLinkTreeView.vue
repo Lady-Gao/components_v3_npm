@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue'
-  import findEnterpriseOrganizationTreeList from '@/utils/findEnterpriseOrganizationTreeList.json'
+  import findEnterpriseOrganizationTreeList from '@utils/findEnterpriseOrganizationTreeList.json'
   const {OrganizationTreeList}=findEnterpriseOrganizationTreeList
  const lazy='http://web2.test.cvtsp.com/api/basic/fleet/findFleetTreeList'
  const dataT=[

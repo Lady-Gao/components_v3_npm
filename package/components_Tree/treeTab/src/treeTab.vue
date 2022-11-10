@@ -37,7 +37,7 @@
 
 <script lang="ts" >
 import { computed, defineComponent, onMounted, PropType, reactive, ref, unref, watch, watchEffect } from "vue";
-import { insertVehicleAttentionInfo, deleteVehicleAttentionInfo } from "../../../util/http";
+import { insertVehicleAttentionInfo, deleteVehicleAttentionInfo } from "../../../utils/http";
 import { ElMessage } from 'element-plus'
 export default defineComponent({
   name: "TreeTab",
@@ -329,7 +329,7 @@ export default defineComponent({
   width: 280px;
   position: absolute;
     bottom: 5px;
-    top: 0;
+    top: 5px;
   .el-tabs {
     height: 100%;
      .el-tabs__content {

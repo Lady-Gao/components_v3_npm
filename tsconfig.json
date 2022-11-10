@@ -14,8 +14,9 @@
     // ++ 这里加上baseUrl 和 path即可 ++
     "paths": {
 	  // 根据别名配置相关路径
-      "@*": ["./src/*"]
+      // "@*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["node_modules", "package/components_Tree/tree/js/*"]
 }

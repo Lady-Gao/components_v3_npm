@@ -39,6 +39,7 @@ export default defineComponent({
                 return newitem
             })
         }
+        console.log(props.powerTool,'ToolList')
         function bottonClick(item:any) {
              if (props.Heard) {
                  context.emit('bottonClick', item)

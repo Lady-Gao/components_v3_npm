@@ -14,7 +14,6 @@
             </template>
         </el-input>
         <!-- 多选框  在线离线-->
-
         <div class="onlineStatusCheck">
             <el-checkbox-group v-model="search.onlineStatus" v-if="isOnlineStatus">
                 <el-checkbox :label="item.value" v-for="(item, index) in onlinection" :key="index">{{ item.label }}
@@ -32,7 +31,6 @@
                         <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                             <i class="remark">{{ item.remark }}</i>
                         </el-tooltip>
-
                     </el-checkbox>
                     <p class="operation">
                         <span v-if="isCollection"
@@ -48,16 +46,14 @@
                 </li>
             </el-checkbox-group>
             <div v-else class="radioGroup">
-
-                <div class="group_content" v-for="(item, index) in listsData" :key="index">
+                <div :class="['group_content',item.isActive?'group_content_active':'']" v-for="(item, index) in listsData" :key="index" @click="textClick(item,index)">
                     <p class="content_text">
                         <span
                             :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
-                        <span class="text" @click="textClick(item)">{{ item[name] }}</span>
+                        <span class="text" >{{ item[name] }}</span>
                         <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                             <i class="remark">{{ item.remark }}</i>
                         </el-tooltip>
-
                     </p>
                     <p class="operation">
                         <span v-if="isCollection"
@@ -80,10 +76,8 @@
                     <el-button type="text" @click="node_collection">确定</el-button>
                 </div>
             </el-popover> -->
-       
         </el-scrollbar>
         <!-- 单选(radio)列表选择 -->
-
         <!-- 分页 -->
         <div class="pagination">
             <p>{{ pagination.total }}条</p>
@@ -98,7 +92,7 @@
 <script lang="ts">
 // @ts-ignore
 import { defineComponent, PropType, reactive, ref, unref, getCurrentInstance, computed } from "vue"
-import { getHttpListData } from "../../../util/http";
+import { getHttpListData } from "../../../utils/http";
 export default defineComponent({
     name: "TreeList",
     props: {
@@ -175,7 +169,6 @@ export default defineComponent({
     },
     emits: ["clcik_collection", "clcik_delete", "current-change", "node-click"],
     setup(props: any, context: any) {
-
         const search = reactive({
             text: '',//输入框文本
             onlineStatus: [],//在线状态
@@ -259,7 +252,7 @@ export default defineComponent({
                 url: props.ListApi,
                 method: 'get',
                 params
-            }).then(res => {
+            }).then((res:any) => {
                 loading.value = false
                 if (res.flag && res.data) {
                     const { total, records, current } = res.data;
@@ -286,8 +279,18 @@ export default defineComponent({
                 return item.id == id
             })
         }
-        function textClick(val: any) {
+        function textClick(val: any,index:number) {
+         
+            listsData.value.forEach(element => {
+                if(element.id!==val.id){
+                    element.isActive=false
+                }else{
+                    element.isActive=!element.isActive
+                }
+            });
+            
             context.emit('node-click', val)
+           
         }
         return {
             search,
@@ -309,7 +312,7 @@ export default defineComponent({
             checkList,
             checkcheckboxChange,
             upNodeIcon,
-            textClick
+            textClick,
         }
     }
 
@@ -328,8 +331,6 @@ export default defineComponent({
     }
 
     .treeList-lists {
-        // min-height: 320px;
-        // height: 76%;
         height: calc(100% - 100px);
         .online {
             color: #008000cf;
@@ -364,12 +365,10 @@ export default defineComponent({
                 padding-left: 5px;
                 color: #b3b0b0;
                 font-size: 12px;
-                // display: inline-block;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 text-align: left;
-                // line-height: 10px;
                 width: 80px;
             }
 
@@ -380,7 +379,9 @@ export default defineComponent({
 
 
         }
-
+        .group_content_active{
+            background: #eee;
+        }
         .radioGroup {
             .group_content {
                 border-bottom: 1px solid #eee;

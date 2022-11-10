@@ -25,7 +25,7 @@ export default {
         { immediate: true, deep: true }
     )
          // 绘制轨迹
-     function watchlineArr(val:boolean){
+     function watchlineArr(val:any){
          val[0]&& init()
      }
 

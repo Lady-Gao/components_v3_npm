@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-  import findVehicleTreeInfoList from '@/utils/findVehicleTreeInfoList.json'
+  import findVehicleTreeInfoList from '@utils/findVehicleTreeInfoList.json'
    const {VehicleTreeInfoList}=findVehicleTreeInfoList
   const treeTitle=['车辆树', '车辆列表',false ]
   const lazy="/basic/tree/findVehicleTreeInfoList"//车多

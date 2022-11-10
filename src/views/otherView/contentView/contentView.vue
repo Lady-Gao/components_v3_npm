@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
- import findVehicleTreeInfoList from '@/utils/findVehicleTreeInfoList.json'
-    import findEnterpriseOrganizationTreeList from '@/utils/findEnterpriseOrganizationTreeList.json'
+ import findVehicleTreeInfoList from '@utils/findVehicleTreeInfoList.json'
+    import findEnterpriseOrganizationTreeList from '@utils/findEnterpriseOrganizationTreeList.json'
   const {VehicleTreeInfoList}=findVehicleTreeInfoList
     const {OrganizationTreeList}=findEnterpriseOrganizationTreeList
 const formInline = ref()

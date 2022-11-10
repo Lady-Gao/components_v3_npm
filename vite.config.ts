@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import path from 'path'
+import { resolve } from 'path'
 console.log('vite-----------------------config')
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,17 +8,18 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, 'index.html'),
-        nested: path.resolve(__dirname, 'lowCode.html')
+        main:resolve(__dirname, 'index.html'),
+        nested: resolve(__dirname, 'lowCode.html')
       }
     }
   },
   resolve: {
-    alias: [
-      {
-        find: "@",
-        replacement: path.resolve(__dirname, 'src')
-      }
-    ]
+    alias: {
+      '@': resolve(__dirname, 'package'),
+      '@utils': resolve(__dirname, 'src/utils'),
+      //   "#": resolve(__dirname,'src/types'),
+      '@Config': resolve(__dirname, 'package/utils/config'),
+    }
   },
+
 })

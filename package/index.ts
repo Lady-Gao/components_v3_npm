@@ -1,4 +1,4 @@
-
+// @ts-nocheck # 忽略全文
 // https://monstergao.gitee.io/cv_amapv3/
 import Map from "./components_Amap/Map/index";
 import Marker from "./components_Amap/Marker/index";

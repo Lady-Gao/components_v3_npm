@@ -11,7 +11,10 @@
                  </el-button>
                 <!-- <slot name="operations"></slot> -->
                 <!-- <el-button  v-for="item in powerTool"  @click="bottomClick(item)">{{getText(item)}}</el-button> -->
-               <OpretionTool :powerTool="powerTool" @bottonClick="bottonClick"/>
+                <el-button  v-if="isSearch" class="toggle" @click="bottonClick('search')">
+                    搜索
+                 </el-button>
+                <OpretionTool :powerTool="powerTool" @bottonClick="bottonClick"/>
                </el-form-item>
             </el-col>
         </el-row>
@@ -27,7 +30,7 @@
  * powerTool类型
  * search
  * add
- * modify
+ * modify 
  * import
  * export
  */
@@ -42,6 +45,10 @@ export default defineComponent({
             default(){
                 return [16,8]
             }
+        },
+        isSearch:{
+            type:Boolean,
+            default:true
         },
         powerTool:{//按钮权限
         type:Array as PropType<string[]>,

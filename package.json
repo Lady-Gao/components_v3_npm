@@ -27,7 +27,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.21",
+    "@types/node": "^17.0.45",
     "@vitejs/plugin-vue": "^2.0.0",
     "node-sass": "^7.0.1",
     "sass-loader": "^12.6.0",

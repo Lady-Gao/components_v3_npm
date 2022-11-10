@@ -1,3 +1,4 @@
+
 <template>
     <div class="grid">
         <div :class="['boxTable', pagination.pages?'havePagin':'']">
@@ -46,7 +47,7 @@
 /**
  * 表头一定要平铺不能折叠 设置好width 不然找不到表格横向滚动条
  */
-
+ // @ts-nocheck # 忽略全文
 import { computed, defineComponent, PropType, ref, watch, onMounted, reactive } from 'vue'
 type Row = {
     prop: string,
@@ -95,7 +96,7 @@ export default defineComponent({
         const table = ref()
         const tableData = ref([])
         const filterTableData = ref([])
-        const columnList = ref({})//需要筛选的字段合集
+        const columnList = reactive([])//需要筛选的字段合集
         const pagination = reactive({
             current: 1,
             total: 0,
@@ -122,13 +123,13 @@ export default defineComponent({
 
         //  input搜索的方法
         function input_textChange(val:any, column:any) {
-            let property = column['property']
-            columnList.value[property] = val
+            let property:string = column['property']
+            columnList[property as keyof typeof columnList] = val
             filterTableData.value = tableData.value.filter(
                 (item:any) => {
                     let arr = []
-                    for (const key in columnList.value) {
-                        let bool = columnList.value[key] ? item[key].includes(columnList.value[key]) : true
+                    for (const key in columnList) {
+                        let bool = columnList[key  as keyof typeof columnList] ? item[key].includes(columnList[key  as keyof typeof columnList]) : true
                         arr.push(bool)
                     }
                     return !arr.includes(false)

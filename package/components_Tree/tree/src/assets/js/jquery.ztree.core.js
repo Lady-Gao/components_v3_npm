@@ -1102,9 +1102,13 @@
                 if (!msg || msg.length == 0) {
                   newNodes = [];
                 } else if (typeof msg == "string") {
-                  newNodes = eval("(" + msg + ")");
+                 
+                  // newNodes = eval("(" + msg + ")");
+                  newNodes = function (){
+                    return JSON.parse(msg)
+                  }()
                 } else {
-                  newNodes = msg;
+                  newNodes = msg; 
                 }
               } catch (err) {
                 newNodes = msg;

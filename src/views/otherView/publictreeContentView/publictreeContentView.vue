@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-  import findVehicleTreeInfoList from '@/utils/findVehicleTreeInfoList.json'
+  import findVehicleTreeInfoList from '@utils/findVehicleTreeInfoList.json'
 import { ref } from 'vue';
    const {VehicleTreeInfoList}=findVehicleTreeInfoList
    const powerTool=["deactivate", "add", "export", "offline", "remove", "unbind", "replace", "modify", "import", "modifycomp", "modifyplat"]

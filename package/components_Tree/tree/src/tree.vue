@@ -13,7 +13,7 @@
  * 传进来的数据为简单json （平铺数据没有层级）  会进行异步请求
  */
 import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue";
-import { getHttpTreeData } from "../../../util/http";
+import { getHttpTreeData } from "../../../utils/http";
 import {getOptions,getMethods} from './js/treeMinxi'
 export default defineComponent({
   name: "Tree",
@@ -156,7 +156,7 @@ export default defineComponent({
        url:props.lazy,
         method: props.type,
         params:props.otherParam,
-      }).then(res => {
+      }).then((res:any) => {
         setInitialTree(res.data);
               console.log(res.data,'内部请求数据')
 

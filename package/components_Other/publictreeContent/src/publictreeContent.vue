@@ -2,8 +2,10 @@
 
     <div class="publictreeContent">
         <div :class="['container',treeState?'containeropen':'containerclose']">
-           
                  <slot ></slot>
+                 <!-- <el-scrollbar> -->
+                    <slot name="main"></slot>
+                 <!-- </el-scrollbar> -->
                 
         </div>
         <div  :class="['aside' ,treeState?'asideopen':'asideclose']">
@@ -63,12 +65,12 @@ treeState.value=!treeState.value
 
 <style lang="scss" scoped>
 .publictreeContent { 
-    overflow: scroll;
     width: 100%;
     position: absolute;
-    top:65px;
-    bottom: 0;
-    overflow: hidden;
+    top: 10px;
+    left: 0;
+    bottom: 5px;
+
     .main{
         position: relative;
     }

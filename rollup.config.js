@@ -4,6 +4,8 @@ import { terser } from "rollup-plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import typescript from 'rollup-plugin-typescript2'
 import commonjs from 'rollup-plugin-commonjs';
+//  import resolve from 'rollup-plugin-node-resolve';
+
 module.exports = [
   {
     // 入口
@@ -30,7 +32,7 @@ module.exports = [
       terser(),
       postcss(),
       typescript(),
-    
+      // resolve(), // 查找和打包node_modules中的第三方模块
       commonjs()
     ],
   },
