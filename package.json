@@ -1,5 +1,5 @@
 {
-  "name": "components_v3_npm",
+  "name": "cv_components_v3",
   "version": "0.0.09",
   "author": "monstergao",
   "scripts": {
@@ -40,5 +40,5 @@
     "lib",
     "README.md"
   ],
-  "main": "./package/lib/index.js"
+  "main": "./package/index.ts"
 }

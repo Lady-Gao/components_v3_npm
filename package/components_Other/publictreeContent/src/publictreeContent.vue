@@ -63,11 +63,11 @@ treeState.value=!treeState.value
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .publictreeContent { 
-    width: 100%;
+    // width: 100%;
     position: absolute;
-    top: 10px;
+    top: 10px ;
     left: 0;
     bottom: 5px;
 

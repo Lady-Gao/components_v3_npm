@@ -21,7 +21,6 @@ export default class BaseTree {
         //     import('../assets/js/jquery.ztree.exhide')
         //   ])
         //   .then(() => {
-            console.log(3434)
             const _self = this;
         this.zTree = null;
         this.treeId = options.el;
@@ -68,7 +67,6 @@ export default class BaseTree {
      */
     setInitialTree(data, callback) {
         var data = this.iconsFilter({data});
-       console.log('setInitialTree')
         $.fn.zTree.init(
             this.el, 
             this.treeConfig(), 
@@ -88,7 +86,6 @@ export default class BaseTree {
      * @param {Boolean} isFreeze: false 默认不冻结
      */
     setIsFirstNodesExpand(data) {
-        console.log(data,'data')
         if(Array.isArray(data) && data.length > 0) {
             data[0].open = this.isExpand;
             data[0].chkDisabled = this.isFreeze;
