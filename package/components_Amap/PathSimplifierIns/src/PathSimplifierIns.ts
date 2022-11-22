@@ -63,7 +63,6 @@ export default {
     emits: ['moveing','pointClick'],
     setup(props:any, context:any) {
         const storeData = inject<any>('storeData')
-        console.log(storeData,'storeData')
         const {  map } = storeData
         const pathSimplifierIns= ref()//pathSimplifierIns对象
             pathSimplifierIns.value=null

@@ -45,7 +45,6 @@ export default {
             let offset = new window.AMap.Pixel(-9, -9);
             context.marker.setContent(content)
             context.marker.setOffset(offset)
-            console.log(context, 'context')
         }
 
 

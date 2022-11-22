@@ -46,7 +46,7 @@
                 </li>
             </el-checkbox-group>
             <div v-else class="radioGroup">
-                <div :class="['group_content',item.isActive?'group_content_active':'']" v-for="(item, index) in listsData" :key="index" @click="textClick(item,index)">
+                <div :class="['group_content',item.click?'group_content_active':'']" v-for="(item, index) in listsData" :key="index" @click="textClick(item,index)">
                     <p class="content_text">
                         <span
                             :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
@@ -283,9 +283,9 @@ export default defineComponent({
          
             listsData.value.forEach((element:any) => {
                 if(element.id!==val.id){
-                    element.isActive=false
+                    element.click=false
                 }else{
-                    element.isActive=!element.isActive
+                    element.click=!element.click
                 }
             });
             

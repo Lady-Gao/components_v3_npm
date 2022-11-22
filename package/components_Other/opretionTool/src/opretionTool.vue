@@ -39,7 +39,6 @@ export default defineComponent({
                 return newitem
             })
         }
-        console.log(props.powerTool,'ToolList')
         function bottonClick(item:any) {
              if (props.Heard) {
                  context.emit('bottonClick', item)
@@ -63,9 +62,9 @@ export default defineComponent({
                 fun: key,
             }
             switch (key) {
-                case "search":
-                    data.text = "搜索"
-                    break;
+                // case "search":
+                //     data.text = "搜索"
+                //     break;
                 case "add":
                     data.text = "添加"
                     break;

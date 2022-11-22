@@ -17,6 +17,8 @@ export default {
                 return {
                     borderWeight: 2, // 线条宽度，默认为 1
                     strokeColor: "#28F", // 线条颜色
+                    strokeWeight:6,//轮廓线宽度
+                    strokeOpacity: 0.8,     //线透明度
                 }
             }
         },
@@ -24,7 +26,6 @@ export default {
     },
     setup(props:any) {
         const storeData = inject<any>('storeData')
-        console.log(storeData,'storeData')
         const {  map } = storeData
         const myLiner = ref() //liner对象
         initLiner()
@@ -37,19 +38,24 @@ export default {
         function initLiner(){
             myLiner.value=new window.AMap.Polyline({
                 map: map,
-                ...props.options
+                ...props.options,
+                zIndex:1
             });
           myLiner.value.on('click',linerClick)
         }
         function watchPath(val:[]) {
+            console.log(val.length,'val')
             if(val.length){
                 setPath()
+            }else{
+                 myLiner.value.setMap(null)
             }
         }
 
         //设置路线
         function setPath(){
             myLiner.value.setPath(props.path)
+            myLiner.value.setMap( map)
         }
 
         function linerClick(val:any,e:any){
@@ -71,8 +77,8 @@ export default {
         myLiner
     }
 },
-render(){
+// render(){
    
-    return () => h('div', { class: 'Liner' }, 'Liner')
-}
+    // return () => h('div', { class: 'Liner' }, 'Liner')
+// }
 }

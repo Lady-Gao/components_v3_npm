@@ -226,12 +226,12 @@ function mouseleave() {
 }
 
 function treeLoaded(){
-  console.log('treeLoaded')
+  // console.log('treeLoaded')
 }
 function treeReady(){
      props.modelValue&&selectNode()
      context.emit('tree-ready',true)
-     console.log('treeReady')
+    //  console.log('treeReady')
      loading.value=false
 }
 

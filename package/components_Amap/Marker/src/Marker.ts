@@ -30,6 +30,12 @@ export default {
                 return false
             }
         },
+        offset:{
+            type:Array,
+            default(){
+                return [-13,0]
+            }
+        }
         //是否拖尾
         // drawLine: {
         //     type: Boolean,
@@ -82,19 +88,16 @@ export default {
        function initMakrt(){
     
         if(!props.position.length)return 
-        console.log(props.size,'initMakrt')
         myMarker.value=new window.AMap.Marker({
             map: map,
             position:props.position,
-            icon:props.Icon,
-            size: new window.AMap.Size(props.size[0], props.size[1]),    // 图标尺寸  宽  高
+            offset:props.offset,
+            // icon:props.Icon,
+             size: props.size,    // 图标尺寸  宽  高
             // anchor: anchor[i], //设置锚点
-            // offset: new AMap.Pixel(0,0), //设置偏移量
-            // label: {
-            //     direction: 'top',
-            //     content: props.id+'号',
-            // }
+            zIndex :0
         });
+        myMarker.value.setIcon(props.Icon)
         // props.position&& myMarker.setPosition(props.position)
         myMarker.value.id=props.id
         //     if(props.intoMap){
@@ -137,10 +140,10 @@ export default {
                 return initMakrt()
             }
             if(!newVal.length){
-                // return  myMarker.setMap(null);
-                return removeMarker()
+                myMarker.value.setMap(null);
+                // return removeMarker()
             }else{
-
+                myMarker.value.setMap(map);
                 setPosition(newVal)
             }
         }
@@ -165,7 +168,6 @@ export default {
         function setPosition(point:[], speed = 1000) {
            
           
-            console.log(point,'setPosition')
            
            
              // 用平滑的方式移动还是跳点移动
@@ -180,14 +182,13 @@ export default {
                 myMarker.value.setPosition(point)
                 // mapMethods.setFitView(myMarker)
             }
-            
+            myMarker.value.setMap( map)
         }
       
         /**
          * 移除marker
          */
         function removeMarker(){
-             console.log('removeMarker')
             if( myMarker.value){
                 myMarker.value.off('click', onClick)
                 myMarker.value.off('moving', onMoving)

@@ -36,7 +36,6 @@ export default {
         const myoverlay=ref()
         const myoverlayEditor=ref() //编辑对象
        
- console.log(props,'EditPlugin')
 
         watch(() => props.edit, watchEdit,
         { immediate: true, deep: true }
@@ -49,7 +48,6 @@ export default {
       
        function createOverlay(){
         if(!editType.value)return 
-           console.log(editType.value,'createOverlayeditType Circle')
            let otherOptions:{bounds?:Object,draggable?:boolean}={}
            
         //矩形 需要计算周边
@@ -92,7 +90,6 @@ export default {
             contex.emit('end',event)
         }
         function watchEdit(val:boolean){
-            console.log(val,'watchEdit')
             if(!props.type)return
             if(val){//开启编辑状态
                 if(! myoverlay.value){
@@ -130,7 +127,6 @@ export default {
             if( myoverlay.value){
                 map.remove( myoverlay.value)
                 myoverlay.value=null
-                console.log(myoverlay.value,'myoverlay')
             }
             if(myoverlayEditor.value){
                 myoverlayEditor.value.close()

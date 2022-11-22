@@ -2,10 +2,11 @@
 
     <div class="publictreeContent">
         <div :class="['container',treeState?'containeropen':'containerclose']">
-                 <slot ></slot>
-                 <!-- <el-scrollbar> -->
+                <slot >
+                    
+                </slot>
+                
                     <slot name="main"></slot>
-                 <!-- </el-scrollbar> -->
                 
         </div>
         <div  :class="['aside' ,treeState?'asideopen':'asideclose']">
@@ -54,6 +55,7 @@ treeState.value=!treeState.value
       context.emit('node-click',mess)
   }
         return {
+            
             treeState,
             changeTreeStates,
             currentChange,
@@ -65,7 +67,6 @@ treeState.value=!treeState.value
 
 <style lang="scss" >
 .publictreeContent { 
-    // width: 100%;
     position: absolute;
     top: 10px ;
     left: 0;
@@ -96,6 +97,9 @@ treeState.value=!treeState.value
       display: flex;
       flex-direction: column;
        width:  calc(100% - 300px);
+    }
+    form{
+        margin-top: 7px;
     }
     .containeropen{
      width:  calc(100% - 300px);

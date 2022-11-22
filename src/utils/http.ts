@@ -1,28 +1,7 @@
 
 
-// export const baseUrl='http://web2.test.cvtsp.com/api'
-// export const token = window.localStorage.getItem('token')
-// export const  headers:{token:any,Authorization:string}={
-//     token,
-//     'Authorization': 'Bearer ' + token
-//   }
-// export  function Http({url='',method='get',params={}}){
-//     let str = '?'
-//     for (const key in params) {
-//         str += key + '=' +params[key] + '&'
-//     }
-   
-     
-//    return  fetch(baseUrl+url+str, {
-//         method,
-//         headers
-//     }).then(response => {
-//         return response.json();
-//     })
-// }
 import { getCurrentInstance } from "vue";
 const Http = getCurrentInstance()?.appContext.config.globalProperties.$Http
-// import Http  from "@/utils/request";
 //车辆树接口
 export function getHttpTreeData(params:any){
     return Http(params) 

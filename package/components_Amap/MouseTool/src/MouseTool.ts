@@ -48,7 +48,6 @@ export default {
          */
        
         function draw(e:any){
-            console.log(props.type,e,)
             overlays.value.push(e.obj);
             context.emit('draw',{obj:e.obj,overlays:overlays.value})
         }
@@ -74,7 +73,6 @@ export default {
          */
         function watchType(val:string) {
             // close()
-        console.log(val,'watchType')
         if(val&&val!=mouseTool.value){
 
             mouseTool.value[val]()

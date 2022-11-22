@@ -11,10 +11,11 @@
                  </el-button>
                 <!-- <slot name="operations"></slot> -->
                 <!-- <el-button  v-for="item in powerTool"  @click="bottomClick(item)">{{getText(item)}}</el-button> -->
-                <el-button  v-if="isSearch" class="toggle" @click="bottonClick('search')">
+                <el-button  v-if="isSearch" class="toggle" @click="bottonClick('search')" type="primary" :loading="searchLoading">
                     搜索
                  </el-button>
                 <OpretionTool :powerTool="powerTool" @bottonClick="bottonClick"/>
+                <slot name="button"></slot>
                </el-form-item>
             </el-col>
         </el-row>
@@ -49,6 +50,10 @@ export default defineComponent({
         isSearch:{
             type:Boolean,
             default:true
+        },
+        searchLoading:{//搜索按钮的loading
+            type:Boolean,
+            default:false
         },
         powerTool:{//按钮权限
         type:Array as PropType<string[]>,

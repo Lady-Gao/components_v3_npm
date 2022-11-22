@@ -158,7 +158,7 @@ export default defineComponent({
         params:props.otherParam,
       }).then((res:any) => {
         setInitialTree(res.data);
-              console.log(res.data,'内部请求数据')
+              // console.log(res.data,'内部请求数据')
 
       })
     }

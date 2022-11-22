@@ -6,23 +6,20 @@ export default {
     name: 'InfoWindow',
     props: {
         position:{
-            type:Array,
-            default(){
-                return []
-            }
+            type:Array||Object,
+          
         },
         content: null,
       
     },
     emits:['close'],
-    setup(props:any,context:any) {
+    setup(props:any,{emit,expose}:any) {
         const storeData = inject<any>('storeData')
         const {map}=storeData
      const InfoWindow = ref()//marker对象
      initInfoWindow()
         
         onMounted(() => {
-            console.log('InfoWindow')
         })
 
         watch(() => props.position, watchPostion,
@@ -36,7 +33,7 @@ export default {
         function initInfoWindow() {
            InfoWindow.value= new window.AMap.InfoWindow({
                 offset: new window.AMap.Pixel(0, -30),
-                autoMove: true,
+                // autoMove: true,
              });
              InfoWindow.value.id=props.id
              InfoWindow.value.on('close',onclose)
@@ -44,7 +41,8 @@ export default {
          }
          //设置图片  定位
          function  open(){
-            setContent()
+            // setContent()
+            console.log(props.position,'open')
             InfoWindow.value.open(map, props.position);
            
         }
@@ -53,10 +51,11 @@ export default {
          * 2.props.position 没值 代表InfoWindow.close()手动调用
          */
         function onclose() {
-            if (props.position.length) {
-                context.emit('close')
+            console.log('onclose')
+            if (props.position) {
+               emit('close')
             } else {
-                console.log('手动调用')
+                console.log(props.position,'onclose手动调用')
             }
         }
         function setContent(){
@@ -70,20 +69,17 @@ export default {
          * 定位有更新就更新定位，没有数据则关闭infowindow
          * @param point 
          */
-        function watchPostion(point:[]) {
-             if (InfoWindow.value && point.length) {
+        function watchPostion(point:any) {
+            InfoWindow.value.setMap(map)
+             if (InfoWindow.value && point) {
                  //打开状态下 更新定位
                 if (InfoWindow.value.getIsOpen()) {
                    setPosition(point);
-                } else {
-
-                    open()
-                    
-                }
+                } 
              }
-            //  else {
-            //      InfoWindow.close()
-            // }
+             else {
+                 InfoWindow.value.close()
+            }
            
         }
 
@@ -94,7 +90,7 @@ export default {
             InfoWindow.value.setContent(text);
         }
        return {
-        close
+        close ,open
        }
     },
     render(){
