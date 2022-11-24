@@ -21,16 +21,18 @@
             </el-checkbox-group>
         </div>
         <!-- 多选(checkbox)列表选择 @change="checkListChange"-->
-        <el-scrollbar  class="treeList-lists" v-loading="loading">
+        <el-scrollbar class="treeList-lists" v-loading="loading">
             <el-checkbox-group v-if="isCheck" v-model="checkList">
                 <li v-for="(item, index) in listsData" :key="index" class="el-checkbox group_content">
                     <el-checkbox :label="item.id" class="content_text" @change="checkcheckboxChange($event, item)">
-                        <span
-                            :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
-                        <span class="text">{{ item[name] }}</span>
-                        <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
-                            <i class="remark">{{ item.remark }}</i>
-                        </el-tooltip>
+                        <span>
+                            <span
+                                :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
+                            <span class="text">{{ item[name] }}</span>
+                            <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
+                                <i class="remark">{{ item.remark }}</i>
+                            </el-tooltip>
+                        </span>
                     </el-checkbox>
                     <p class="operation">
                         <span v-if="isCollection"
@@ -46,11 +48,12 @@
                 </li>
             </el-checkbox-group>
             <div v-else class="radioGroup">
-                <div :class="['group_content',item.click?'group_content_active':'']" v-for="(item, index) in listsData" :key="index" @click="textClick(item,index)">
+                <div :class="['group_content', item.click ? 'group_content_active' : '']" v-for="(item, index) in listsData"
+                    :key="index" @click="textClick(item, index)">
                     <p class="content_text">
                         <span
                             :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
-                        <span class="text" >{{ item[name] }}</span>
+                        <span class="text">{{ item[name] }}</span>
                         <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                             <i class="remark">{{ item.remark }}</i>
                         </el-tooltip>
@@ -69,13 +72,7 @@
                     </p>
                 </div>
             </div>
-            <!-- <el-popover ref="popoverRef" :visible="showPopover" trigger="click" title="备注" virtual-triggering>
-                <el-input clearable v-model="popover.remark" :maxlength="50" />
-                <div style="text-align: right;">
-                    <el-button type="text" @click="showPopover = false">取消</el-button>
-                    <el-button type="text" @click="node_collection">确定</el-button>
-                </div>
-            </el-popover> -->
+
         </el-scrollbar>
         <!-- 单选(radio)列表选择 -->
         <!-- 分页 -->
@@ -252,7 +249,7 @@ export default defineComponent({
                 url: props.ListApi,
                 method: 'get',
                 params
-            }).then((res:any) => {
+            }).then((res: any) => {
                 loading.value = false
                 if (res.flag && res.data) {
                     const { total, records, current } = res.data;
@@ -279,18 +276,18 @@ export default defineComponent({
                 return item.id == id
             })
         }
-        function textClick(val: any,index:number) {
-         
-            listsData.value.forEach((element:any) => {
-                if(element.id!==val.id){
-                    element.click=false
-                }else{
-                    element.click=!element.click
+        function textClick(val: any, index: number) {
+
+            listsData.value.forEach((element: any) => {
+                if (element.id !== val.id) {
+                    element.click = false
+                } else {
+                    element.click = !element.click
                 }
             });
-            
+
             context.emit('node-click', val)
-           
+
         }
         return {
             search,
@@ -332,6 +329,7 @@ export default defineComponent({
 
     .treeList-lists {
         height: calc(100% - 100px);
+
         .online {
             color: #008000cf;
         }
@@ -353,6 +351,9 @@ export default defineComponent({
             .content_text {
                 flex: 2;
                 text-align: left;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .text {
@@ -379,9 +380,11 @@ export default defineComponent({
 
 
         }
-        .group_content_active{
+
+        .group_content_active {
             background: #eee;
         }
+
         .radioGroup {
             .group_content {
                 border-bottom: 1px solid #eee;

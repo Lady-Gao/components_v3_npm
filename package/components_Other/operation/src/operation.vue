@@ -6,9 +6,9 @@
             </el-col>
             <el-col style="text-align:right;height:55px" :span="$slots.default?Span[1]:24" >
                 <el-form-item class="buttonForm">
-                 <el-button type="text" v-if="$slots.header" class="toggle" @click="showItem">
+                 <span class="el-button el-button--text toggle" v-if="$slots.header"  @click="showItem">
                     {{flag ?"收起":"展开"}}
-                 </el-button>
+                 </span>
                 <!-- <slot name="operations"></slot> -->
                 <!-- <el-button  v-for="item in powerTool"  @click="bottomClick(item)">{{getText(item)}}</el-button> -->
                 <el-button  v-if="isSearch" class="toggle" @click="bottonClick('search')" type="primary" :loading="searchLoading">
@@ -89,12 +89,22 @@ function bottonClick(item:string){
 <style lang="scss" >
 .Operation{
 text-align: left;
-.el-input__inner{
-    width: 173px;
+.treeSearch{
+    min-width:180px;
 }
+.el-input{
+        width: 180px !important;
+        .el-input__inner{
+            width: 100%;
+        }
+    }
+.el-form-item{
+    margin-right: 0 !important;
+  }
 .buttonForm{
     display: flex;
     justify-content: flex-end;
+    margin-right: 6px !important;
 }
 }
 </style>

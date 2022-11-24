@@ -114,9 +114,16 @@ export default defineComponent({
             } else {//数组
                  tableData.value=val
             }
-            filterTableData.value=[].concat(tableData.value)   
+            if(tableData.value.length){
+                filterTableData.value=[].concat(tableData.value)   
+            }else{
+                filterTableData.value=[]
+            }
+            console.log(filterTableData.value,'filterTableData')
             pagination.total=val.total||0
             pagination.pages=val.pages||0
+            pagination.current=val.current||1
+            pagination.size=val.size||10
 
         }
 
@@ -217,7 +224,7 @@ export default defineComponent({
     position: relative;
 
     height: 100%;
-    width: 98%;
+    width: 100%;
 
     .boxTable {
         position: absolute;

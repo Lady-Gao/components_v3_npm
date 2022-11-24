@@ -94,6 +94,7 @@ export default {
        }
     },
     render(){
-        return () => h('div',{class:'InfoWindow'},'InfoWindow')
+        return 
+        //return () => h('div',{class:'InfoWindow'},'InfoWindow')
     }
 }

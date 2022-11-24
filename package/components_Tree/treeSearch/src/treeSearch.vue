@@ -1,20 +1,20 @@
 <template>
   <div :class="open ? 'treeSearch' : 'treeSearch inputTree'" @mouseleave="mouseleave">
     <!--  @input='fliterNode' @clear="fliterNode"  -->
-    <el-input  ref="Input"  v-model="inputValue" 
+    <el-input  ref="Input"  v-model="inputValue"
       clearable  @focus="focus"  @input='fliterNode'>
       <template #suffix>
         <span class="cvIcon_search" @click="loadTree"></span>
       </template>
     </el-input>
-    <el-scrollbar>
+    <!-- <el-scrollbar> -->
       <tree ref="baseTree" v-loading="loading" v-show="isShowTree" :treeData="treeData" :lazy='lazy'  :autoParam="autoParam"
         :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
         :hoverOperation="hoverOperation" :nodeFilter="nodeFilter" @node-check="nodeCheck" @node-click='nodClick'
         @tree-loaded="treeLoaded" @tree-ready="treeReady"
         >
       </tree>
-  </el-scrollbar>
+  <!-- </el-scrollbar> -->
   </div>
 </template>
 
@@ -354,9 +354,7 @@ function loadTree(){
   position: relative;
 }
 
-.cv-ztree {
-  margin-top:15px;
-}
+
 
 .inputTree {
 
@@ -364,9 +362,10 @@ function loadTree(){
     max-height: 320px;
     position: absolute;
     width: 100%;
-    z-index: 1;
+    z-index: 3;
     padding-top:8px;
      margin-top:0px;
+   
   }
 }
 </style>

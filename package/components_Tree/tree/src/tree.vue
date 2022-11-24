@@ -2,8 +2,9 @@
 
 <template>
   <div class="cv-ztree" ref="tree">
-
+    <el-scrollbar>
     <ul :id="treeId"></ul>
+    </el-scrollbar>
   </div>
 </template>
     
@@ -136,7 +137,7 @@ export default defineComponent({
       });
  
       //如果传了treeData  就不是异步
-      if (Array.isArray(props.treeData)&&props.treeData.length) {
+      if (Array.isArray(props.treeData)) {
         //传进来的数据是数组
          setInitialTree(props.treeData)
       } else if(props.lazy) {

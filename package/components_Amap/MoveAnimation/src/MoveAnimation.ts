@@ -137,8 +137,8 @@ export default {
             init
         }
     },
-    // render() {
-
+     render() {
+        return 
     //      return () => h('div', { class: 'MoveAnimation' }, 'MoveAnimation')
-    // }
+     }
 }

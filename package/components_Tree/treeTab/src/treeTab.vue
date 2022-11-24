@@ -28,8 +28,8 @@
       virtual-triggering>
       <el-input clearable v-model="popover.remark" :maxlength="50" />
       <div style="text-align: right;">
-        <el-button type="text" @click="showPopover = false">取消</el-button>
-        <el-button type="text" @click="node_collection">确定</el-button>
+        <span class="el-button el-button--text" @click="showPopover = false">取消</span>
+        <span class="el-button el-button--text" @click="node_collection">确定</span>
       </div>
     </el-popover>
   </div>
@@ -247,7 +247,7 @@ export default defineComponent({
       const { isAttention, id } = currentTreeNode.value;
       if (Number(isAttention)) {
         //     // 已经关注过，执行取消(cancel)操作
-        const { flag } = await deleteVehicleAttentionInfo(id);
+        const { flag }:any = await deleteVehicleAttentionInfo(id);
         currentTreeNode.value.isAttention = 0
         monitor_vehicleAttention(currentTreeNode.value)
        flag&& ElMessage({
@@ -263,7 +263,7 @@ export default defineComponent({
 
     }
     async function node_collection() {
-      const { flag } = await insertVehicleAttentionInfo({
+      const { flag }:any = await insertVehicleAttentionInfo({
         remark: popover.remark,
         vehicleId: currentTreeNode.value.id
       })
@@ -329,7 +329,7 @@ export default defineComponent({
   width: 280px;
   position: absolute;
     bottom: 5px;
-    top: 5px;
+    top: 0px;
   .el-tabs {
     height: 100%;
      .el-tabs__content {
@@ -339,6 +339,17 @@ export default defineComponent({
         height: 100%;
       }
    }
+   .cv-ztree{
+    width: calc(100% + 20px);
+    box-shadow: none;
+    border-radius: 0;
+   }
+   .treeList-lists{
+    width: calc(100% + 18px);
+    padding-right: 20px;
+    box-sizing: border-box;
+   }
+
   }
 }
 </style>

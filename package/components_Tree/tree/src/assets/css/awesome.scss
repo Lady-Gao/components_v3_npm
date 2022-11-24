@@ -5,102 +5,122 @@
     url('//at.alicdn.com/t/font_3354902_ay4w47j4gq.woff?t=1650857568480') format('woff'),
     url('//at.alicdn.com/t/font_3354902_ay4w47j4gq.ttf?t=1650857568480') format('truetype');
 }
+
 //阿里图标账号 15386671927@163.com
 .cv-ztree {
   width: 100%;
-  min-width: 200px;
-  height: 95%;
+  min-width: 100px;
+  height: 100%;
   min-height: 200px;
   overflow-y: scroll;
   background-color: #fff;
   min-height: 320px;
   font-family: 'Microsoft YaHei';
-  ul,li{
+  margin-top: 15px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 12%), 0 0 6px rgb(0 0 0 / 12%);
+  border-radius: 5px;
+  ul,
+  li {
     padding: 0px;
     margin: 0;
   }
+
   li {
     font-family: 'iconfont-tree';
-      line-height: 26px;
+    line-height: 26px;
+    text-align: left;
+    padding-left: 5px;
+    position: relative;
+
+    a {
+      white-space: nowrap;
       text-align: left;
-      padding-left: 5px;
-      position: relative;
-      a{
-        text-align: left;
-      &:hover{
+
+      .button {
+        padding-right: 3px;
+        display: inline;
+      }
+
+      &:hover {
         // text-indent: 3px;
         // padding: 5px 0;
         // opacity: .8;
         // background: #e4e7ed;
         // border-radius: 6px;
       }
-      }
-      .node_name{
-        display: inline-block;
-        width: 60%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 12px;
-      }
-      .curSelectedNode{
-        background: #e4e7ed;
-        // display: inline-block;
-        // width: 80%;
-        // text-indent: 3px;
-        padding: 5px 0;
+    }
+
+    .node_name {
+      // display: inline-block;
+      width: 75%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 28px;
+      position: absolute;
+    }
+
+    .curSelectedNode {
+      background: #e4e7ed;
+      // display: inline-block;
+      // width: 80%;
+      // text-indent: 3px;
+      padding: 5px 0;
       opacity: .8;
       border-radius: 6px;
-      }
-   
-      .button{
-        padding-right: 3px;
-      }
-      // 公司icon
-      .company_ico_open:before,
-      .company_ico_close:before,
-      .company_ico_docu:before {
-        content: "\e61a";
-      }
+    }
 
-      //close右箭头
-      .noline_close:before {
-        content: '\e62d';
-      }
+    .button {
+      padding-right: 3px;
+      display: inline-block;
+      min-width: 14px;
+    }
 
-      //open下三角
-      .noline_open:before {
-        content: '\e62e';
-      }
+    // 公司icon
+    .company_ico_open:before,
+    .company_ico_close:before,
+    .company_ico_docu:before {
+      content: "\e61a";
+    }
 
-      // 复选框未勾选
-      .checkbox_false_full:before,
-      .checkbox_false_full_focus:before,
-      .checkbox_false_part:before,
-      .checkbox_false_part_focus:before {
-        content: "\e67b";
-      }
+    //close右箭头
+    .noline_close:before {
+      content: '\e62d';
+    }
 
-      // 复选框勾选上
-      .checkbox_true_full:before,
-      .checkbox_true_full_focus:before,
-      .checkbox_true_part:before,
-      .checkbox_true_part_focus:before {
-        content: '\e686';
-        color: #409eff;
-      }
+    //open下三角
+    .noline_open:before {
+      content: '\e62e';
+    }
 
-      //机构icon
-      .organize_ico_open:before,
-      .organize_ico_close:before,
-      .organize_ico_docu:before {
-        content: "\e666";
-      }
+    // 复选框未勾选
+    .checkbox_false_full:before,
+    .checkbox_false_full_focus:before,
+    .checkbox_false_part:before,
+    .checkbox_false_part_focus:before {
+      content: "\e67b";
+    }
 
-      .fleed_ico_open:before,
-      .fleed_ico_close:before,
-      .fleed_ico_docu:before {
-        content: "\e77a";
-      }
+    // 复选框勾选上
+    .checkbox_true_full:before,
+    .checkbox_true_full_focus:before,
+    .checkbox_true_part:before,
+    .checkbox_true_part_focus:before {
+      content: '\e686';
+      color: #409eff;
+    }
+
+    //机构icon
+    .organize_ico_open:before,
+    .organize_ico_close:before,
+    .organize_ico_docu:before {
+      content: "\e666";
+    }
+
+    .fleed_ico_open:before,
+    .fleed_ico_close:before,
+    .fleed_ico_docu:before {
+      content: "\e77a";
+    }
   }
 }

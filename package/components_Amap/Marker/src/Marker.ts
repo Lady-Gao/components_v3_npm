@@ -226,8 +226,8 @@ export default {
             myMarker
         }
     },
-    // render(){
-       
+   render(){
+        return 
     //     return () => h('div', { class: 'Marker' })
-    // }
+    }
 }
