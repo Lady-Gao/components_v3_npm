@@ -362,7 +362,7 @@ function loadTree(){
     max-height: 320px;
     position: absolute;
     width: 100%;
-    z-index: 3;
+    z-index: 9999;
     padding-top:8px;
      margin-top:0px;
    

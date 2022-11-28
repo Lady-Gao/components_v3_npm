@@ -1,10 +1,10 @@
 <template>
  <el-form :inline="true"  class="Operation" label-position="right" label-width="80px">
     <el-row>
-            <el-col :span="$slots.default?Span[0]:0" >
+            <el-col :span="$slots.default?span[0]:0" >
                 <slot></slot>
             </el-col>
-            <el-col style="text-align:right;height:55px" :span="$slots.default?Span[1]:24" >
+            <el-col style="text-align:right;height:55px" :span="$slots.default?span[1]:24" >
                 <el-form-item class="buttonForm">
                  <span class="el-button el-button--text toggle" v-if="$slots.header"  @click="showItem">
                     {{flag ?"收起":"展开"}}
@@ -15,8 +15,10 @@
                     搜索
                  </el-button>
                 <OpretionTool :powerTool="powerTool" @bottonClick="bottonClick"/>
-                <slot name="button"></slot>
-               </el-form-item>
+                   <div class="slotBtn">
+                       <slot name="button" ></slot>
+                    </div>
+            </el-form-item>
             </el-col>
         </el-row>
  <el-row>
@@ -41,7 +43,7 @@ export default defineComponent({
     name:"Operation",
     props:{
           //对搜索条件和按钮的分配比例
-        Span:{
+        span:{
              type: Array, 
             default(){
                 return [16,8]
@@ -89,6 +91,9 @@ function bottonClick(item:string){
 <style lang="scss" >
 .Operation{
 text-align: left;
+.slotBtn{
+    margin-right: 6px;
+}
 .treeSearch{
     min-width:180px;
 }
@@ -104,7 +109,7 @@ text-align: left;
 .buttonForm{
     display: flex;
     justify-content: flex-end;
-    margin-right: 6px !important;
+    // margin-right: 6px !important;
 }
 }
 </style>

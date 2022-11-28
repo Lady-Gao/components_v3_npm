@@ -2,9 +2,9 @@
 
 @font-face {
   font-family: 'iconfont-cv_components_v3';  /* Project id 3365244 */
-  src: url('//at.alicdn.com/t/font_3365244_bhcmryp6sn4.woff2?t=1652941071966') format('woff2'),
-  url('//at.alicdn.com/t/font_3365244_bhcmryp6sn4.woff?t=1652941071966') format('woff'),
-  url('//at.alicdn.com/t/font_3365244_bhcmryp6sn4.ttf?t=1652941071966') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_3365244_3dug04ny1jg.woff2?t=1669601044768') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3365244_3dug04ny1jg.woff?t=1669601044768') format('woff'),
+       url('//at.alicdn.com/t/c/font_3365244_3dug04ny1jg.ttf?t=1669601044768') format('truetype');
 }
 //阿里图标账号 15386671927@163.com
   .cvIcon_search{
@@ -42,6 +42,8 @@
    content: '\e6b4';
 }
 // 离线车辆图标
+.icon0car_ico_open::before,
+.icon0car_ico_close::before,
 .icon0car_ico_docu::before{
   font-family: 'iconfont-cv_components_v3';
   content: '\e65a';
@@ -51,6 +53,8 @@
   content: '\e9cc';
 }
 // 在线车辆图标
+.icon0car_online_ico_close::before,
+.icon0car_online_ico_open::before,
 .icon0car_online_ico_docu::before{
   font-family: 'iconfont-cv_components_v3';
   content: '\e65a';
@@ -74,4 +78,18 @@
   font-family: 'iconfont-cv_components_v3';
   content: '\e652';
   color: #6b6a6a;
+}
+//离线视频车辆
+.unlineCamera_ico_open::before,
+.unlineCamera_ico_close::before{
+  font-family: 'iconfont-cv_components_v3';
+  content: '\e969';
+}
+// 在线视频车辆icon
+.onlineCamera_ico_open:before,
+.onlineCamera_ico_close:before,
+.onlineCamera_ico_docu:before {
+  font-family: 'iconfont-cv_components_v3';
+  content: '\e969';
+  color: #008000cf;
 }

@@ -242,5 +242,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
+.opretionTool{
+    margin-right: 6px;
+}
 </style>
