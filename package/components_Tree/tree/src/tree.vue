@@ -1,7 +1,7 @@
 
 
 <template>
-  <div class="cv-ztree" ref="tree">
+  <div class="cv-ztree" ref="tree" v-loading="loading">
     <el-scrollbar>
     <ul :id="treeId"></ul>
     </el-scrollbar>
@@ -124,45 +124,54 @@ export default defineComponent({
     const tree = ref();
     const treeId = ref()
      const zTree = ref()
+     const loading = ref(true)
     treeId.value = randomMakeTreeid()
     onMounted(() => {
       init()
     });
     function init(){
+     
       import("./js/base-tree").then(BaseTree=>{
        tree.value = new BaseTree.default({
         el: treeId.value,
         options:getOptions(props),
-        methods:getMethods(props,context)
+        methods:getMethods({...props,loading},context,)
       });
- 
-      //如果传了treeData  就不是异步
-      if (Array.isArray(props.treeData)) {
+      if(!props.treeData.length){
+        loading.value=true
+      }else{
+        loading.value=false
+      }
+      console.log(props.treeData.length,props.lazy,'init---------------------')
+        //如果传了treeData  就不是异步
+        if (Array.isArray(props.treeData)) {
         //传进来的数据是数组
          setInitialTree(props.treeData)
-      } else if(props.lazy) {
-        getTreeData()
-      }
+      } 
+      // else if(props.lazy) {
+      //   getTreeData()
+      // }
        })
     }
 //设置树的初始化数据
   function setInitialTree(data:any) {
-         tree.value.setInitialTree(data);
-         zTree.value=tree.value.zTree
-     context.emit('tree-ready')
+    zTree.value=tree.value.zTree
+    tree.value.setInitialTree&&tree.value.setInitialTree(data);
+      context.emit('tree-ready')
+      console.log('--------------------------setInitialTree')
     }
     // 使用请求数据 lazy headers  type otherParam
-  function getTreeData() {
-     getHttpTreeData({
-       url:props.lazy,
-        method: props.type,
-        params:props.otherParam,
-      }).then((res:any) => {
-        setInitialTree(res.data);
-              // console.log(res.data,'内部请求数据')
-
-      })
-    }
+  // function getTreeData() {
+  //    getHttpTreeData({
+  //      url:props.lazy,
+  //       method: props.type,
+  //       params:props.otherParam,
+  //     }).then((res:any) => {
+  //       console.log('------------------------getTreeData')
+  //       setInitialTree(res.data);
+  //       loading.value=false
+  //     })
+  //   }
 
     // 随意生成树的id编号
     function randomMakeTreeid() {
@@ -190,6 +199,7 @@ export default defineComponent({
         )
     //输入框改变
     function watchTreeData(val: any) {
+      console.log(val,'watchTreeData')
      init()
     }
     return {
@@ -197,6 +207,7 @@ export default defineComponent({
       tree,
       zTree,
       init,
+      loading
     }
   },
 });

@@ -11,8 +11,9 @@
             <el-button class="jiantou" @click="changeTreeStates">
                 <span :class="treeState ? 'cvIcon-jiantouLeft' : 'cvIcon-jiantouRight'"></span>
             </el-button>
-            <treeTab :treeData="treeData" :isCheck='isCheck' :autoParam="autoParam"   :otherParam="otherParam"
-             @current-change="currentChange" @node-click='nodeClick' />
+            <!--  @current-change="currentChange" -->
+            <treeTab :isVideo="isVideo" :treeData="treeData" :lazy="lazy" :isCheck='isCheck' :autoParam="autoParam"   :otherParam="otherParam"
+             @node-click='nodeClick' @node-check="nodeCheck" @checkedList="checkedList"/>
         </div>
     </div>
 </template>
@@ -29,6 +30,10 @@ export default defineComponent({
                 return [];
             },
         },
+        lazy: {// 树的接口(/monitor/findVehicleTreeInfoList)
+      type: String,
+      default: '/basic/tree/findVehicleTreeInfoList',
+    },
         name: {//车辆树显示节点时,将返回的text作为节点名称
             type: String,
             default: "text"
@@ -48,26 +53,40 @@ export default defineComponent({
                 return {};
             },
         },
+        isVideo: {//是否展示视频摄像头
+      type: Boolean,
+      default: false
     },
-    emits: ['current-change', 'node-click'],//多选时用current-change，单选用node-click
+
+    },
+    emits: ['current-change','checked-list', 'node-click','node-check'],//多选时用current-change，单选用node-click
     setup(props: any, context: any) {
+    
         const treeState = ref(true)
         //更改tabtree收缩状态
         function changeTreeStates() {
             treeState.value = !treeState.value
         }
-        function currentChange(val: any) {
-            context.emit('current-change', val)
-        }
+        // function currentChange(val: any) {
+        //     context.emit('current-change', val)
+        // }
         function nodeClick(mess: {}) {
             context.emit('node-click', mess)
+        }
+        function nodeCheck(mess: {}) {
+            context.emit('node-check', mess)
+        }
+        function checkedList(mess: {}) {
+            context.emit('checked-list', mess)
         }
         return {
 
             treeState,
             changeTreeStates,
-            currentChange,
-            nodeClick
+            // currentChange,
+            nodeClick,
+            nodeCheck,//[{type:true,data:[]}]
+            checkedList,//[ID,ID...]
         }
     }
 })

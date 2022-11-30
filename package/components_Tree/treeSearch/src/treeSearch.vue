@@ -8,10 +8,10 @@
       </template>
     </el-input>
     <!-- <el-scrollbar> -->
-      <tree ref="baseTree" v-loading="loading" v-show="isShowTree" :treeData="treeData" :lazy='lazy'  :autoParam="autoParam"
+      <tree ref="baseTree"  v-show="isShowTree" :treeData="treeSearchData" :lazy='lazy'  :autoParam="autoParam"
         :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
         :hoverOperation="hoverOperation" :nodeFilter="nodeFilter" @node-check="nodeCheck" @node-click='nodClick'
-        @tree-loaded="treeLoaded" @tree-ready="treeReady"
+        @tree-loaded="treeLoaded" @tree-ready="treeReady" 
         >
       </tree>
   <!-- </el-scrollbar> -->
@@ -53,7 +53,7 @@ export default defineComponent({
   },
   lazy: {// 树的接口(/monitor/findVehicleTreeInfoList)
     type: String,
-    default: '',
+    default: '/basic/tree/findVehicleTreeInfoList',
   },
   type: { //树的异步请求方式
     type: String,
@@ -105,6 +105,7 @@ export default defineComponent({
 const inputValue = ref('')
 const nondeClickinputValue = ref('')
 const baseTree = ref()
+const treeSearchData=ref(props.treeData)
 function fliterNode() {
   const { zTree } = baseTree.value
   const all_nodes = zTree.getNodes();
@@ -226,12 +227,12 @@ function mouseleave() {
 }
 
 function treeLoaded(){
-  // console.log('treeLoaded')
+//  console.log('treeLoaded')
 }
 function treeReady(){
      props.modelValue&&selectNode()
      context.emit('tree-ready',true)
-    //  console.log('treeReady')
+  // console.log('treeReady')
      loading.value=false
 }
 
@@ -318,8 +319,10 @@ if(node){
 }
 //重新加载树
 function loadTree(){
-  loading.value=true
- baseTree.value.init()
+  // loading.value=true
+//   baseTree.value
+//  baseTree.value.init()
+treeSearchData.value=[]
 }
       return{
         baseTree,
@@ -337,7 +340,8 @@ function loadTree(){
         changeCheckStates,
         upNodeIcon,
         loadTree,
-        loading
+        loading,
+        treeSearchData
       }
    }
 })

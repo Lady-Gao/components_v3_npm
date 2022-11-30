@@ -243,7 +243,8 @@ export default class BaseTree {
                  * @param {*} targetNode 成为 treeNodes 拖拽结束的目标节点 JSON 数据对象。
                  * @param {*} moveType 指定移动到目标节点的相对位置
                  */
-                onDrop:this.onDrop
+                onDrop:this.onDrop,
+              
             } 
         }
     }

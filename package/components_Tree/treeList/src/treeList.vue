@@ -22,18 +22,36 @@
         </div>
         <!-- 多选(checkbox)列表选择 @change="checkListChange"-->
         <el-scrollbar class="treeList-lists" v-loading="loading">
-            <el-checkbox-group v-if="isCheck" v-model="checkList">
+            <el-checkbox-group v-if="isCheck" v-model="checkList" class="checkboxGroup">
                 <li v-for="(item, index) in listsData" :key="index" class="el-checkbox group_content">
                     <el-checkbox :label="item.id" class="content_text" @change="checkcheckboxChange($event, item)">
                         <span>
+
                             <span
                                 :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
                             <span class="text">{{ item[name] }}</span>
                             <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                                 <i class="remark">{{ item.remark }}</i>
                             </el-tooltip>
+
                         </span>
                     </el-checkbox>
+                    <div v-if="isVideo && checkList.includes(item.id)" class="channelInfos">
+                        <el-checkbox-group v-model="item.clickChanneArr" >
+                            <el-checkbox v-for="(ch, index) in item.channelInfos" class="camera"
+                            :key="index" :label="index+1"  @change="clickChannecheckboxChange(item,index+1)"
+                            >
+                                <p>
+                                    <span :class="item.onlineStatus == '1' ? 'onlinecamera' : 'unlinecamera'"></span>
+                                    <span
+                                        :class="['channe_text', item.clickChannel == index + 1 ? 'clickChanne' : '']">CH{{
+                                                index + 1
+                                        }}</span>
+                                </p>
+                            </el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+
                     <p class="operation">
                         <span v-if="isCollection"
                             :class="item.isAttention ? 'cvIcon_collection' : 'cvIcon_uncollection'"
@@ -47,16 +65,27 @@
                     </p>
                 </li>
             </el-checkbox-group>
+            <!-- 单选(radio)列表选择 -->
             <div v-else class="radioGroup">
-                <div :class="['group_content', item.click ? 'group_content_active' : '']" v-for="(item, index) in listsData"
-                    :key="index" @click="textClick(item, index)">
+                <div :class="['group_content', item.click ? 'text_active' : '']" v-for="(item, index) in listsData"
+                    :key="index">
                     <p class="content_text">
                         <span
                             :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
-                        <span class="text">{{ item[name] }}</span>
+                        <span class="text" @click="textClick(item, index)">{{ item[name] }}</span>
                         <el-tooltip effect="dark" :content="item.remark" placement="top-start" v-if="!isCollection">
                             <i class="remark">{{ item.remark }}</i>
                         </el-tooltip>
+                    <div v-if="isVideo && item.click" class="channelInfos">
+                        <p v-for="(ch, index) in item.channelInfos" class="camera"
+                            @click="clickCamera(item, index + 1)">
+                            <span :class="item.onlineStatus == '1' ? 'onlinecamera' : 'unlinecamera'"></span>
+                            <span :class="['channe_text', item.clickChannel == index + 1 ? 'clickChanne' : '']">CH{{
+                                    index + 1
+                            }}</span>
+                        </p>
+
+                    </div>
                     </p>
                     <p class="operation">
                         <span v-if="isCollection"
@@ -74,7 +103,6 @@
             </div>
 
         </el-scrollbar>
-        <!-- 单选(radio)列表选择 -->
         <!-- 分页 -->
         <div class="pagination">
             <p>{{ pagination.total }}条</p>
@@ -88,7 +116,7 @@
 
 <script lang="ts">
 // @ts-ignore
-import { defineComponent, PropType, reactive, ref, unref, getCurrentInstance, computed } from "vue"
+import { defineComponent, PropType, reactive, ref, unref, watch, computed } from "vue"
 import { getHttpListData } from "../../../utils/http";
 export default defineComponent({
     name: "TreeList",
@@ -163,8 +191,13 @@ export default defineComponent({
                 return {};
             },
         },
+        isVideo: {//是否展示视频摄像头
+            type: Boolean,
+            default: false
+        },
+
     },
-    emits: ["clcik_collection", "clcik_delete", "current-change", "node-click"],
+    emits: ["clcik_collection", "clcik_delete", "checked-list", "node-click","node-check"],
     setup(props: any, context: any) {
         const search = reactive({
             text: '',//输入框文本
@@ -182,7 +215,7 @@ export default defineComponent({
             let page = Math.ceil(num)
             return page
         })
-        const listsData = ref()
+        const listsData = ref<any[]>([])
         const loading = ref(false)
         handlerSearch()
         function selectChange() {
@@ -198,10 +231,20 @@ export default defineComponent({
         })
         const showPopover = ref(false)
         const popoverRef = ref()
-        const checkList = ref([])
+        const checkList = ref<any[]>([])
+      
         //   多选才会触发
         function checkcheckboxChange(event: Event, row: any) {
+            row.clickChanneArr=[]
+            context.emit('node-check', {type:event,data:[row]})
+            // context.emit('checked-list', checkList.value)// checkList.value
             context.emit('current-change', event, row.id)
+        }
+      //   多选才会触发 选中通道时触发
+        function clickChannecheckboxChange(item:any,index:number){
+            item.clickChannel=index
+            let type=item.clickChanneArr.includes(index)
+            context.emit('node-check', {type,data:[item]})
         }
         // 收藏事件
         function clcik_collection(event: Event, row: any) {
@@ -218,12 +261,15 @@ export default defineComponent({
 
         }
 
-
+ 
         //选中与取消
         const changeCheckStates = (list: any) => {
-            checkList.value = list
+            checkList.value=list
+            // context.emit('checked-list', list)// checkList.value
         }
-
+        // watch(() => checkList.value, changeCheckStates,
+        //     { immediate: true, deep: true }
+        // )
         //分页变化
         function handlerCurrentChange(val: any) {
             search.current = val;
@@ -281,13 +327,18 @@ export default defineComponent({
             listsData.value.forEach((element: any) => {
                 if (element.id !== val.id) {
                     element.click = false
+                    element.clickChannel = 0
                 } else {
                     element.click = !element.click
                 }
             });
-
             context.emit('node-click', val)
 
+        }
+        //点击视频通道
+        function clickCamera(item: any, index: number) {
+            item.clickChannel = index
+            context.emit('node-click', item)
         }
         return {
             search,
@@ -310,6 +361,8 @@ export default defineComponent({
             checkcheckboxChange,
             upNodeIcon,
             textClick,
+            clickCamera,
+            clickChannecheckboxChange
         }
     }
 
@@ -336,10 +389,7 @@ export default defineComponent({
 
         .el-checkbox {
             width: 100%;
-            border-bottom: 1px solid #eee;
             float: left;
-
-
         }
 
         .group_content {
@@ -347,6 +397,9 @@ export default defineComponent({
             justify-content: space-between;
             cursor: pointer;
             width: 100%;
+            line-height: 32px;
+            height: auto;
+            border-bottom: 1px solid #eee;
 
             .content_text {
                 flex: 2;
@@ -354,6 +407,11 @@ export default defineComponent({
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+
+                .name {
+                    display: inline-block;
+                    width: 100%;
+                }
             }
 
             .text {
@@ -381,15 +439,58 @@ export default defineComponent({
 
         }
 
-        .group_content_active {
+        .text_active {
             background: #eee;
+        }
+
+        .checkboxGroup {
+            .group_content {
+
+                display: unset;
+
+                .operation {
+                    position: absolute;
+                    right: 5px;
+                    top: 0;
+                }
+            }
+
+            .channelInfos {
+                width: 100%;
+                line-height: 32px;
+                padding-top: 35px;
+            }
         }
 
         .radioGroup {
             .group_content {
-                border-bottom: 1px solid #eee;
+
                 margin-right: 30px;
                 line-height: 32px;
+
+                .channelInfos {
+                    padding-left: 15px;
+
+                    .clickChanne {
+                        color: var(--el-color-primary);
+                    }
+
+                    .channe_text {
+                        margin-left: 5px;
+                    }
+                }
+
+                .onlinecamera::before {
+                    font-family: 'iconfont-tree';
+                    content: "\e965";
+                    color: #008000cf;
+                }
+
+                .unlinecamera::before {
+                    font-family: 'iconfont-tree';
+                    content: "\e965";
+                    color: #7d7d7b;
+                }
             }
         }
     }
