@@ -127,9 +127,9 @@ export function getMethods(props: any, context: any) {
     }
     return {
        
-        //treeLoaded
+        //获取到data数据
         treeLoaded() {
-            console.log('tree-loaded')
+            console.log('获取到data数据')
             context.emit('tree-loaded')
         },
         /**
@@ -270,6 +270,7 @@ export function getMethods(props: any, context: any) {
                 onChecAfterEmit(treeNode, zTree)
             }
             props.loading.value=false
+            context.emit('tree-ready',zTree)
         },
 
 
@@ -279,7 +280,11 @@ export function getMethods(props: any, context: any) {
          * @param   treeId 
          * @param   treeNode 
          */
-        onRightClick(event: Event, treeId: string, treeNode: any) { },
+        onRightClick(event: Event, treeId: string, treeNode: any) {
+            let zTree = this.getZTreeObj(treeId)
+            zTree.selectNode(treeNode);
+            context.emit('right-click',event,treeId,treeNode)
+         },
         /**
          * 用于捕获节点编辑名称结束之后的事件回调函数
          * @param   event 

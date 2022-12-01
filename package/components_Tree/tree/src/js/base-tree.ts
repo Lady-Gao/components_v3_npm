@@ -75,8 +75,8 @@ export default class BaseTree {
         //展开所有节点
         this.expandAll && this.zTree.expandAll(true)
         typeof callback === 'function' && callback(this.zTree);
-        this.treeLoaded(data);
-        
+        // this.treeLoaded(data);
+        console.log(this.zTree,'this.zTree')
     }
 
     /**

@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont-tree';
 /* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
-  src: url('//at.alicdn.com/t/c/font_3354902_e1jqaw0b31p.woff2?t=1669600219554') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3354902_e1jqaw0b31p.woff?t=1669600219554') format('woff'),
-       url('//at.alicdn.com/t/c/font_3354902_e1jqaw0b31p.ttf?t=1669600219554') format('truetype');
+src: url('//at.alicdn.com/t/c/font_3354902_8tcdiy7lyl4.woff2?t=1669785215272') format('woff2'),
+url('//at.alicdn.com/t/c/font_3354902_8tcdiy7lyl4.woff?t=1669785215272') format('woff'),
+url('//at.alicdn.com/t/c/font_3354902_8tcdiy7lyl4.ttf?t=1669785215272') format('truetype');
 }
 
 //阿里图标账号 15386671927@163.com
@@ -125,6 +125,10 @@
 // 摄像头icon
     .camera_ico_docu:before{
       content: "\e965";
+    }
+    //异步请求时的loading
+    .ico_loading::before {
+      content: "\e627";
     }
   }
 }

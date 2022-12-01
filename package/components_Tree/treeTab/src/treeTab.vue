@@ -4,7 +4,7 @@
       <el-tab-pane :label="titles[0]" name="tab0" v-if="titles[0]">
 
         <treeSearch ref="treeSearch" :name="name" :treeData='treeData' :lazy='lazy' :autoParam="autoParam"
-          :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection" 
+          :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection" @tree-ready="treeReady"
           :hoverOperation="isCollection && hoverOperation" @node-click="nodeClick" @node-check="nodeCheck" />
 
       </el-tab-pane>
@@ -12,7 +12,7 @@
         <treeList :isVideo="isVideo" :ListApi="vehicleListApi" ref="vehicleList" :name="vehicleListName"
           :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection" :selection="selection"
           :isOnlineStatus="isOnlineStatus" @clcik_collection="collectionOnclick" @current-change="currentChange"
-          @node-click="nodeClickList" @node-check="nodeCheckList" @checked-list="checkedList"/>
+          @node-click="nodeClickList" @node-check="nodeCheckList" @checked-list="checkedList" />
       </el-tab-pane>
       <el-tab-pane :label="titles[2]" name="tab2" v-if="titles[2]">
         <treeList :isVideo="isVideo" :ListApi="vehicleAttentionApi" ref="vehicleAttentionList" :name="vehicleListName"
@@ -134,7 +134,7 @@ export default defineComponent({
     },
 
   },
-  emits: ['checked-list', 'node-click', 'node_collection', 'node-check'],
+  emits: ['checked-list', 'node-click', 'node_collection', 'node-check', 'tree-ready'],
   setup(props: any, context: any) {
     const treeSearch = ref()
     const vehicleList = ref()
@@ -149,10 +149,10 @@ export default defineComponent({
 
     var allCurrentIds = ref<any[]>([])
     //车辆列表选中的id [id,id]
-    function checkedList(list: any){
-      allCurrentIds.value=list
+    function checkedList(list: any) {
+      allCurrentIds.value = list
       // context.emit('checked-list',list)
-       // 更改状态
+      // 更改状态
     }
     //车辆列表 type:勾选状态  多选
     function currentChange(type: boolean, id: string) {
@@ -179,7 +179,7 @@ export default defineComponent({
     }
     // 车辆树的emit只返回车辆
     function nodeClick(val: any) {
-      let data =val.treeNode
+      let data = val.treeNode
       if (val.treeNode) {
         if (val.treeNode.type == 4) {
           data = val.treeNode
@@ -198,32 +198,40 @@ export default defineComponent({
         }
       }
 
-      
+
     }
     //车辆树
     function nodeCheck(mess: any) {
-       let data =mess.checkedListObj
+      let data = mess.checkedListObj
       // if (mess.checked) {
-        // 勾选中,异步加载时可能会重复勾选
-        // allCurrentIds.value.push(...mess.checkedList)
-        // allCurrentIds.value=mess.allList
-        //去重
-      
+      // 勾选中,异步加载时可能会重复勾选
+      // allCurrentIds.value.push(...mess.checkedList)
+      // allCurrentIds.value=mess.allList
+      //去重
+
       // } else {
-        //如果是通号号 
-        if(props.isVideo&&!mess.checked&&data[0]&&data[0].checked){
-           // nothing
-        // }else{
-          // 取消勾选
-          // for (let i = 0; i < mess.checkedList.length; i++) {
-          //   let index = allCurrentIds.value.indexOf(mess.checkedList[i])
-          //   allCurrentIds.value.splice(index, 1)
-           }
-          allCurrentIds.value=mess.allList
-        // }
-        
-     // }
-   
+      //如果是通号号 
+      // if(props.isVideo&&!mess.checked&&data[0]&&data[0].checked){
+      // nothing
+      // }else{
+      // 取消勾选
+      // for (let i = 0; i < mess.checkedList.length; i++) {
+      //   let index = allCurrentIds.value.indexOf(mess.checkedList[i])
+      //   allCurrentIds.value.splice(index, 1)
+      // }
+      // allCurrentIds.value=mess.allList
+      // }
+      
+      // }
+      
+      allCurrentIds.value = allCurrentIds.value.concat(mess.allList)
+      if (!mess.checked) {
+        for (let i = 0; i < mess.checkedListObj.length; i++) {
+          let index = allCurrentIds.value.indexOf(mess.checkedListObj[i])
+          allCurrentIds.value.splice(index, 1)
+        }
+      }
+      console.log(allCurrentIds.value, 'allCurrentIds.value')
       allCurrentIds.value = Array.from(new Set(allCurrentIds.value))
       context.emit('node-check', {//取消或选中得是哪一个
         type: mess.checked,
@@ -231,13 +239,13 @@ export default defineComponent({
       })
       vehiclestates()
     }
-//车辆列表
-function nodeCheckList(mess: any){
-  context.emit('node-check', {//取消或选中得是哪一个
+    //车辆列表
+    function nodeCheckList(mess: any) {
+      context.emit('node-check', {//取消或选中得是哪一个
         type: mess.type,
-        data:mess.data
+        data: mess.data
       })
-}
+    }
     //改变树和列表的选中状态--复选
     function changeCheckStates(type: boolean, id: string) {
       // 车辆列表的状态
@@ -249,7 +257,7 @@ function nodeCheckList(mess: any){
       vehicleList.value && vehicleList.value.changeCheckStates(allCurrentIds.value)
       vehicleAttentionList.value && vehicleAttentionList.value.changeCheckStates(allCurrentIds.value)
       // sendcurrentChange()
-      context.emit('checked-list',allCurrentIds.value)
+      context.emit('checked-list', allCurrentIds.value)
 
     }
     function sendcurrentChange() {
@@ -347,6 +355,10 @@ function nodeCheckList(mess: any){
     function monitor_vehicle() {
 
     }
+    //树异步加载完成
+    function treeReady() {
+      context.emit('tree-ready', true)
+    }
 
     return {
       activeName,
@@ -366,7 +378,8 @@ function nodeCheckList(mess: any){
       collectionOnclick,
       collection_delete,
       nodeCheckList,
-      checkedList
+      checkedList,
+      treeReady
     }
   }
 })

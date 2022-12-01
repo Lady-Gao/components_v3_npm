@@ -109,7 +109,6 @@ text-align: left;
 .buttonForm{
     display: flex;
     justify-content: flex-end;
-    // margin-right: 6px !important;
 }
 }
 </style>

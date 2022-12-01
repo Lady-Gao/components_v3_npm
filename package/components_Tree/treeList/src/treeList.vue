@@ -25,7 +25,6 @@
             <el-checkbox-group v-if="isCheck" v-model="checkList" class="checkboxGroup">
                 <li v-for="(item, index) in listsData" :key="index" class="el-checkbox group_content">
                     <el-checkbox :label="item.id" class="content_text" @change="checkcheckboxChange($event, item)">
-                        <span>
 
                             <span
                                 :class="item.onlineStatus == '1' ? `${item.icon || 'icon0'}car_online_ico_docu` : `${item.icon || 'icon0'}car_ico_docu`"></span>
@@ -34,7 +33,6 @@
                                 <i class="remark">{{ item.remark }}</i>
                             </el-tooltip>
 
-                        </span>
                     </el-checkbox>
                     <div v-if="isVideo && checkList.includes(item.id)" class="channelInfos">
                         <el-checkbox-group v-model="item.clickChanneArr" >
@@ -197,7 +195,7 @@ export default defineComponent({
         },
 
     },
-    emits: ["clcik_collection", "clcik_delete", "checked-list", "node-click","node-check"],
+    emits: ['current-change',"clcik_collection", "clcik_delete", "checked-list", "node-click","node-check"],
     setup(props: any, context: any) {
         const search = reactive({
             text: '',//输入框文本
@@ -400,14 +398,14 @@ export default defineComponent({
             line-height: 32px;
             height: auto;
             border-bottom: 1px solid #eee;
-
+            user-select: initial;
             .content_text {
                 flex: 2;
                 text-align: left;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-
+                user-select: initial;
                 .name {
                     display: inline-block;
                     width: 100%;
@@ -445,7 +443,7 @@ export default defineComponent({
 
         .checkboxGroup {
             .group_content {
-
+  
                 display: unset;
 
                 .operation {

@@ -11,7 +11,7 @@
       <tree ref="baseTree"  v-show="isShowTree" :treeData="treeSearchData" :lazy='lazy'  :autoParam="autoParam"
         :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
         :hoverOperation="hoverOperation" :nodeFilter="nodeFilter" @node-check="nodeCheck" @node-click='nodClick'
-        @tree-loaded="treeLoaded" @tree-ready="treeReady" 
+        @tree-ready="treeReady" @right-click="onRightClick"
         >
       </tree>
   <!-- </el-scrollbar> -->
@@ -98,16 +98,16 @@ export default defineComponent({
       },
     },
   },
-   emits:['clear','update:modelValue', 'node-click', 'node-check','tree-ready'],
+   emits:['clear','update:modelValue', 'node-click', 'node-check','tree-ready','right-click'],
    
    setup(props: any, context: any) {
-     const loading=ref(true)
 const inputValue = ref('')
 const nondeClickinputValue = ref('')
 const baseTree = ref()
 const treeSearchData=ref(props.treeData)
-function fliterNode() {
-  const { zTree } = baseTree.value
+const baseTreezTree=ref()
+function fliterNode() { 
+  const zTree=  baseTreezTree.value
   const all_nodes = zTree.getNodes();
   const { childs, filterNodes } = filterNodes_search();
   all_nodes.forEach((node: any) => {
@@ -134,7 +134,7 @@ function fliterNode() {
 * return 
 */
 function filterNodes_search(level:number = 1) {
-  const { zTree } = baseTree.value
+  const zTree=  baseTreezTree.value
   let filterNodes: any[] = [];
   var results = zTree.getNodesByParamFuzzy(props.name, inputValue.value);
   if (inputValue.value) {
@@ -163,7 +163,7 @@ function filterNodes_search(level:number = 1) {
 * @param {Node} allNodes 所有符合条件的节点
 */
 function filterNodes_highlight(Nodes: any, childs: any) {
-  const { zTree } = baseTree.value
+  const zTree=  baseTreezTree.value
   const all_nodes = zTree.transformToArray(
     Nodes ? Nodes : zTree.getNodes()
   );
@@ -226,14 +226,14 @@ function mouseleave() {
 
 }
 
-function treeLoaded(){
-//  console.log('treeLoaded')
-}
-function treeReady(){
+// function treeLoaded(){
+// //  console.log('treeLoaded')
+// }
+//树异步加载完成
+function treeReady(zTree:any){
      props.modelValue&&selectNode()
-     context.emit('tree-ready',true)
-  // console.log('treeReady')
-     loading.value=false
+     baseTreezTree.value=zTree
+     context.emit('tree-ready',zTree)
 }
 
 
@@ -270,15 +270,15 @@ function treeReady(){
   }
 
   function getNodeByParam(valueName?:any,modelValue?:any){
-    const { zTree } = baseTree.value
-      const all_nodes = zTree.getNodes(); 
+    const zTree=  baseTreezTree.value
+      // const all_nodes = zTree.getNodes(); 
       let key=valueName||props.valueName,value=modelValue||props.modelValue
       let nodes=zTree.getNodeByParam(key,value)
     return nodes
   }
 //更改勾选状态
 function changeCheckStates(allCurrentIds:any,check:boolean,ids:any){
-  const { zTree } = baseTree.value
+  const zTree=  baseTreezTree.value
   //没有选中的就取消所有
   if(!allCurrentIds.length){
     zTree.checkAllNodes(false);
@@ -299,7 +299,7 @@ function changeCheckStates(allCurrentIds:any,check:boolean,ids:any){
 
 // 更新收藏和在线图标
 function upNodeIcon(val:any){
-const { zTree } = baseTree.value
+  const zTree=  baseTreezTree.value
    const { id, isAttention,onlineStatus } = val;
   const node = zTree.getNodeByParam('id', id);
 if(node){
@@ -324,6 +324,9 @@ function loadTree(){
 //  baseTree.value.init()
 treeSearchData.value=[]
 }
+function  onRightClick(event: Event, treeId: string, treeNode: any) {
+            context.emit('right-click',event,treeId,treeNode)
+         }
       return{
         baseTree,
         Input,
@@ -334,14 +337,14 @@ treeSearchData.value=[]
         isShowTree,
         nodeCheck,
         nodClick,
-        treeLoaded,
+        // treeLoaded,
         treeReady,
         getNodeByParam,
         changeCheckStates,
         upNodeIcon,
         loadTree,
-        loading,
-        treeSearchData
+        treeSearchData,
+        onRightClick
       }
    }
 })

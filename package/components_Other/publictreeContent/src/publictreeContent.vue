@@ -13,7 +13,7 @@
             </el-button>
             <!--  @current-change="currentChange" -->
             <treeTab :isVideo="isVideo" :treeData="treeData" :lazy="lazy" :isCheck='isCheck' :autoParam="autoParam"   :otherParam="otherParam"
-             @node-click='nodeClick' @node-check="nodeCheck" @checkedList="checkedList"/>
+             @node-click='nodeClick' @node-check="nodeCheck" @checkedList="checkedList" @tree-ready="treeReady"/>
         </div>
     </div>
 </template>
@@ -59,7 +59,7 @@ export default defineComponent({
     },
 
     },
-    emits: ['current-change','checked-list', 'node-click','node-check'],//多选时用current-change，单选用node-click
+    emits: ['checked-list', 'node-click','node-check','tree-ready'],//多选时用node-check,checked-list，单选用node-click
     setup(props: any, context: any) {
     
         const treeState = ref(true)
@@ -79,8 +79,12 @@ export default defineComponent({
         function checkedList(mess: {}) {
             context.emit('checked-list', mess)
         }
+            //树异步加载完成
+    function treeReady(){
+     context.emit('tree-ready',true)
+}
         return {
-
+            treeReady,
             treeState,
             changeTreeStates,
             // currentChange,

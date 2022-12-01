@@ -119,7 +119,7 @@ export default defineComponent({
     // treeLoaded: Function,  // 树接受数据加载完成的回调
 
   },
-  emits:['tree-loaded','tree-ready','node-click','node-check'],
+  emits:['tree-ready','node-click','node-check','right-click'],//'tree-loaded',
   setup(props: any, context: any) {
     const tree = ref();
     const treeId = ref()
@@ -142,7 +142,7 @@ export default defineComponent({
       }else{
         loading.value=false
       }
-      console.log(props.treeData.length,props.lazy,'init---------------------')
+      console.log( tree.value.zTree,'init---------------------')
         //如果传了treeData  就不是异步
         if (Array.isArray(props.treeData)) {
         //传进来的数据是数组
@@ -155,10 +155,10 @@ export default defineComponent({
     }
 //设置树的初始化数据
   function setInitialTree(data:any) {
-    zTree.value=tree.value.zTree
+    // zTree.value=tree.value.zTree
     tree.value.setInitialTree&&tree.value.setInitialTree(data);
-      context.emit('tree-ready')
-      console.log('--------------------------setInitialTree')
+    
+      console.log(tree.value.zTree,'--------------------------setInitialTree')
     }
     // 使用请求数据 lazy headers  type otherParam
   // function getTreeData() {
