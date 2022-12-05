@@ -8,10 +8,10 @@
       </template>
     </el-input>
     <!-- <el-scrollbar> -->
-      <tree ref="baseTree"  v-show="isShowTree" :treeData="treeSearchData" :lazy='lazy'  :autoParam="autoParam"
+      <tree ref="baseTree"  v-show="isShowTree" :treeData="treeSearchData" :enable="enable" :lazy='lazy'  :autoParam="autoParam"
         :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
         :hoverOperation="hoverOperation" :nodeFilter="nodeFilter" @node-check="nodeCheck" @node-click='nodClick'
-        @tree-ready="treeReady" @right-click="onRightClick"
+        @tree-ready="treeReady" @tree-loaded="treeLoaded" @right-click="onRightClick" :isSendHttp="isSendHttp"
         >
       </tree>
   <!-- </el-scrollbar> -->
@@ -97,8 +97,20 @@ export default defineComponent({
         return ["type", 4];
       },
     },
+    isLinkTree:{//是否为关联性组件inputlinktree需要鼠标移开时需要保持选中的文字
+      type: Boolean,
+    default: true
+    },
+    isSendHttp: { // 当传入的treeData是空数组时 会自动请求，这个参数为是否需要使用lazy去自动请求请求
+      type: Boolean,
+      default: true,
+    },
+    enable:{// 设置 zTree 是否开启异步加载模式
+      type: Boolean,
+      default: true,
+    }
   },
-   emits:['clear','update:modelValue', 'node-click', 'node-check','tree-ready','right-click'],
+   emits:['clear','update:modelValue', 'node-click', 'node-check','tree-ready','tree-loaded','right-click'],
    
    setup(props: any, context: any) {
 const inputValue = ref('')
@@ -216,8 +228,11 @@ function focus() {
   }
 }
 function mouseleave() {
-  //鼠标移开 保持选中的文本（防止选中后删除文字）
+  //鼠标移开 保持选中的文本（防止选中后删除文字） 用于linktree
+ if(props.isLinkTree){
   inputValue.value=nondeClickinputValue.value
+  // fliterNode()
+ }
   if (!props.open) {//inputTree模式
     //移除光标
     Input.value.blur();
@@ -226,13 +241,14 @@ function mouseleave() {
 
 }
 
-// function treeLoaded(){
-// //  console.log('treeLoaded')
-// }
+function treeLoaded(zTree:any){
+  baseTreezTree.value=zTree
+  context.emit('tree-loaded',zTree)
+}
 //树异步加载完成
 function treeReady(zTree:any){
+  baseTreezTree.value=zTree
      props.modelValue&&selectNode()
-     baseTreezTree.value=zTree
      context.emit('tree-ready',zTree)
 }
 
@@ -242,16 +258,20 @@ function treeReady(zTree:any){
   watch(() => props.modelValue, watchModelValue,
             { immediate: true, deep: true }
         )
+  watch(() => props.treeData, (val)=>{
+    treeSearchData.value=val
+    console.log(props.treeData.length,props.lazy,'-------sss-----watchTreeData')
+  },  { immediate: true, deep: true })
 // function watchTreeData(val:any){
 //   console.log(val,'watchTreeData')
 // }
 //监听传入的ModelValue 在树上选中 
   function watchModelValue(val:any){
-    if(val&&baseTree.value){
-        selectNode()
-    }else{
+    if(val&&baseTreezTree.value){
+        selectNode()//点击选中时不过滤节点 只显示选中状态
+   }else{
       //值被删除但未清除文字和筛选状态
-      if(nondeClickinputValue.value!==""){
+      if(nondeClickinputValue.value!==""&&baseTreezTree.value){
          nondeClickinputValue.value= inputValue.value =''
           fliterNode()//过滤数据 选中
       }
@@ -337,7 +357,7 @@ function  onRightClick(event: Event, treeId: string, treeNode: any) {
         isShowTree,
         nodeCheck,
         nodClick,
-        // treeLoaded,
+        treeLoaded,
         treeReady,
         getNodeByParam,
         changeCheckStates,

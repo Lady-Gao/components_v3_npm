@@ -5,7 +5,9 @@
 
         <treeSearch ref="treeSearch" :name="name" :treeData='treeData' :lazy='lazy' :autoParam="autoParam"
           :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection" @tree-ready="treeReady"
-          :hoverOperation="isCollection && hoverOperation" @node-click="nodeClick" @node-check="nodeCheck" />
+          :hoverOperation="isCollection && hoverOperation" @node-click="nodeClick" @node-check="nodeCheck"
+          :isLinkTree="false"
+          />
 
       </el-tab-pane>
       <el-tab-pane :label="titles[1]" name="tab1" v-if="titles[1]">

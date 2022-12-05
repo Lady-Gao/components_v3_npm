@@ -76,7 +76,6 @@ export default class BaseTree {
         this.expandAll && this.zTree.expandAll(true)
         typeof callback === 'function' && callback(this.zTree);
         // this.treeLoaded(data);
-        console.log(this.zTree,'this.zTree')
     }
 
     /**

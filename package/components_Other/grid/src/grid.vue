@@ -119,7 +119,7 @@ export default defineComponent({
             }else{
                 filterTableData.value=[]
             }
-            console.log(filterTableData.value,'filterTableData')
+            // console.log(filterTableData.value,'filterTableData')
             pagination.total=val.total||0
             pagination.pages=val.pages||0
             pagination.current=val.current||1
