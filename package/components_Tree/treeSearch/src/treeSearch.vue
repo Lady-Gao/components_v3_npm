@@ -4,14 +4,14 @@
     <el-input  ref="Input"  v-model="inputValue"
       clearable  @focus="focus"  @input='fliterNode'>
       <template #suffix>
-        <span class="cvIcon_search" @click="loadTree"></span>
+        <span class="cvIcon_search"></span>
       </template>
     </el-input>
     <!-- <el-scrollbar> -->
-      <tree ref="baseTree"  v-show="isShowTree" :treeData="treeSearchData" :enable="enable" :lazy='lazy'  :autoParam="autoParam"
+      <tree ref="baseTree"  v-show="isShowTree" :treeData="treeSearchData"  :lazy='lazy'  :autoParam="autoParam"
         :otherParam="otherParam" :isCheck="isCheck" :name="name" :showIcon="showIcon" :limit-check="limitCheck"
         :hoverOperation="hoverOperation" :nodeFilter="nodeFilter" @node-check="nodeCheck" @node-click='nodClick'
-        @tree-ready="treeReady" @tree-loaded="treeLoaded" @right-click="onRightClick" :isSendHttp="isSendHttp"
+        @tree-ready="treeReady" @tree-loaded="treeLoaded" @right-click="onRightClick" 
         >
       </tree>
   <!-- </el-scrollbar> -->
@@ -23,16 +23,11 @@ import { computed, defineComponent, onMounted, reactive, ref, watch, watchEffect
 export default defineComponent({
   name: "TreeSearch",
   props: {
-     modelValue: {//v-model的value 文本内容(目前默认id值)
+    initValue: {//初始化选中的id 
     default: null
   },
 
-  valueName: { //v-model接收的字段key 
-    type: String,
-    default() {
-      return "id";
-    },
-  },
+
   treeData: {//树的初始化数据
     type: Array,
     default() {
@@ -59,11 +54,11 @@ export default defineComponent({
     type: String,
     default: 'get'
   },
-  // headers: { //树的异步请求头部 
-  //   type: Object,
-  //   default: {
-  //   }
-  // },
+  headers: { //树的异步请求头部 
+    type: Object,
+    default: {
+    }
+  },
   autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
     type: Array,
     default() {
@@ -101,16 +96,9 @@ export default defineComponent({
       type: Boolean,
     default: true
     },
-    isSendHttp: { // 当传入的treeData是空数组时 会自动请求，这个参数为是否需要使用lazy去自动请求请求
-      type: Boolean,
-      default: true,
-    },
-    enable:{// 设置 zTree 是否开启异步加载模式
-      type: Boolean,
-      default: true,
-    }
+   
   },
-   emits:['clear','update:modelValue', 'node-click', 'node-check','tree-ready','tree-loaded','right-click'],
+   emits:['clear', 'node-click', 'node-check','tree-ready','tree-loaded','right-click'],//'update:modelValue'
    
    setup(props: any, context: any) {
 const inputValue = ref('')
@@ -129,7 +117,7 @@ function fliterNode() {
 
   let showNode={}
   if(inputValue.value == ""){//清空了输入框，要把modelvalue清空
-    context.emit("update:modelValue",'')
+    // context.emit("update:initValue",'')
      context.emit("clear")
      nondeClickinputValue.value=""
     showNode=childs
@@ -206,10 +194,9 @@ interface mess{
 }
 function nodClick(mess: mess) {
  nondeClickinputValue.value= inputValue.value = mess.treeNode[props.name]
-
   context.emit('node-click', mess)
   // 更新当前的text显示和当前的node节点信息
-  context.emit("update:modelValue", mess.treeNode[props.valueName]);
+  // context.emit("update:modelValue", mess.treeNode[props.valueName]);
   if (!props.open) {//inputTree模式
     isShowTree.value = false
   }
@@ -243,31 +230,31 @@ function mouseleave() {
 
 function treeLoaded(zTree:any){
   baseTreezTree.value=zTree
+  props.initValue&&selectNode()
   context.emit('tree-loaded',zTree)
 }
 //树异步加载完成
 function treeReady(zTree:any){
   baseTreezTree.value=zTree
-     props.modelValue&&selectNode()
+    props.initValue&&selectNode()
      context.emit('tree-ready',zTree)
 }
 
 
 
 
-  watch(() => props.modelValue, watchModelValue,
+  watch(() => props.initValue, watchModelValue,
             { immediate: true, deep: true }
         )
   watch(() => props.treeData, (val)=>{
     treeSearchData.value=val
   },  { immediate: true, deep: true })
-// function watchTreeData(val:any){
-//   console.log(val,'watchTreeData')
-// }
+
 //监听传入的ModelValue 在树上选中 
   function watchModelValue(val:any){
+    console.log(val,'watchModelValue    val')
     if(val&&baseTreezTree.value){
-        selectNode()//点击选中时不过滤节点 只显示选中状态
+     selectNode()//点击选中时不过滤节点 只显示选中状态
    }else{
       //值被删除但未清除文字和筛选状态
       if(nondeClickinputValue.value!==""&&baseTreezTree.value){
@@ -288,10 +275,11 @@ function treeReady(zTree:any){
       }
   }
 
-  function getNodeByParam(valueName?:any,modelValue?:any){
+  function getNodeByParam(K?:any,V?:any){
     const zTree=  baseTreezTree.value
       // const all_nodes = zTree.getNodes(); 
-      let key=valueName||props.valueName,value=modelValue||props.modelValue
+      let key=K||'id'
+      let value=V||props.initValue
       let nodes=zTree.getNodeByParam(key,value)
     return nodes
   }
@@ -304,12 +292,12 @@ function changeCheckStates(allCurrentIds:any,check:boolean,ids:any){
   }
     // 找到node  
     if(typeof ids =="string"){
-      let node=getNodeByParam(props.valueName,ids)
+      let node=getNodeByParam('id',ids)
         //设置勾选状态
       node&&zTree.checkNode(node, check, true);
     }else{
       ids.forEach((id:any) => {
-        let node=getNodeByParam(props.valueName,id)
+        let node=getNodeByParam('id',id)
        //设置勾选状态
         node&&zTree.checkNode(node, check, true);
       });

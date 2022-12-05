@@ -37,10 +37,7 @@ export function getOptions(props: any) {
     return {
         lazy: baseUrl + props.lazy,
         type: props.type,
-        headers: {
-            token: localStorage.getItem('token'),
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-        },//props.headers,
+        headers: props.headers,
         autoParam: props.autoParam,
         otherParam: props.otherParam,
         name: props.name,
@@ -109,8 +106,8 @@ export function getMethods(props: any, context: any) {
         context.emit('node-check', {
             checked: treeNode.checked,//点击的状态
             treeNode,//当前选中
-            checkedListObj,//点击的的数组对象
-            allList//所有已勾选的数据
+            checkedListObj,//选中的数组对象
+            allList//所有已勾选的id数组
         })
 
     }
@@ -127,11 +124,11 @@ export function getMethods(props: any, context: any) {
     }
     return {
        
-        //获取到data数据
-        treeLoaded() {
-            console.log('获取到data数据')
-            context.emit('tree-loaded')
-        },
+        // //获取到data数据
+        // treeLoaded() {
+        //     console.log('获取到data数据')
+        //     context.emit('tree-loaded')
+        // },
         /**
          * 用于捕获单击节点之前的事件回调函数，并且根据返回值确定是否允许单击操作
          * @param treeId treeId

@@ -1,12 +1,12 @@
 <template>
   <div class='inputLinkTree'>
     <el-form-item label="所属公司">
-      <treeSearch :treeData="treeData" :name="name" v-model="value1" :open="false" ref="treeSearch1"
+      <treeSearch :treeData="treeData" :lazy="lazy1" :name="name" :initValue="value1" :open="false" ref="treeSearch1"
         @tree-loaded="treeLoaded1" @node-click='nodeClick1' @clear='clear1' :isLinkTree="true"/>
     </el-form-item>
     <el-form-item label="所属车组">
-      <treeSearch :lazy="lazy" :name="name" :treeData="treeData2" v-model="value2" :open="false" :isLinkTree="true"
-        @tree-loaded="treeLoaded2" @node-click='nodeClick2' @clear='clear2'  :isSendHttp="isSendHttp"
+      <treeSearch :lazy="lazy2" :name="name" :treeData="treeData2" :initValue="value2" :open="false" :isLinkTree="true"
+        @tree-ready="treeReady2" @node-click='nodeClick2' @clear='clear2' 
         :otherParam="{'enterpriseId':currentDATA1.enterpriseId,'pId':currentDATA1.id,'type':currentDATA1.type}"
         />
 
@@ -45,7 +45,11 @@ export default defineComponent({
     //     type: String,
     //     default: "/basic/fleet/findFleetTreeList",
     // },
-    lazy: {// 传入的是接口方式：第二棵树  车组树接口(/basic/fleet/findFleetTreeList)
+    lazy1: {// 传入的是接口方式：第一棵树  车组树接口(/basic/fleet/findFleetTreeList)
+      type: String,
+      default: '',
+    },
+    lazy2: {// 传入的是接口方式：第二棵树  车组树接口(/basic/fleet/findFleetTreeList)
       type: String,
       default: '',
     },
@@ -77,7 +81,6 @@ export default defineComponent({
     const value2 = ref()
     const treeData2 = ref([])
     const treeSearch1 = ref()
-    const isSendHttp=ref(false)
     const inputzTree=ref()
     const currentDATA1=ref({
       enterpriseId:'',
@@ -92,15 +95,13 @@ export default defineComponent({
 value2.value=props.modelFormObj.fleetId
       if (val.enterpriseId && treeSearch1.value) {
         getHttptreeData2()
-      //  let nodes =  treeSearch1.value.getNodeByParam('id',val.enterpriseId)
-      //  console.log(nodes,'------------------modelFormObjChange')
       }
     }
 
     const nodeSendArr = ref()
     // nodeClick
     function nodeClick1(mess: any) {
-      value2.value = ''
+      value2.value= ''
       getHttptreeData2(mess.treeNode)
       nodeSendArr.value = [mess.treeNode.id, '']
       context.emit('current-change', nodeSendArr.value)
@@ -108,27 +109,21 @@ value2.value=props.modelFormObj.fleetId
     }
     function nodeClick2(mess: any) {
       nodeSendArr.value = [value1.value, mess.treeNode.id]
+      value2.value=mess.treeNode.id
       context.emit('current-change', nodeSendArr.value)
       
     }
     // clear
     function clear1() {
       value2.value = ''
-      // isSendHttp.value=false
-      // treeData2.value = []
-      // console.log(inputzTree.value,'clear1')
-      // // inputzTree.value.showNode([])
-      // var nodes = inputzTree.value.getNodes();
-      // console.log(nodes,'nodes')
-      // inputzTree.value.destroy();
-      // inputzTree.value.hideNode(nodes);
       currentDATA1.value={
         enterpriseId:'0',
       pId:'0',
       type:'0',
       }
-      treeData2.value = []
+      treeData2.value = []//触发tree2的数据更新
       nodeSendArr.value = ['', '']
+      console.log('clear1')
       context.emit('current-change', nodeSendArr.value)
     }
     function clear2() {
@@ -140,16 +135,10 @@ value2.value=props.modelFormObj.fleetId
       }
     }
     function treeLoaded1(zTree:any) {
-    
-      // context.emit('tree-loaded',zTree)
-      // console.log(1111)
-      // value1.value && getHttptreeData2()
+      context.emit('tree-loaded',zTree)
     }
-    function treeLoaded2(zTree:any) {
-      console.log('tree-loaded1122222')
-// value2.value=props.modelFormObj.fleetId
-inputzTree.value=zTree
-      context.emit('tree-loaded')
+    function treeReady2(zTree:any) {
+      context.emit('tree-ready',zTree)
     }
 
     
@@ -159,25 +148,9 @@ inputzTree.value=zTree
       let nodes = treeNode || treeSearch1.value.getNodeByParam('id',value1.value)
       if(nodes){
       currentDATA1.value=nodes
-      isSendHttp.value=true
       treeData2.value = []
     }
 
-      // let str = `?enterpriseId=${nodes.enterpriseId}&pId=${nodes.id}&type=${nodes.type}`
-
-      // fetch(props.lazy + str, {
-      //   method: props.type,
-      //   headers: props.headers
-      // }).then(response => {
-      //   return response.json();
-      // }).then(res => {
-      //   if (res.data) {
-      //     treeData2.value = res.data
-      //   } else {
-      //     treeData2.value = []
-      //   }
-      //   console.log(treeData2.value.length)
-      // })
     }
 
     return {
@@ -191,9 +164,8 @@ inputzTree.value=zTree
       treeSearch1,
       nodeSendArr,
       treeLoaded1,
-      treeLoaded2,
+      treeReady2,
       currentDATA1,
-      isSendHttp
     }
   }
 })

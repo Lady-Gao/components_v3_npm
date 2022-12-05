@@ -4,7 +4,7 @@
       <el-tab-pane :label="titles[0]" name="tab0" v-if="titles[0]">
 
         <treeSearch ref="treeSearch" :name="name" :treeData='treeData' :lazy='lazy' :autoParam="autoParam"
-          :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection" @tree-ready="treeReady"
+          :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection" @tree-loaded="treeLoaded" @tree-ready="treeReady"
           :hoverOperation="isCollection && hoverOperation" @node-click="nodeClick" @node-check="nodeCheck"
           :isLinkTree="false"
           />
@@ -114,7 +114,11 @@ export default defineComponent({
       type: String,
       default: 'get'
     },
-
+    headers: { //树的异步请求头部 
+    type: Object,
+    default: {
+    }
+  },
     autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
       type: Array as PropType<String[]>,
       default() {
@@ -136,7 +140,7 @@ export default defineComponent({
     },
 
   },
-  emits: ['checked-list', 'node-click', 'node_collection', 'node-check', 'tree-ready'],
+  emits: ['checked-list', 'node-click', 'node-check', 'tree-ready','tree-loaded'],
   setup(props: any, context: any) {
     const treeSearch = ref()
     const vehicleList = ref()
@@ -357,9 +361,12 @@ export default defineComponent({
     function monitor_vehicle() {
 
     }
+  function treeLoaded(zTree:any){
+  context.emit('tree-loaded',zTree)
+}
     //树异步加载完成
-    function treeReady() {
-      context.emit('tree-ready', true)
+    function treeReady(zTree:any) {
+      context.emit('tree-ready', zTree)
     }
 
     return {
@@ -381,7 +388,8 @@ export default defineComponent({
       collection_delete,
       nodeCheckList,
       checkedList,
-      treeReady
+      treeLoaded,
+      treeReady,
     }
   }
 })

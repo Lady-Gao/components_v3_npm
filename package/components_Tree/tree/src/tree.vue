@@ -79,13 +79,13 @@ export default defineComponent({
       type: String,
       default: 'get'
     },
-    // headers: { //树的异步请求头部 ,目前放在util/http内
-    //   type: Object,
-    //   default: {
-    //     // 'token':localStorage.getItem("token"),
-    //     // 'Authorization':'Bearer '+localStorage.getItem("token")
-    //   }
-    // },
+    headers: { //树的异步请求头部 ,目前放在util/http内
+      type: Object,
+      default: {
+            token: localStorage.getItem('token'),
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    },
     autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id', "type",]
       type: Array,
       default() {
@@ -116,18 +116,8 @@ export default defineComponent({
         return ()=>{}
       }
     },
-    // treeReady: Function, // 树的初始节点渲染到页面
-    // treeLoaded: Function,  // 树接受数据加载完成的回调
-    isSendHttp: { // 当传入的treeData是空数组时 会自动请求，这个参数为是否需要使用lazy去自动请求请求
-      type: Boolean,
-      default: true,
-    },
-    enable:{// 设置 zTree 是否开启异步加载模式
-      type: Boolean,
-      default: true,
-    }
   },
-  emits:['tree-ready','tree-loaded','node-click','node-check','right-click'],//'tree-loaded',
+  emits:['tree-loaded','node-click','node-check','right-click'],//'tree-loaded',
   setup(props: any, context: any) {
     const tree = ref();
     const treeId = ref()
@@ -145,24 +135,13 @@ export default defineComponent({
         options:getOptions(props),
         methods:getMethods({...props,loading},context,)
       });
-      // if(props.isSendHttp&&!props.treeData.length){
-      //   loading.value=true
-      // }else{
-      //   loading.value=false
-      // }
+  
 
-      // if(!props.isSendHttp){
-      //   return setInitialTree([[]])
-      //   console.log(props.treeData,'isSendHttp-etInitialTree')
-      // }
+    
       //如果传了treeData  就不是异步
       if (Array.isArray(props.treeData)&&props.lazy) {
         //传进来的数据是数组
          setInitialTree(props.treeData)
-        //  setTimeout(() => {
-        //   setInitialTree([])
-        //   console.log(' setInitialTree(props.treeData)')
-        //  }, 20000);
       } 
       // else if(props.lazy) {
         // getTreeData()
@@ -172,8 +151,8 @@ export default defineComponent({
     }
 //设置树的初始化数据
   function setInitialTree(data:any,options={}) {
-    // zTree.value=tree.value.zTree
     tree.value.setInitialTree&&tree.value.setInitialTree(data,options);
+    // console.log("-----------tree-loaded---------1--------",tree.value.zTree)
      context.emit('tree-loaded',tree.value.zTree)
     }
     // 使用请求数据 lazy headers  type otherParam

@@ -235,7 +235,6 @@ export default defineComponent({
         function checkcheckboxChange(event: Event, row: any) {
             row.clickChanneArr=[]
             context.emit('node-check', {type:event,data:[row]})
-            // context.emit('checked-list', checkList.value)// checkList.value
             context.emit('current-change', event, row.id)
         }
       //   多选才会触发 选中通道时触发

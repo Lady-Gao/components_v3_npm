@@ -12,8 +12,9 @@
                 <span :class="treeState ? 'cvIcon-jiantouLeft' : 'cvIcon-jiantouRight'"></span>
             </el-button>
             <!--  @current-change="currentChange" -->
-            <treeTab :isVideo="isVideo" :treeData="treeData" :lazy="lazy" :isCheck='isCheck' :autoParam="autoParam"   :otherParam="otherParam"
-             @node-click='nodeClick' @node-check="nodeCheck" @checkedList="checkedList" @tree-ready="treeReady"/>
+            <treeTab :isVideo="isVideo" :treeData="treeData" :lazy="lazy" :isCheck='isCheck' :autoParam="autoParam"
+                :otherParam="otherParam" @node-click='nodeClick' @node-check="nodeCheck" @checkedList="checkedList"
+                @tree-ready="treeReady" @tree-loaded="treeLoaded" />
         </div>
     </div>
 </template>
@@ -31,9 +32,9 @@ export default defineComponent({
             },
         },
         lazy: {// 树的接口(/monitor/findVehicleTreeInfoList)
-      type: String,
-      default: '/basic/tree/findVehicleTreeInfoList',
-    },
+            type: String,
+            default: '/basic/tree/findVehicleTreeInfoList',
+        },
         name: {//车辆树显示节点时,将返回的text作为节点名称
             type: String,
             default: "text"
@@ -54,14 +55,14 @@ export default defineComponent({
             },
         },
         isVideo: {//是否展示视频摄像头
-      type: Boolean,
-      default: false
-    },
+            type: Boolean,
+            default: false
+        },
 
     },
-    emits: ['checked-list', 'node-click','node-check','tree-ready'],//多选时用node-check,checked-list，单选用node-click
+    emits: ['checked-list', 'node-click', 'node-check', 'tree-ready', 'tree-loaded'],//多选时用node-check,checked-list，单选用node-click
     setup(props: any, context: any) {
-    
+
         const treeState = ref(true)
         //更改tabtree收缩状态
         function changeTreeStates() {
@@ -79,10 +80,15 @@ export default defineComponent({
         function checkedList(mess: {}) {
             context.emit('checked-list', mess)
         }
-            //树异步加载完成
-    function treeReady(){
-     context.emit('tree-ready',true)
-}
+        function treeLoaded(ztree: any) {
+            context.emit('tree-loaded', ztree)
+        }
+
+        //树异步加载完成
+        function treeReady(ztree: any) {
+            context.emit('tree-ready', ztree)
+        }
+
         return {
             treeReady,
             treeState,
