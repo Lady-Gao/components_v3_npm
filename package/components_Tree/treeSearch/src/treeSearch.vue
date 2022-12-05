@@ -260,7 +260,6 @@ function treeReady(zTree:any){
         )
   watch(() => props.treeData, (val)=>{
     treeSearchData.value=val
-    console.log(props.treeData.length,props.lazy,'-------sss-----watchTreeData')
   },  { immediate: true, deep: true })
 // function watchTreeData(val:any){
 //   console.log(val,'watchTreeData')

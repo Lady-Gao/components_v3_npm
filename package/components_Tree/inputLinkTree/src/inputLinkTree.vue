@@ -87,10 +87,10 @@ export default defineComponent({
     watch(() => props.modelFormObj, modelFormObjChange, { immediate: true, deep: true })
     //父级传值
     function modelFormObjChange(val: any) {
+      console.log(val,'modelFormObjChange')
       value1.value=props.modelFormObj.enterpriseId
 value2.value=props.modelFormObj.fleetId
       if (val.enterpriseId && treeSearch1.value) {
-        console.log(val,'modelFormObjChange')
         getHttptreeData2()
       //  let nodes =  treeSearch1.value.getNodeByParam('id',val.enterpriseId)
       //  console.log(nodes,'------------------modelFormObjChange')
@@ -114,17 +114,22 @@ value2.value=props.modelFormObj.fleetId
     // clear
     function clear1() {
       value2.value = ''
-      isSendHttp.value=false
-      treeData2.value = []
-      console.log(inputzTree.value,'clear1')
-      // inputzTree.value.showNode([])
-      var nodes = inputzTree.value.getNodes();
-      console.log(nodes,'nodes')
+      // isSendHttp.value=false
+      // treeData2.value = []
+      // console.log(inputzTree.value,'clear1')
+      // // inputzTree.value.showNode([])
+      // var nodes = inputzTree.value.getNodes();
+      // console.log(nodes,'nodes')
       // inputzTree.value.destroy();
       // inputzTree.value.hideNode(nodes);
+      currentDATA1.value={
+        enterpriseId:'0',
+      pId:'0',
+      type:'0',
+      }
+      treeData2.value = []
       nodeSendArr.value = ['', '']
       context.emit('current-change', nodeSendArr.value)
-      console.log('clear1')
     }
     function clear2() {
       let clear2value = [value1.value, '']
@@ -136,14 +141,14 @@ value2.value=props.modelFormObj.fleetId
     }
     function treeLoaded1(zTree:any) {
     
-      context.emit('tree-loaded',zTree)
+      // context.emit('tree-loaded',zTree)
       // console.log(1111)
       // value1.value && getHttptreeData2()
     }
     function treeLoaded2(zTree:any) {
+      console.log('tree-loaded1122222')
 // value2.value=props.modelFormObj.fleetId
 inputzTree.value=zTree
-      console.log(inputzTree.value,'treeLoaded2')
       context.emit('tree-loaded')
     }
 
@@ -156,7 +161,6 @@ inputzTree.value=zTree
       currentDATA1.value=nodes
       isSendHttp.value=true
       treeData2.value = []
-      console.log(currentDATA1.value,'currentDATA1')
     }
 
       // let str = `?enterpriseId=${nodes.enterpriseId}&pId=${nodes.id}&type=${nodes.type}`

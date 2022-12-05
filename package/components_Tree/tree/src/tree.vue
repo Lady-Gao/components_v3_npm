@@ -150,33 +150,28 @@ export default defineComponent({
       // }else{
       //   loading.value=false
       // }
-      console.log(props.isSendHttp,'------props.isSendHttp')
 
       // if(!props.isSendHttp){
       //   return setInitialTree([[]])
       //   console.log(props.treeData,'isSendHttp-etInitialTree')
       // }
-      console.log(props.treeData.length,props.lazy,'-------sss-----setInitialTrsssselazye')
       //如果传了treeData  就不是异步
       if (Array.isArray(props.treeData)&&props.lazy) {
         //传进来的数据是数组
          setInitialTree(props.treeData)
-         setTimeout(() => {
-          setInitialTree([])
-          console.log(' setInitialTree(props.treeData)')
-         }, 20000);
-      } else{
-       
-      }
+        //  setTimeout(() => {
+        //   setInitialTree([])
+        //   console.log(' setInitialTree(props.treeData)')
+        //  }, 20000);
+      } 
       // else if(props.lazy) {
-      //   console.log(22222)
-      //   getTreeData()
+        // getTreeData()
       // }
+      
        })
     }
 //设置树的初始化数据
   function setInitialTree(data:any,options={}) {
-    console.log(data.length,'setInitialTree')
     // zTree.value=tree.value.zTree
     tree.value.setInitialTree&&tree.value.setInitialTree(data,options);
      context.emit('tree-loaded',tree.value.zTree)
