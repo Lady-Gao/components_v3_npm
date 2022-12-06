@@ -37,7 +37,10 @@ export function getOptions(props: any) {
     return {
         lazy: baseUrl + props.lazy,
         type: props.type,
-        headers: props.headers,
+        headers: {
+            token: localStorage.getItem('token'),
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
         autoParam: props.autoParam,
         otherParam: props.otherParam,
         name: props.name,
@@ -123,7 +126,7 @@ export function getMethods(props: any, context: any) {
 
     }
     return {
-       
+
         // //获取到data数据
         // treeLoaded() {
         //     console.log('获取到data数据')
@@ -249,6 +252,16 @@ export function getMethods(props: any, context: any) {
          */
         onExpand(event: Event, treeId: string, treeNode: any) { },
         /**
+               * 用于捕获异步加载之前的事件回调函数，zTree 根据返回值确定是否允许进行异步加载
+               * @param   treeId  treeId
+               * @param   treeNode 进行异步加载的父节点 JSON 数据对象
+               * 返回值Boolean 返回值是 true / false
+                *如果返回 false，zTree 将不进行异步加载，也无法触发 onAsyncSuccess / onAsyncError 事件回调函数
+               */
+        beforeAsync(event: Event, treeId: string, treeNode: any) {
+            props.loading.value = true
+        },
+        /**
                 * 用于捕获异步加载正常结束的事件回调函数
                 * @param   event 标准的 js event 对象
                 * @param   treeId  treeId
@@ -266,8 +279,8 @@ export function getMethods(props: any, context: any) {
                 }
                 onChecAfterEmit(treeNode, zTree)
             }
-            props.loading.value=false
-            context.emit('tree-ready',zTree)
+            props.loading.value = false
+            context.emit('tree-ready', zTree)
         },
 
 
@@ -280,8 +293,8 @@ export function getMethods(props: any, context: any) {
         onRightClick(event: Event, treeId: string, treeNode: any) {
             let zTree = this.getZTreeObj(treeId)
             zTree.selectNode(treeNode);
-            context.emit('right-click',event,treeId,treeNode)
-         },
+            context.emit('right-click', event, treeId, treeNode)
+        },
         /**
          * 用于捕获节点编辑名称结束之后的事件回调函数
          * @param   event 

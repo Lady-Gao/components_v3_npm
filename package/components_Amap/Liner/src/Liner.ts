@@ -44,7 +44,10 @@ export default {
             myLiner.value.on('click', linerClick)
         }
         function watchPath(val: []) {
-            console.log(val.length, 'val')
+            if (!myLiner.value){
+                 initLiner()
+                 setPath()
+            }
             if (val.length) {
                 setPath()
             } else {
@@ -64,7 +67,7 @@ export default {
         /**
          * 移除marker
          */
-        function removeMarker() {
+        function removeLiner() {
             if (myLiner.value) {
                 myLiner.value.off('click', linerClick)
                 map.remove(myLiner.value)
@@ -73,7 +76,7 @@ export default {
 
         }
         return {
-            removeMarker,
+            removeLiner,
             myLiner
         }
     },

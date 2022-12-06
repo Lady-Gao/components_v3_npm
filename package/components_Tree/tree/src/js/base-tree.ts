@@ -152,7 +152,10 @@ export default class BaseTree {
                     return _self.iconsFilter(responseData);
                 },
                 type: this.type,
-                headers:this.headers
+                headers:{
+                    token: localStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
             },
             callback: {
                  /**
@@ -182,6 +185,7 @@ export default class BaseTree {
                  * @param {*} treeNode 
                  */
                 onExpand: this.onExpand,
+                beforeAsync: this.beforeAsync,
                 /**
                  * 用于捕获异步加载正常结束的事件回调函数
                  * @param {*} event 

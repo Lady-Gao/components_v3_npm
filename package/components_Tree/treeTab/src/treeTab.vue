@@ -6,7 +6,6 @@
         <treeSearch ref="treeSearch" :name="name" :treeData='treeData' :lazy='lazy' :autoParam="autoParam"
           :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection" @tree-loaded="treeLoaded" @tree-ready="treeReady"
           :hoverOperation="isCollection && hoverOperation" @node-click="nodeClick" @node-check="nodeCheck"
-          :isLinkTree="false"
           />
 
       </el-tab-pane>
@@ -114,11 +113,6 @@ export default defineComponent({
       type: String,
       default: 'get'
     },
-    headers: { //树的异步请求头部 
-    type: Object,
-    default: {
-    }
-  },
     autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
       type: Array as PropType<String[]>,
       default() {

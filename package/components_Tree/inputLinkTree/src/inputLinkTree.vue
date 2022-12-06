@@ -1,14 +1,13 @@
 <template>
   <div class='inputLinkTree'>
     <el-form-item label="所属公司">
-      <treeSearch :treeData="treeData" :lazy="lazy1" :name="name" :initValue="value1" :open="false" ref="treeSearch1"
-        @tree-loaded="treeLoaded1" @node-click='nodeClick1' @clear='clear1' :isLinkTree="true"/>
+      <treeSearch :treeData="treeData" :name="name" :currentValue="value1" :open="false" ref="treeSearch1"
+        @tree-loaded="treeLoaded1" @node-click='nodeClick1' @clear='clear1' :isLinkTree="true" />
     </el-form-item>
     <el-form-item label="所属车组">
-      <treeSearch :lazy="lazy2" :name="name" :treeData="treeData2" :initValue="value2" :open="false" :isLinkTree="true"
-        @tree-ready="treeReady2" @node-click='nodeClick2' @clear='clear2' 
-        :otherParam="{'enterpriseId':currentDATA1.enterpriseId,'pId':currentDATA1.id,'type':currentDATA1.type}"
-        />
+      <treeSearch :lazy="lazy" :name="name" :treeData="treeData2" :currentValue="value2" :open="false" :isLinkTree="true"
+        @tree-ready="treeReady2" @node-click='nodeClick2' @clear='clear2'
+        :otherParam="{ 'enterpriseId': currentDATA1.enterpriseId, 'pId': currentDATA1.id, 'type': currentDATA1.type }" />
 
     </el-form-item>
   </div>
@@ -19,7 +18,7 @@ import { computed, defineComponent, onMounted, reactive, ref, watch, watchEffect
 export default defineComponent({
   name: "InputLinkTree",
   props: {
-    modelFormObj: { //表单绑定的对象
+    currentValue: { //表单绑定的对象
       type: Object,
       required: true,
       default() {
@@ -29,42 +28,17 @@ export default defineComponent({
         }
       }
     },
-    // modelKey: {//表单的key值 modelFormObj['enterpriseId'] 
-    //   type: Array,
-    //   default() {
-    //     return ['enterpriseId','fleetId'];
-    //   },
-    // },
     treeData: {//树的初始化数据
       type: Array,
       default() {
         return [];
       },
     },
-    // tree2url: { //传入的是接口方式：第二棵树  车组树接口
-    //     type: String,
-    //     default: "/basic/fleet/findFleetTreeList",
-    // },
-    lazy1: {// 传入的是接口方式：第一棵树  车组树接口(/basic/fleet/findFleetTreeList)
+    lazy: {// 传入的是接口方式：第二棵树  车组树接口(/basic/fleet/findFleetTreeList)
       type: String,
       default: '',
     },
-    lazy2: {// 传入的是接口方式：第二棵树  车组树接口(/basic/fleet/findFleetTreeList)
-      type: String,
-      default: '',
-    },
-    type: { //树的异步请求方式
-      type: String,
-      default: 'get'
-    },
-    headers: { //树的异步请求头部 
-      type: Object,
-      default: {
-        'token': localStorage.getItem("token"),
-        'Authorization': 'Bearer ' + localStorage.getItem("token")
-      }
 
-    },
     name: {//显示节点时,将返回的text作为节点名称
       type: String,
       default: "text"
@@ -77,22 +51,21 @@ export default defineComponent({
   emits: ['current-change', 'tree-loaded'],
   setup(props: any, context: any) {
 
-    const value1 =ref()
+    const value1 = ref()
     const value2 = ref()
     const treeData2 = ref([])
     const treeSearch1 = ref()
-    const inputzTree=ref()
-    const currentDATA1=ref({
-      enterpriseId:'',
-      pId:'',
-      type:'',
+    const inputzTree = ref()
+    const currentDATA1 = ref({
+      enterpriseId: '',
+      pId: '',
+      type: '',
     })
-    watch(() => props.modelFormObj, modelFormObjChange, { immediate: true, deep: true })
+    watch(() => props.currentValue, currentValueChange, { immediate: true, deep: true })
     //父级传值
-    function modelFormObjChange(val: any) {
-      console.log(val,'modelFormObjChange')
-      value1.value=props.modelFormObj.enterpriseId
-value2.value=props.modelFormObj.fleetId
+    function currentValueChange(val: any) {
+      value1.value = props.currentValue.enterpriseId
+      value2.value = props.currentValue.fleetId
       if (val.enterpriseId && treeSearch1.value) {
         getHttptreeData2()
       }
@@ -101,29 +74,29 @@ value2.value=props.modelFormObj.fleetId
     const nodeSendArr = ref()
     // nodeClick
     function nodeClick1(mess: any) {
-      value2.value= ''
+      value1.value = mess.treeNode.id
+      value2.value = ''
       getHttptreeData2(mess.treeNode)
       nodeSendArr.value = [mess.treeNode.id, '']
       context.emit('current-change', nodeSendArr.value)
-      
+
     }
     function nodeClick2(mess: any) {
       nodeSendArr.value = [value1.value, mess.treeNode.id]
-      value2.value=mess.treeNode.id
+      value2.value = mess.treeNode.id
       context.emit('current-change', nodeSendArr.value)
-      
+
     }
     // clear
     function clear1() {
       value2.value = ''
-      currentDATA1.value={
-        enterpriseId:'0',
-      pId:'0',
-      type:'0',
+      currentDATA1.value = {
+        enterpriseId: '0',
+        pId: '0',
+        type: '0',
       }
       treeData2.value = []//触发tree2的数据更新
       nodeSendArr.value = ['', '']
-      console.log('clear1')
       context.emit('current-change', nodeSendArr.value)
     }
     function clear2() {
@@ -134,22 +107,22 @@ value2.value=props.modelFormObj.fleetId
         context.emit('current-change', nodeSendArr.value)
       }
     }
-    function treeLoaded1(zTree:any) {
-      context.emit('tree-loaded',zTree)
+    function treeLoaded1(zTree: any) {
+      context.emit('tree-loaded', zTree)
     }
-    function treeReady2(zTree:any) {
-      context.emit('tree-ready',zTree)
+    function treeReady2(zTree: any) {
+      context.emit('tree-ready', zTree)
     }
 
-    
+
     //请求第二棵树数据
     function getHttptreeData2(treeNode = null) {
-   
-      let nodes = treeNode || treeSearch1.value.getNodeByParam('id',value1.value)
-      if(nodes){
-      currentDATA1.value=nodes
-      treeData2.value = []
-    }
+
+      let nodes = treeNode || treeSearch1.value.getNodeByParam('id', value1.value)
+      if (nodes) {
+        currentDATA1.value = nodes
+        treeData2.value = []
+      }
 
     }
 
@@ -173,12 +146,13 @@ value2.value=props.modelFormObj.fleetId
 </script>
 
 <style lang='scss'>
-.inputLinkTree{
+.inputLinkTree {
   display: inline-block;
-  .cv-ztree{
+
+  .cv-ztree {
     box-shadow: 0 2px 4px rgb(0 0 0 / 12%), 0 0 6px rgb(0 0 0 / 12%);
     border-radius: 5px;
   }
-  
+
 }
 </style>

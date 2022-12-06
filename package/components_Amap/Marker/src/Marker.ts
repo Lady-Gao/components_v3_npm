@@ -166,10 +166,6 @@ export default {
          * @param point  Array 新位置信息 
          */
         function setPosition(point:[], speed = 1000) {
-           
-          
-           
-           
              // 用平滑的方式移动还是跳点移动
             if (props.usemoveTransform) {
                   //平滑移动

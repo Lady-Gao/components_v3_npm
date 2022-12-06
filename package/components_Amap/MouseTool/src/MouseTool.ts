@@ -56,7 +56,7 @@ export default {
             map.remove(overlays.value)
         }
 
-        //关闭，并清除覆盖物
+        //结束绘制 true:清除覆盖物，false:不清除覆盖物
         function close(flag=true){
             mouseTool.value.close(flag)
         }

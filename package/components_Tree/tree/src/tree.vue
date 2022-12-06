@@ -79,13 +79,7 @@ export default defineComponent({
       type: String,
       default: 'get'
     },
-    headers: { //树的异步请求头部 ,目前放在util/http内
-      type: Object,
-      default: {
-            token: localStorage.getItem('token'),
-            'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }
-    },
+
     autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id', "type",]
       type: Array,
       default() {
@@ -128,7 +122,6 @@ export default defineComponent({
       init()
     });
     function init(){
-     
       import("./js/base-tree").then(BaseTree=>{
        tree.value = new BaseTree.default({
         el: treeId.value,

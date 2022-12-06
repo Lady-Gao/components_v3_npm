@@ -16,7 +16,7 @@ export default {
         },
         Icon:{
             type:String,
-            default: "https://a.amap.com/jsapi_demos/static/demo-center-v2/car.png"
+            default: null
         },
         size:{
             type:Array,

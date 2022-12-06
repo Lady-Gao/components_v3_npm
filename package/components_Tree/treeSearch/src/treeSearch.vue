@@ -3,8 +3,9 @@
     <!--  @input='fliterNode' @clear="fliterNode"  -->
     <el-input  ref="Input"  v-model="inputValue"
       clearable  @focus="focus"  @input='fliterNode'>
-      <template #suffix>
-        <span class="cvIcon_search"></span>
+      <template #suffix v-if="!isLinkTree">
+        <!--  @click="loadTree" -->
+        <span class="cvIcon_search" ></span>
       </template>
     </el-input>
     <!-- <el-scrollbar> -->
@@ -23,7 +24,7 @@ import { computed, defineComponent, onMounted, reactive, ref, watch, watchEffect
 export default defineComponent({
   name: "TreeSearch",
   props: {
-    initValue: {//初始化选中的id 
+    currentValue: {//初始化选中的id 
     default: null
   },
 
@@ -53,11 +54,6 @@ export default defineComponent({
   type: { //树的异步请求方式
     type: String,
     default: 'get'
-  },
-  headers: { //树的异步请求头部 
-    type: Object,
-    default: {
-    }
   },
   autoParam: {// 异步加载时(点击节点)需要 自动提交父节点属性的参数  ['id=123232', "type",]
     type: Array,
@@ -94,7 +90,7 @@ export default defineComponent({
     },
     isLinkTree:{//是否为关联性组件inputlinktree需要鼠标移开时需要保持选中的文字
       type: Boolean,
-    default: true
+    default: false
     },
    
   },
@@ -117,7 +113,7 @@ function fliterNode() {
 
   let showNode={}
   if(inputValue.value == ""){//清空了输入框，要把modelvalue清空
-    // context.emit("update:initValue",'')
+    // context.emit("update:currentValue",'')
      context.emit("clear")
      nondeClickinputValue.value=""
     showNode=childs
@@ -230,20 +226,20 @@ function mouseleave() {
 
 function treeLoaded(zTree:any){
   baseTreezTree.value=zTree
-  props.initValue&&selectNode()
+  props.currentValue&&selectNode()
   context.emit('tree-loaded',zTree)
 }
 //树异步加载完成
 function treeReady(zTree:any){
   baseTreezTree.value=zTree
-    props.initValue&&selectNode()
+    props.currentValue&&selectNode()
      context.emit('tree-ready',zTree)
 }
 
 
 
 
-  watch(() => props.initValue, watchModelValue,
+  watch(() => props.currentValue, watchModelValue,
             { immediate: true, deep: true }
         )
   watch(() => props.treeData, (val)=>{
@@ -252,10 +248,10 @@ function treeReady(zTree:any){
 
 //监听传入的ModelValue 在树上选中 
   function watchModelValue(val:any){
-    console.log(val,'watchModelValue    val')
     if(val&&baseTreezTree.value){
-     selectNode()//点击选中时不过滤节点 只显示选中状态
-   }else{
+      nondeClickinputValue.value= inputValue.value =''
+      selectNode()//点击选中时不过滤节点 只显示选中状态
+    }else{
       //值被删除但未清除文字和筛选状态
       if(nondeClickinputValue.value!==""&&baseTreezTree.value){
          nondeClickinputValue.value= inputValue.value =''
@@ -277,10 +273,10 @@ function treeReady(zTree:any){
 
   function getNodeByParam(K?:any,V?:any){
     const zTree=  baseTreezTree.value
-      // const all_nodes = zTree.getNodes(); 
       let key=K||'id'
-      let value=V||props.initValue
-      let nodes=zTree.getNodeByParam(key,value)
+      let value=V||props.currentValue
+        let nodes=zTree.getNodeByParam(key,parseInt(value))
+        console.log(nodes,'nodes')
     return nodes
   }
 //更改勾选状态

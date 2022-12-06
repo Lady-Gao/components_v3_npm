@@ -3,7 +3,7 @@
     
    
  <el-form :line="true"  :model="ruleForm"  ref="ruleFormRef"    :rules="rules">
-        <inputLinkTree :modelFormObj="ruleForm" 
+        <inputLinkTree :initValue="ruleForm" 
         :treeData="OrganizationTreeList"
          :lazy='lazy'  
        @tree-ready="treeReady"

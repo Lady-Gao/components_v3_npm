@@ -37,6 +37,12 @@ export default {
             type: String,
             default: () => "mapDom" + Math.random() * 1001
         },
+        options:{
+            type: Object,
+            default(){
+                return {}
+            }
+        }
     },
 
     setup(props: any, { attrs, slots, emit, expose, }: any) {
@@ -55,7 +61,6 @@ export default {
             })
             function needDom() {
                 let dom = document.getElementById(props.id)
-                console.log(dom,'dom')
                 if (dom) {
                     findDom = true
                     MapScript()
@@ -88,7 +93,8 @@ export default {
             storeData.map = new AMap.Map(props.id, {
                 zoom: props.zoom,//级别
                 center: props.center,//中心点坐标
-                viewMode: props.viewMode//使用地图视图
+                viewMode: props.viewMode,//使用地图视图
+                ...props.options
             });
 
             // storeData.map.mapId=props.id new Gaode(storeData.map)
