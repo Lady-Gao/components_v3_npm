@@ -1,6 +1,6 @@
 {
   "name": "cv_components_v3",
-  "version": "0.0.09",
+  "version": "0.0.015",
   "author": "monstergao",
   "scripts": {
     "dev": "vite",
