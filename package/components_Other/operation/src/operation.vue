@@ -9,8 +9,6 @@
                  <span class="el-button el-button--text toggle" v-if="$slots.header"  @click="showItem">
                     {{flag ?"收起":"展开"}}
                  </span>
-                <!-- <slot name="operations"></slot> -->
-                <!-- <el-button  v-for="item in powerTool"  @click="bottomClick(item)">{{getText(item)}}</el-button> -->
                 <el-button  v-if="isSearch" class="toggle" @click="bottonClick('search')" type="primary" :loading="searchLoading">
                     搜索
                  </el-button>
@@ -31,7 +29,6 @@
 <script lang="ts">
 /**
  * powerTool类型
- * search
  * add
  * modify 
  * import
@@ -49,7 +46,7 @@ export default defineComponent({
                 return [16,8]
             }
         },
-        isSearch:{
+        isSearch:{//是否显示搜索按钮
             type:Boolean,
             default:true
         },
@@ -60,7 +57,7 @@ export default defineComponent({
         powerTool:{//按钮权限
         type:Array as PropType<string[]>,
         default(){
-            return ['search']
+            return []
         }
 
         },

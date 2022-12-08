@@ -22,7 +22,7 @@ export default defineComponent({
         powerTool: {//按钮权限
             type: Array as PropType<string[]>,
             default() {
-                return ['search']
+                return []
             }
         },
         Heard: {//是头部的搜索按钮
@@ -70,9 +70,6 @@ export default defineComponent({
                 fun: key,
             }
             switch (key) {
-                // case "search":
-                //     data.text = "搜索"
-                //     break;
                 case "add":
                     data.text = "添加"
                     break;
@@ -104,74 +101,16 @@ export default defineComponent({
                     data.type = "red"
                     
                     break;
-                // case "resend":
-                //     data.text = "resend"
-                //     break;
-                // case "modifycomp":
-                //     data.text = "modifycomp"
-                //     break;
-                // case "modifyplat":
-                //     data.text = "modifyplat"
-                //     break;
-                // case "sendAdd":
-                //     data.text = "sendAdd"
-                //     break;
-                // case "sendEdit":
-                //     data.text = "sendEdit"
-                //     break;
-                // case "sendDown":
-                //     data.text = "sendDown"
-                //     break;
-                // case "reset":
-                //     data.text = "reset"
-                //     break;
-                // case "deactivate":
-                //     data.text = "deactivate"
-                //     break;
-                // case "offline":
-                //     data.text = "offline"
-                //     break;
-                // case "unbind":
-                //     data.text = "unbind"
-                //     break;
-                // case "deviceinfo":
-                //     data.text = "deviceinfo"
-                //     break;
-                // case "logout":
-                //     data.text = "logout"
-                //     break;
-                // case "bound":
-                //     data.text = "bound"
-                //     break;
-                // case "unbound":
-                //     data.text = "unbound"
-                //     break;
-                // case "apply":
-                //     data.text = "apply"
-                //     break;
-                // case "processAlarm":
-                //     data.text = "processAlarm"
-                //     break;
-                // case "removeAlarm":
-                //     data.text = "removeAlarm"
-                //     break;
+               
             }
             return data
         }
+        //只是排序 单纯排序和长度计算 以便于显示’更多‘按钮
         function refsetarr() {
             //排序
             props.powerTool.forEach((item: any) => {
                 switch (item) {
-                    // case "look":
-                    //     console.log(item, 'item')
-                    //     pxToolList.value[0] = item
-                    //     break;
-                    // case "modify":
-                    //     pxToolList.value[1] = item
-                    //     break;
-                    // case "remove":
-                    //     pxToolList.value[2] = item
-                    //     break;
+                
                     case "resend":
                         pxToolList.value[3] = item
                         break;
