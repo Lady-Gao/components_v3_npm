@@ -279,7 +279,8 @@ export function getMethods(props: any, context: any) {
                 }
                 onChecAfterEmit(treeNode, zTree)
             }
-            props.loading.value = false
+            props.loading.value = false 
+         
             context.emit('tree-ready', zTree)
         },
 

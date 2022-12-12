@@ -1760,6 +1760,7 @@
         }
       },
       init: function (obj, zSetting, zNodes) {
+        console.log(obj, zSetting, zNodes,'obj, zSetting, zNodes')
         var setting = tools.clone(_setting);
         $.extend(true, setting, zSetting);
         setting.treeId = obj.attr("id");
@@ -1784,7 +1785,6 @@
         event.bindTree(setting);
         event.unbindEvent(setting);
         event.bindEvent(setting);
-  
         var zTreeTools = {
           setting: setting,
           addNodes: function (parentNode, index, newNodes, isSilent) {

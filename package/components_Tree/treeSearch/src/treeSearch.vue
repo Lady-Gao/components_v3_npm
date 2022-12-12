@@ -5,7 +5,7 @@
       clearable  @focus="focus"  @input='fliterNode'>
       <template #suffix v-if="!isLinkTree">
         <!--  @click="loadTree" -->
-        <span class="cvIcon_search" ></span>
+        <span class="cvIcon_search" @click="loadTree"></span>
       </template>
     </el-input>
     <!-- <el-scrollbar> -->
@@ -226,12 +226,15 @@ function mouseleave() {
 
 function treeLoaded(zTree:any){
   baseTreezTree.value=zTree
+  console.log(baseTreezTree.value,'search-----load')
+  baseTree.value.loading=false
   props.currentValue&&selectNode()
   context.emit('tree-loaded',zTree)
 }
 //树异步加载完成
 function treeReady(zTree:any){
   baseTreezTree.value=zTree
+  console.log(baseTreezTree.value,'search-----ready')
     props.currentValue&&selectNode()
      context.emit('tree-ready',zTree)
 }
@@ -276,7 +279,6 @@ function treeReady(zTree:any){
       let key=K||'id'
       let value=V||props.currentValue
         let nodes=zTree.getNodeByParam(key,parseInt(value))
-        console.log(nodes,'nodes')
     return nodes
   }
 //更改勾选状态

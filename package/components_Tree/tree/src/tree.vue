@@ -16,6 +16,7 @@
 import { computed, defineComponent, onMounted, reactive, ref, watch } from "vue";
 import { getHttpTreeData } from "../../../utils/http";
 import {getOptions,getMethods} from './js/treeMinxi'
+import {nextTick} from 'vue'
 export default defineComponent({
   name: "Tree",
   props: {
@@ -114,11 +115,20 @@ export default defineComponent({
   emits:['tree-loaded','node-click','node-check','right-click'],//'tree-loaded',
   setup(props: any, context: any) {
     const tree = ref();
-    const treeId = ref()
+    const treeId = ref(randomMakeTreeid())
      const zTree = ref()
      const loading = ref(false)
-    treeId.value = randomMakeTreeid()
+    // treeId.value = randomMakeTreeid()
     onMounted(() => {
+      // console.log(document.getElementById(treeId.value),treeId.value,'getElementById')
+  // setTimeout(() => {
+    console.log(111,'mount')
+   nextTick(()=>{
+
+     console.log(document.getElementById(treeId.value),treeId.value,'getElementById mount')
+   })
+   console.log(222,'mount')
+  // }, 3000);
       init()
     });
     function init(){
@@ -129,13 +139,14 @@ export default defineComponent({
         methods:getMethods({...props,loading},context,)
       });
   
-
     
       //如果传了treeData  就不是异步
       if (Array.isArray(props.treeData)&&props.lazy) {
         //传进来的数据是数组
          setInitialTree(props.treeData)
-      } 
+      } else{
+        console.log('tree---else')
+      }
       // else if(props.lazy) {
         // getTreeData()
       // }
@@ -144,9 +155,10 @@ export default defineComponent({
     }
 //设置树的初始化数据
   function setInitialTree(data:any,options={}) {
-    tree.value.setInitialTree&&tree.value.setInitialTree(data,options);
     // console.log("-----------tree-loaded---------1--------",tree.value.zTree)
-     context.emit('tree-loaded',tree.value.zTree)
+      tree.value.setInitialTree&&tree.value.setInitialTree(data,options);
+      console.log(tree.value.zTree,'zTree  loaded')
+      context.emit('tree-loaded',tree.value.zTree)
     }
     // 使用请求数据 lazy headers  type otherParam
   // function getTreeData() {
@@ -162,8 +174,8 @@ export default defineComponent({
 
     // 随意生成树的id编号
     function randomMakeTreeid() {
-      treeId.value = `tree${Math.floor(new Date().getTime() + Math.random() * 100000)}`;
-      return treeId.value
+       return  `tree${Math.floor(new Date().getTime() + Math.random() * 100000)}`;
+      
     }
     
 
