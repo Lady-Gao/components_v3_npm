@@ -117,19 +117,15 @@ export default defineComponent({
     const tree = ref();
     const treeId = ref(randomMakeTreeid())
      const zTree = ref()
-     const loading = ref(false)
+     const loading = ref(true)
     // treeId.value = randomMakeTreeid()
     onMounted(() => {
-      // console.log(document.getElementById(treeId.value),treeId.value,'getElementById')
-  // setTimeout(() => {
-    console.log(111,'mount')
    nextTick(()=>{
-
-     console.log(document.getElementById(treeId.value),treeId.value,'getElementById mount')
-   })
-   console.log(222,'mount')
-  // }, 3000);
+    setTimeout(() => {
       init()
+    }, 10);
+   })
+     
     });
     function init(){
       import("./js/base-tree").then(BaseTree=>{
@@ -144,9 +140,7 @@ export default defineComponent({
       if (Array.isArray(props.treeData)&&props.lazy) {
         //传进来的数据是数组
          setInitialTree(props.treeData)
-      } else{
-        console.log('tree---else')
-      }
+      } 
       // else if(props.lazy) {
         // getTreeData()
       // }
@@ -155,10 +149,10 @@ export default defineComponent({
     }
 //设置树的初始化数据
   function setInitialTree(data:any,options={}) {
-    // console.log("-----------tree-loaded---------1--------",tree.value.zTree)
-      tree.value.setInitialTree&&tree.value.setInitialTree(data,options);
-      console.log(tree.value.zTree,'zTree  loaded')
-      context.emit('tree-loaded',tree.value.zTree)
+    tree.value.setInitialTree&&tree.value.setInitialTree(data,options);
+        console.log("-----------tree-loaded---------1--------")
+        context.emit('tree-loaded',tree.value.zTree)
+      
     }
     // 使用请求数据 lazy headers  type otherParam
   // function getTreeData() {

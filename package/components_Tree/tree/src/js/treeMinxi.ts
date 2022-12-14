@@ -259,6 +259,7 @@ export function getMethods(props: any, context: any) {
                 *如果返回 false，zTree 将不进行异步加载，也无法触发 onAsyncSuccess / onAsyncError 事件回调函数
                */
         beforeAsync(event: Event, treeId: string, treeNode: any) {
+            console.log('beforeAsync')
             props.loading.value = true
         },
         /**

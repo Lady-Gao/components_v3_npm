@@ -42,7 +42,6 @@ export default {
          //设置图片  定位
          function  open(){
             // setContent()
-            console.log(props.position,'open')
             InfoWindow.value.open(map, props.position);
            
         }
@@ -51,7 +50,6 @@ export default {
          * 2.props.position 没值 代表InfoWindow.close()手动调用
          */
         function onclose() {
-            console.log('onclose')
             if (props.position) {
                emit('close')
             } else {

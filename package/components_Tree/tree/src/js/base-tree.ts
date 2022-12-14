@@ -12,15 +12,6 @@ import "../assets/js/jquery.ztree.exhide"
 
 export default class BaseTree {
     constructor(options) {
-        // Promise.all([
-        //     import('../assets/css/awesome.scss'),
-        //     import('../assets/js/jquery-1.4.4.min.js'),
-        //     import('../assets/js/jquery.ztree.core'),
-        //     import('../assets/js/jquery.ztree.excheck'),
-        //     import('../assets/js/jquery.ztree.exedit'),
-        //     import('../assets/js/jquery.ztree.exhide')
-        //   ])
-        //   .then(() => {
             const _self = this;
         this.zTree = null;
         this.treeId = options.el;
@@ -67,7 +58,6 @@ export default class BaseTree {
      */
     setInitialTree(data, callback) {
         var data = this.iconsFilter({data});
-        console.log(this.el,'this.el')
         $.fn.zTree.init(
             this.el, 
             this.treeConfig(), 
@@ -77,7 +67,6 @@ export default class BaseTree {
         this.expandAll && this.zTree.expandAll(true)
         typeof callback === 'function' && callback(this.zTree);
         // this.treeLoaded(data);
-        console.log(this.zTree,'this.zTree')
       
     }
 
