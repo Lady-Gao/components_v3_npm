@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { listPoints, icon1, icon2 } from "@utils/dataC";
+import { listPoints, icon1, icon2 } from "@/utils/dataC";
 const hPathSimplifierIns = ref();
 function startAnimation() {
  hPathSimplifierIns.value.start();

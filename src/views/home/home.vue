@@ -18,7 +18,7 @@
 
 <script setup lang='ts'>
 
-import {listPoints,icon1,icon2} from "@utils/data";
+import {listPoints,icon1,icon2} from "@/utils/data";
 
 import { ref } from "vue";
 const pathList=ref([])

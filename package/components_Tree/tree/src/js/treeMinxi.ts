@@ -1,5 +1,4 @@
 // @ts-nocheck # 忽略全文
-import { baseUrl } from "../../../../utils/request";
 export function getOptions(props: any) {
     function iconsFilter(nodes: any) {//更改节点得图标
         var { data, flag } = nodes;
@@ -35,7 +34,7 @@ export function getOptions(props: any) {
         }
     }
     return {
-        lazy: baseUrl + props.lazy,
+        lazy: window.CONFIG.host + props.lazy,
         type: props.type,
         headers: {
             token: localStorage.getItem('token'),

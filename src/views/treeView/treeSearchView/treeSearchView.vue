@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import findVehicleTreeInfoList from '@utils/findVehicleTreeInfoList.json'
-import getEnterpriseTreeList from '@utils/getEnterpriseTreeList.json'
+import findVehicleTreeInfoList from '@/utils/findVehicleTreeInfoList.json'
+import getEnterpriseTreeList from '@/utils/getEnterpriseTreeList.json'
 import { reactive, ref, watch } from 'vue'
 const { VehicleTreeInfoList } = findVehicleTreeInfoList
 const { EnterpriseTreeList } = getEnterpriseTreeList

@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
-import { addFilters } from "@utils/common";
-import {findAlarmPolymerizationInfoList,findAlarmInfoDetails} from '../../../utils/API'
+import { addFilters } from "@/utils/common";
+import {findAlarmPolymerizationInfoList,findAlarmInfoDetails} from '@/utils/API'
 const tableData = ref({})
 const loading = ref(true)
 let params={

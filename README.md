@@ -49,7 +49,8 @@ https://monstergao.gitee.io/cv_components_v3/
 ### 打包
 ### components_v3_npm 终端
 
--  npm run librollup
+-  npm run librollup 或者  npm run build
+
 
 在components_v3_npm/package下生成lib文件夹
 

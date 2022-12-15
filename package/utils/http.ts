@@ -1,18 +1,17 @@
 
 
  // @ts-nocheck # 忽略全文
-import Http  from "@/utils/request";
 //车辆树接口
 export function getHttpTreeData(params:any){
-    return Http(params) 
+    return window.Http(params) 
 }
 // 车辆列表
 export function getHttpListData(params:any){
-    return Http(params) 
+    return window.Http(params) 
 }
 // 取消关注
 export function deleteVehicleAttentionInfo(vehicleId:string){
-    return Http({
+    return window.Http({
         url: '/basic/vehicle/deleteVehicleAttentionInfo',
         params: {
             vehicleId
@@ -22,7 +21,7 @@ export function deleteVehicleAttentionInfo(vehicleId:string){
 }
 //关注车辆
 export function insertVehicleAttentionInfo(params:{}){
-    return  Http({
+    return  window.Http({
         url: '/basic/vehicle/insertVehicleAttentionInfo',
         params,
         method:"post"

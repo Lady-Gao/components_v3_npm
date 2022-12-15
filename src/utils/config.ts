@@ -1,4 +1,4 @@
-export default  {
+window.CONFIG ={
     host: localStorage.getItem('dev-Api')|| '//web2.test.cvtsp.com/api',
     socketUrl: localStorage.getItem('socket-Api')||'//web2.test.cvtsp.com',
     staticServer: "//fs.cvtsp.com/",
