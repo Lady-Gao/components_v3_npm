@@ -1,6 +1,6 @@
 {
   "name": "cv_components_v3",
-  "version": "0.0.16",
+  "version": "0.0.181",
   "author": "monstergao",
   "scripts": {
     "dev": "vite"
@@ -18,8 +18,8 @@
   },
   "license": "ISC",
   "files": [
-    "lib",
+    "dist",
     "README.md"
   ],
-  "main": "lib/index"
+  "main": "dist/my-lib.mjs"
 }
