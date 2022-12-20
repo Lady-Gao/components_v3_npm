@@ -10,7 +10,7 @@ export default defineConfig(({ command, mode }) => {
   // dev  开发环境
   alias= {
     '@': resolve(__dirname, 'src'),
-    '@Config': resolve(__dirname, 'src/utils/config'),
+    // '@Config': resolve(__dirname, 'src/utils/config'),
   }
 }else{
  
