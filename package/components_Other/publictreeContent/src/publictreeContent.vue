@@ -108,7 +108,7 @@ export default defineComponent({
     top: 10px;
     left: 0;
     bottom: 5px;
-
+right: 0;
     .main {
         position: relative;
     }

@@ -8,7 +8,7 @@
   "dependencies": {
     "default-passive-events": "^2.0.0",
     "sass": "^1.49.9",
-    "vue": "^3.2.25"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@types/node": "^17.0.21",
@@ -21,5 +21,5 @@
     "lib",
     "README.md"
   ],
-  "main": "lib/index.mjs"
+  "main": "index.ts"
 }
