@@ -104,8 +104,11 @@ text-align: left;
     margin-right: 0 !important;
   }
 .buttonForm{
-    display: flex;
-    justify-content: flex-end;
+    .el-form-item__content{
+        // display: flex;
+
+        // justify-content: flex-end !important;
+    }
 }
 }
 </style>

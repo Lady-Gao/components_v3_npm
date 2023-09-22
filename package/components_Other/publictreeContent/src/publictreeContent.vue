@@ -14,7 +14,7 @@
             <!--  @current-change="currentChange" -->
             <treeTab :isVideo="isVideo" :treeData="treeData" :lazy="lazy" :isCheck='isCheck' :autoParam="autoParam"
                 :otherParam="otherParam" @node-click='nodeClick' @node-check="nodeCheck" @checkedList="checkedList"
-                @tree-ready="treeReady" @tree-loaded="treeLoaded" />
+                @tree-ready="treeReady" @tree-loaded="treeLoaded" :titles="titles" @right-click="onRightClick"/>
         </div>
     </div>
 </template>
@@ -58,9 +58,13 @@ export default defineComponent({
             type: Boolean,
             default: false
         },
+        titles: {
+      type: [Array,Function],
+     
+    },
 
     },
-    emits: ['checked-list', 'node-click', 'node-check', 'tree-ready', 'tree-loaded'],//多选时用node-check,checked-list，单选用node-click
+    emits: ['checked-list', 'node-click', 'node-check', 'tree-ready','treeLoaded', 'tree-loaded','right-click'],//多选时用node-check,checked-list，单选用node-click
     setup(props: any, context: any) {
 
         const treeState = ref(true)
@@ -88,15 +92,19 @@ export default defineComponent({
         function treeReady(ztree: any) {
             context.emit('tree-ready', ztree)
         }
-
+        function  onRightClick(event: Event, treeId: string, treeNode: any) {
+            context.emit('right-click',event,treeId,treeNode)
+         }
         return {
             treeReady,
             treeState,
             changeTreeStates,
+            treeLoaded,
             // currentChange,
             nodeClick,
             nodeCheck,//[{type:true,data:[]}]
             checkedList,//[ID,ID...]
+            onRightClick,
         }
     }
 })

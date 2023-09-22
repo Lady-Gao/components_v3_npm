@@ -6,6 +6,7 @@
         <treeSearch ref="treeSearch" :name="name" :treeData='treeData' :lazy='lazy' :autoParam="autoParam"
           :otherParam="otherParam" :isCheck='isCheck' :isCollection="isCollection" @tree-loaded="treeLoaded" @tree-ready="treeReady"
           :hoverOperation="isCollection && hoverOperation" @node-click="nodeClick" @node-check="nodeCheck"
+          @right-click="onRightClick"
           />
 
       </el-tab-pane>
@@ -134,7 +135,7 @@ export default defineComponent({
     },
 
   },
-  emits: ['checked-list', 'node-click', 'node-check', 'tree-ready','tree-loaded'],
+  emits: ['checked-list', 'node-click', 'node-check', 'tree-ready','tree-loaded','right-click'],
   setup(props: any, context: any) {
     const treeSearch = ref()
     const vehicleList = ref()
@@ -362,7 +363,10 @@ export default defineComponent({
     function treeReady(zTree:any) {
       context.emit('tree-ready', zTree)
     }
-
+    // 右击事件
+    function  onRightClick(event: Event, treeId: string, treeNode: any) {
+            context.emit('right-click',event,treeId,treeNode)
+         }
     return {
       activeName,
       currentChange,
@@ -384,6 +388,7 @@ export default defineComponent({
       checkedList,
       treeLoaded,
       treeReady,
+      onRightClick
     }
   }
 })
